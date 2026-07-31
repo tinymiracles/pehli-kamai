@@ -1238,7 +1238,7 @@ const DATA = allData.map(c=>{
     location: c.location,
     resume: hasRes,
     resumeKey: hasRes ? c.key : null,
-    track: inferTrack(c.sectors),
+    track: inferTrack([c.sectors[0]]),
   };
 });
 
