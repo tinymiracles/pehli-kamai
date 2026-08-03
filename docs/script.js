@@ -12,48 +12,58 @@ const auth=firebase.auth();
 
 const allData = [
   {id:1,key:'alisha',name:'Alisha Shaikh Aslam',location:'Mumbai',sectors:['Admin & Data Entry'],note:'Looking in Admin and Data Entry',urgent:false,resume:false},
-  {id:2,key:'bhavesh',name:'Bhavesh Pardeshi',location:'Mumbai',sectors:['Sales','Admin & Data Entry'],note:'Looking in Sales and Data Entry',urgent:false,resume:false},
+  {id:2,key:'bhavesh',name:'Bhavesh Rishi Pardeshi',location:'Grant Road, Mumbai',sectors:['Sales','Admin & Data Entry'],note:'Fresher, SSC 2026 pass, MS-CIT certified, good typing speed',urgent:false,resume:true},
   {id:3,key:'ayush',name:'Ayush Pardeshi',location:'Mumbai',sectors:['Sales','Admin & Data Entry','Office Work'],note:'Looking in Sales, Data Entry, Office Work',urgent:false,resume:false},
   {id:4,key:'paresh',name:'Paresh Pardeshi',location:'Mumbai',sectors:['Editing & Animation','Real Estate'],note:'Looking in Editing, Animation, Real Estate',urgent:false,resume:false},
-  {id:5,key:'shreya_m',name:'Shreya Mathur',location:'Mumbai',sectors:['Media & Advertising','Teaching'],note:'TYBAMMC student, Advertising & Creative',urgent:false,resume:true},
-  {id:6,key:'kartik',name:'Kartik Pardeshi',location:'Mumbai',sectors:['Back Office','Receptionist','Art & Teaching'],note:'Part-time — Back Office, Receptionist, Art',urgent:false,resume:false},
-  {id:7,key:'dipesh',name:'Dipesh',location:'Mumbai',sectors:['Sales','Marketing','Office Work'],note:'Looking in Sales, Marketing, Office Work',urgent:false,resume:false},
-  {id:8,key:'aniket',name:'Aniket Pardeshi',location:'Goregaon East',sectors:['Open to All'],note:'Fresher — open to any sector',urgent:false,resume:true},
-  {id:9,key:'riya',name:'Riya Sanjay Kale',location:'Andheri',sectors:['Admin & Data Entry'],note:'Data Entry — looking near Andheri',urgent:false,resume:false},
+  {id:5,key:'shreya_m',name:'Shreya Mathur',location:'Mumbai',sectors:['Media & Advertising','Design / Creative','Education & Training'],note:'TYBAMMC Advertising student, 3yr private tutoring exp',urgent:false,resume:true},
+  {id:6,key:'kartik',name:'Kartik Pardeshi',location:'Mumbai',sectors:['Applied Arts','Medical Assistance','Clinic Coordination'],note:'Medical Assistant exp at allergy clinic, MS-CIT, aspiring Applied Arts',urgent:false,resume:true},
+  {id:7,key:'dipesh',name:'Dipesh Vijay Dhodade',location:'Dahanu, Palghar',sectors:['Electrician','Electrical & Electronics','ITI Trades'],note:'ITI Electrician (77.8%), MS-CIT 93%, 1-month OJT at Thakur Electronics',urgent:false,resume:true},
+  {id:8,key:'aniket',name:'Aniket Pardeshi',location:'Goregaon East',sectors:['Sales','Retail','Logistics','BPO'],note:'Fresher, HSC pass 2023, energetic team player ready to start',urgent:false,resume:true},
+  {id:9,key:'riya',name:'Riya Sanjay Kale',location:'Goregaon East',sectors:['Tele-calling','Customer Support','Real Estate'],note:'2yr tele-calling exp in real estate sector',urgent:false,resume:true},
   {id:10,key:'harshad',name:'Harshad Sanjay Kale',location:'Mumbai',sectors:['Editing & Animation','Graphics & Design'],note:'Looking in Editing, Graphic, Animation',urgent:false,resume:false},
-  {id:11,key:'amuthasara',name:'Amuthasara Albertraj',location:'Aarey Colony',sectors:['Sales','Teaching'],note:'BA grad, 3yr tuition exp, Sales & Teaching',urgent:false,resume:true},
-  {id:12,key:'iqra',name:'Iqra Khan',location:'Mumbai Central',sectors:['Sales','Office Work','Admin & Data Entry'],note:'BCom pursuing, boutique + teaching exp',urgent:false,resume:true},
-  {id:13,key:'shweta',name:'Shweta Sunil Jaiswal',location:'Andheri East',sectors:['Accounting & Finance','Office Work'],note:'BCom Accounting & Finance student',urgent:false,resume:true},
-  {id:14,key:'janhavi',name:'Janhavi Pradeep Redkar',location:'Malad East',sectors:['Sales','Admin & Data Entry','Office Work'],note:'BCom pursuing, Tally, MS-CIT certified',urgent:false,resume:true},
-  {id:15,key:'archita',name:'Archita Pardeshi',location:'Mumbai',sectors:['Accounting & Finance','Admin & Data Entry'],note:'Tally Prime exp, worked at Tiny Miracles',urgent:false,resume:true},
-  {id:16,key:'shreya_s',name:'Shreya Shedge',location:'Parel',sectors:['Open to All'],note:'MS-CIT certified, fresher',urgent:false,resume:true},
-  {id:17,key:'gangaram',name:'Gangaram Raut',location:'Grant Road',sectors:['Admin & Data Entry','Accounting & Finance'],note:'Tally certified, part-time accounting exp',urgent:false,resume:true},
-  {id:18,key:'sandeep',name:'Sandeep Betwala',location:'Mumbai',sectors:['Admin & Data Entry','Office Work'],note:'3yr data entry + admin experience, MS Excel',urgent:false,resume:true},
-  {id:19,key:'purva',name:'Purva Shedge',location:'Parel',sectors:['Admin & Data Entry','Office Work'],note:'Data Entry intern, documentation skills',urgent:false,resume:true},
-  {id:20,key:'ashish',name:'Ashish Pardeshi',location:'Girgaon',sectors:['Office Work','Admin & Data Entry','BPO'],note:'BCom, DSL Engineer at Tata Teleservices',urgent:false,resume:true},
+  {id:11,key:'amuthasara',name:'Amuthasara Albertraj',location:'Aarey Colony',sectors:['Education & Training','Admin','Customer Service'],note:'BA Mass Comm, 3+yr tuition teaching exp, student council leadership',urgent:false,resume:true},
+  {id:12,key:'iqra',name:'Iqra Farid Khan',location:'Mumbai Central',sectors:['Retail & Fashion','Education & Training','Admin'],note:'BCom pursuing, boutique styling exp + teaching intern at Tiny Miracles Daycare',urgent:false,resume:true},
+  {id:13,key:'shweta',name:'Shweta Sunil Jaiswal',location:'Andheri East',sectors:['Accounting','Admin','Banking Ops Support'],note:'BCom Accounting & Finance student, event & leadership exp',urgent:false,resume:true},
+  {id:14,key:'janhavi',name:'Janhavi Pradeep Redkar',location:'Malad East',sectors:['Accounting','Admin','Banking Ops Support'],note:'BCom pursuing, Tally Prime A-grade certified, 40 WPM typing',urgent:false,resume:true},
+  {id:15,key:'archita',name:'Archita Pardeshi',location:'Mumbai',sectors:['Accounting','Banking Ops Support','Admin'],note:'Operations Supervisor exp in Tally billing & vendor docs, pursuing degree',urgent:false,resume:true},
+  {id:16,key:'shreya_s',name:'Shreya Shedge',location:'Parel',sectors:['Admin','Retail','Customer Service'],note:'Fresher, HSC pass, MS-CIT certified, dependable & adaptable',urgent:false,resume:true},
+  {id:17,key:'gangaram',name:'Gangaram Raut',location:'Grant Road',sectors:['Accounting','Admin','Banking Ops Support'],note:'Tally-certified, part-time accounting exp in vouchers & ledgers',urgent:false,resume:true},
+  {id:18,key:'sandeep',name:'Sandeep Betwala',location:'Mumbai',sectors:['Admin','Data Entry','Staffing / HR Ops'],note:'Staffing Coordinator at Ad Astra, prior data entry & sales ops exp',urgent:false,resume:true},
+  {id:19,key:'purva',name:'Purva Shedge',location:'Parel',sectors:['Admin','Data Entry','BPO'],note:'Data Entry intern in Mumbai, documentation & verification skills',urgent:false,resume:true},
+  {id:20,key:'ashish',name:'Ashish Anand Pardeshi',location:'Girgaon',sectors:['BPO','Technical Support','Admin'],note:'10+yr DSL Engineer at Tata Teleservices, MIS reporting & SLA mgmt',urgent:false,resume:true},
   {id:21,key:'chandar',name:'Chandar Pardeshi',location:'Mumbai',sectors:['Open to All'],note:'Open to any sector',urgent:false,resume:false},
-  {id:22,key:'kripa',name:'Kripa Pardeshi',location:'Mumbai',sectors:['Receptionist','Admin & Data Entry'],note:'Receptionist exp at 2 clinics, Nail Artist',urgent:false,resume:true},
+  {id:22,key:'kripa',name:'Kripa Pardeshi',location:'Mumbai',sectors:['Admin / Front Desk','Beauty & Wellness','Healthcare Support'],note:'Receptionist at 2 clinics + freelance nail artist, BCom student',urgent:false,resume:true},
   {id:23,key:'varun',name:'Varun Pardeshi',location:'Mumbai Central',sectors:['Office Work','Admin & Data Entry'],note:'HSC + Computer Course, Fresher',urgent:false,resume:true},
-  {id:24,key:'abhishek',name:'Abhishek Pardeshi',location:'Mumbai Central',sectors:['Catering & Hospitality','Customer Service'],note:'Hospital steward + canteen exp',urgent:false,resume:true},
-  {id:25,key:'zainab',name:'Ansari Zainab Abdul',location:'Mumbai',sectors:['Open to All'],note:'Open to any sector',urgent:true,resume:false},
-  {id:26,key:'divya',name:'Divya Khandu Garud',location:'Aarey Colony',sectors:['Customer Service','Retail'],note:'3yr cash counter exp, MS-CIT, Makeup Artist',urgent:false,resume:true},
-  {id:27,key:'janvi',name:'Janvi Ajay Pardeshi',location:'Mumbai',sectors:['Admin & Data Entry','Office Work'],note:'HSC Arts, Fresher, basic computer skills',urgent:false,resume:true},
-  {id:28,key:'kalpesh',name:'Kalpesh Lotade',location:'Aarey Colony',sectors:['Office Work','BPO','Admin & Data Entry'],note:'HSC Commerce, MSCIT pursuing, Fresher',urgent:false,resume:true},
-  {id:29,key:'kamini',name:'Kamini Gangurde',location:'Mumbai',sectors:['Sales','Marketing','Catering & Hospitality'],note:'BA + Hotel Mgmt, 1.5yr sales exp',urgent:false,resume:true},
-  {id:30,key:'kinjal',name:'Kinjal Pardeshi',location:'Mumbai',sectors:['Open to All'],note:'HSC appearing 2026, Fresher',urgent:false,resume:true},
-  {id:31,key:'mohd',name:'Mohd Sameer Shaikh',location:'Mumbai Central',sectors:['Catering & Hospitality','Sales','Management'],note:'Team Leader, Restaurant Mgr, Sales Mgr exp',urgent:false,resume:true},
-  {id:32,key:'nihal',name:'Nihal Kurian',location:'Aarey Colony',sectors:['Editing & Animation','Graphics & Design'],note:'MAAC Motion Graphic Designer, Fresher',urgent:false,resume:true},
+  {id:24,key:'abhishek',name:'Abhishek Dhanraj Pardeshi',location:'Mumbai Central',sectors:['Customer Service','Retail','Catering & Hospitality'],note:'Fresher, billing/customer service exp at canteen, cookie shop & hospital ward',urgent:false,resume:true},
+  {id:25,key:'zainab',name:'Ansari Zainab Abdul Latif',location:'Govandi',sectors:['Healthcare Support','Admin','Customer Service'],note:'6+yr exp: Nurse Assistant & Clinic Receptionist',urgent:true,resume:true},
+  {id:26,key:'divya',name:'Divya Khandu Garud',location:'Aarey Colony',sectors:['Retail','Beauty & Wellness','Customer Service'],note:'3yr cash-counter exp at Greats Food, certified Makeup Artist',urgent:false,resume:true},
+  {id:27,key:'janvi',name:'Janvi Ajay Pardeshi',location:'Mumbai',sectors:['Admin','Data Entry','BPO'],note:'Fresher, HSC Arts pass, basic computer & data entry skills',urgent:false,resume:true},
+  {id:28,key:'kalpesh',name:'Kalpesh Nandu Lotade',location:'Aarey Colony',sectors:['Admin','IT Support','BPO'],note:'Fresher, HSC Commerce, MSCIT pursuing, ready for admin/IT/BPO roles',urgent:false,resume:true},
+  {id:29,key:'kamini',name:'Kamini Krishnakumar Gangurde',location:'Mumbai',sectors:['Sales & Marketing','Hospitality','Customer Service'],note:'Hotel Mgmt + BA, sales & marketing exp at Excel Enterprises',urgent:false,resume:true},
+  {id:30,key:'kinjal',name:'Kinjal Ravi Pardeshi',location:'Mumbai',sectors:['Admin','Retail','Customer Service'],note:'Fresher, HSC appearing 2025-26, quick learner, positive attitude',urgent:false,resume:true},
+  {id:31,key:'mohd',name:'Mohd Sameer Umar Shaikh',location:'Mumbai Central',sectors:['Hospitality','Retail & Sales','Restaurant Operations'],note:'Team Leader at 1441 Pizzeria, prior sales & restaurant mgmt exp',urgent:false,resume:true},
+  {id:32,key:'nihal',name:'Nihal Kurian',location:'Aarey Colony',sectors:['Design / VFX','Media & Creative'],note:'MAAC-trained Motion Graphic Designer, Photoshop/Illustrator/After Effects',urgent:false,resume:true},
   {id:33,key:'nikhil',name:'Nikhil Madhe',location:'Andheri East',sectors:['Open to All'],note:'10th pass, Fresher, hardworking',urgent:false,resume:true},
-  {id:34,key:'omkar',name:'Omkar Ghosalkar',location:'Aarey Colony',sectors:['Logistics','Office Work'],note:'BCom Logistics student, supply chain basics',urgent:false,resume:true},
-  {id:35,key:'pradeep',name:'Pradeep Hadal',location:'Aarey Colony',sectors:['Accounting & Finance','Admin & Data Entry'],note:'BCom, Tally ERP, MSCIT, Excel certified',urgent:false,resume:true},
-  {id:36,key:'pranali_g',name:'Pranali Gangurde',location:'Aarey Colony',sectors:['Catering & Hospitality','Customer Service'],note:'Hotel Mgmt trained, Fresher, front desk',urgent:false,resume:true},
-  {id:37,key:'pranali_k',name:'Pranali Khanjode',location:'Aarey Colony',sectors:['Catering & Hospitality','Sales'],note:'Hotel Mgmt trained, business dev interest',urgent:false,resume:true},
-  {id:38,key:'sahil',name:'Sahil Pangerkar',location:'Virar',sectors:['Sales','Marketing'],note:'BMS student, LIC Agent, Marketing intern',urgent:false,resume:true},
-  {id:39,key:'sarathi',name:'Sarathi Pandav',location:'Mumbai Central',sectors:['Accounting & Finance','Office Work'],note:'BMS student, Tally pursuing, Fresher',urgent:false,resume:true},
-  {id:40,key:'shakil',name:'Shakil Shaikh',location:'Aarey Colony',sectors:['Jewellery & Crafts','Office Work'],note:'Jewellery filler & diamond setter, 7yr exp',urgent:false,resume:true},
-  {id:41,key:'sneha',name:'Sneha Chaudhari',location:'Aarey Colony',sectors:['Accounting & Finance','Admin & Data Entry'],note:'BCom, Adv Tally + Excel certified',urgent:false,resume:true},
-  {id:42,key:'twinkal',name:'Twinkal Gupta',location:'Mumbai',sectors:['Teaching','Office Work'],note:'HSC, tutor exp, basic computer skills',urgent:false,resume:true},
-  {id:43,key:'vrushali',name:'Vrushali Magare',location:'Aarey Colony',sectors:['Open to All'],note:'HSC, MS-CIT, NSS Volunteer, Fresher',urgent:false,resume:true},
+  {id:34,key:'omkar',name:'Omkar Mahesh Ghosalkar',location:'Aarey Colony',sectors:['Logistics & Supply Chain','Admin','E-commerce'],note:'BCom Logistics student, college leadership & coordination exp',urgent:false,resume:true},
+  {id:35,key:'pradeep',name:'Pradeep Rama Hadal',location:'Aarey Colony',sectors:['Accounting','Admin','Banking Ops Support'],note:'BCom (7.46 CGPA), Tally ERP 9 & Excel trained, MSCIT certified',urgent:false,resume:true},
+  {id:36,key:'pranali_g',name:'Pranali Gangurde',location:'Aarey Colony',sectors:['Hotel Front Desk','Housekeeping','Food & Beverage (F&B)','Customer Service'],note:'Hotel Mgmt course, trained in hospitality ops & front desk',urgent:false,resume:true},
+  {id:37,key:'pranali_k',name:'Pranali Suresh Khanjode',location:'Aarey Colony',sectors:['Hospitality','Front Desk / F&B','Business Development'],note:'Hotel Mgmt course, hospitality training, interested in biz dev too',urgent:false,resume:true},
+  {id:38,key:'sahil',name:'Sahil Pangerkar',location:'Virar',sectors:['Sales & Marketing','Insurance / BFSI','Marketing Internship'],note:'BMS student, LIC Agent training, sales & negotiation skills',urgent:false,resume:true},
+  {id:39,key:'sarathi',name:'Sarathi Kishor Pandav',location:'Mumbai Central',sectors:['Admin','Retail','BPO'],note:'FY BMS student, Tally course pursuing, eager fresher',urgent:false,resume:true},
+  {id:40,key:'shakil',name:'Shakil Sultan Shaikh',location:'Aarey Colony',sectors:['Jewellery & Craft Manufacturing','Retail'],note:'7yr jewellery filler & stone-setter, micro pave/prong/bezel setting',urgent:false,resume:true},
+  {id:41,key:'sneha',name:'Sneha Kailash Chaudhari',location:'Aarey Colony',sectors:['Accounting','Banking Ops Support','Admin'],note:'BCom grad, Advance Tally Prime & Excel (pivot tables) trained',urgent:false,resume:true},
+  {id:42,key:'twinkal',name:'Twinkal Gupta',location:'Mumbai',sectors:['Admin','Education & Training','BPO'],note:'HSC pass, tutoring exp, basic computer & typing skills',urgent:false,resume:true},
+  {id:43,key:'vrushali',name:'Vrushali Sunil Magare',location:'Aarey Colony',sectors:['Admin','Retail','BPO'],note:'Pursuing graduation, MS-CIT certified, NSS volunteer 2021-23',urgent:false,resume:true},
+  {id:44,key:'afrin',name:'Afrin Khan',location:'Mumbai',sectors:['Retail & Sales','Hospitality','Customer Service'],note:'10+yr Retail Store Manager, currently Store Mgr at Nilkamal',urgent:false,resume:true},
+  {id:45,key:'akanksha',name:'Akanksha Ganesh Kadam',location:'Mumbai',sectors:['Accounting','Admin','Banking Ops Support'],note:'BCom pursuing, Tally Prime GST & Advance Excel certified fresher',urgent:false,resume:true},
+  {id:46,key:'ambika',name:'Ambika Gopal Pardeshi',location:'Khetwadi',sectors:['Healthcare Support','Admin'],note:'Dental Assistant, 5+4+0.5yr exp across 3 Mumbai dental clinics',urgent:false,resume:true},
+  {id:47,key:'dakshata',name:'Dakshata Parshuram Kolekar',location:'Mumbai',sectors:['Admin','Retail','BPO'],note:"Fresher pursuing FY, NCC 'A'&'B' certificate, disciplined & trainable",urgent:false,resume:true},
+  {id:48,key:'jyostna',name:'Jyostna Shankar Ulyandal',location:'Mumbai',sectors:['Admin','Retail','BPO'],note:'TYBCOM pursuing, fresher, basic computer knowledge, eager learner',urgent:false,resume:true},
+  {id:49,key:'kashish',name:'Kashish Dubakka',location:'Goregaon East',sectors:['Customer Service','BPO','Coordination'],note:'BCom pursuing, 6mo customer service exp at JAM Outsourcing',urgent:false,resume:true},
+  {id:50,key:'omkar_k',name:'Omkar Mangesh Kudalkar',location:'Goregaon East',sectors:['Operations','Logistics & Courier','Admin'],note:'4yr Operations Executive in courier ops at Trackon Courier',urgent:false,resume:true},
+  {id:51,key:'rohit',name:'Rohit Vijay Kale',location:'Goregaon East',sectors:['Sales','Banking','Customer Service'],note:'BCom grad, credit card sales at SBI + 3yr Swiggy delivery exp',urgent:false,resume:true},
+  {id:52,key:'vaishnavi',name:'Vaishnavi Sarju Pardeshi',location:'Grant Road',sectors:['Medical / Healthcare','Open to All'],note:'HSC Arts pursuing, fresher, open to medical or any sector',urgent:false,resume:true},
+  {id:53,key:'vijay_c',name:'Vijay Shivaji Chavan',location:'Mumbai',sectors:['Admin','Data Entry','BPO'],note:'BA pursuing, 2yr data entry & record-keeping exp at LPRO Co',urgent:false,resume:true},
 ];
 const EJ_PK='iDYGDYpxhT7wKJ12d',EJ_SID='service_ob0zrq2',EJ_TID='template_1wuqmdr';
 const N_EMAIL='meghna@tinymiracles.com',N_EMAIL2='rishikesh@tinymiracles.com',N_WA='919326691744';
@@ -387,7 +397,7 @@ function saveProfile(){
     const idx=DATA.findIndex(x=>x.id===old.id);
     if(idx>=0)DATA[idx]={...DATA[idx],name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,resume:true,resumeKey:rk};
     const em=editingEmail;editingEmail=null;
-    buildChips();render();updateEnqBadge();closeA();
+    buildChips();render();updateEnqBadge();updateAboutStats();closeA();
     emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc,candidate_location:loc,candidate_note:'Profile updated.',viewed_at:t,message_type:'Profile Updated — '+nm,to_email:N_EMAIL}).catch(()=>{});
     emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc,candidate_location:loc,candidate_note:'Profile updated.',viewed_at:t,message_type:'Profile Updated — '+nm,to_email:N_EMAIL2}).catch(()=>{});
     openYtDash(accts[em]);
@@ -411,8 +421,7 @@ function saveProfile(){
   DATA.push(np);
   document.getElementById('h-tot').textContent=DATA.length;
   document.getElementById('s-tot').textContent=DATA.length;
-  const abTot=document.getElementById('ab-tot');if(abTot)abTot.textContent=DATA.length;
-  buildChips();render();updateEnqBadge();closeA();
+  buildChips();render();updateEnqBadge();updateAboutStats();closeA();
 
   auth.createUserWithEmailAndPassword(email,pw)
     .then(cred=>{
@@ -880,7 +889,12 @@ document.querySelectorAll('.ov').forEach(o=>{
   if(o.id==='at-ov')return;
   o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
-buildChips();render();updateEnqBadge();
+function updateAboutStats(){
+  const abTot=document.getElementById('ab-tot'); if(abTot) abTot.textContent=DATA.length;
+  const abRes=document.getElementById('ab-res'); if(abRes) abRes.textContent=DATA.filter(d=>d.resume).length;
+  const abSec=document.getElementById('ab-sec'); if(abSec) abSec.textContent=new Set(DATA.map(d=>d.sector)).size+'+';
+}
+buildChips();render();updateEnqBadge();updateAboutStats();
 
 // Fetch new candidates added via the form and merge into DATA
 db.collection('candidates').orderBy('createdAt','asc').get().then(snap=>{
@@ -917,8 +931,7 @@ db.collection('candidates').orderBy('createdAt','asc').get().then(snap=>{
     buildChips();render();
     document.getElementById('h-tot').textContent=DATA.length;
     document.getElementById('s-tot').textContent=DATA.length;
-    const abTot=document.getElementById('ab-tot');
-    if(abTot) abTot.textContent=DATA.length;
+    updateAboutStats();
   }
 }).catch(()=>{});
 
