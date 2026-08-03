@@ -97,7 +97,7 @@ const DATA = allData.map(c=>{
   };
 });
 
-let sl=new Set(), curSec='all', curId=null, pendingResume=null, editingEmail=null;
+let sl=new Set(), curSec='all', curId=null, pendingResume=null, editingEmail=null, currentYtAcct=null;
 
 function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();}
 
@@ -381,26 +381,27 @@ function saveProfile(){
 
   // ── EDIT MODE ──
   if(editingEmail){
-    const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
-    const old=accts[editingEmail];
-    if(!old){toast('Account not found.');editingEmail=null;return;}
+    const cachedAccts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
+    const old=(currentYtAcct&&currentYtAcct.email===editingEmail)?currentYtAcct:cachedAccts[editingEmail];
+    if(!old){toast('Account not found. Please sign in again.');editingEmail=null;return;}
     const npw=document.getElementById('a-pw').value;const npw2=document.getElementById('a-pw2').value;
     if(npw){if(npw.length<6){toast('Password must be at least 6 characters.');return;}if(npw!==npw2){toast('Passwords do not match.');return;}}
     const rk='new_'+Date.now();
     const html=buildResumeHTML(resumeD);
     RESUMES[rk]={t:'html',d:html};
     const updated={...old,name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,resumeKey:rk,resume:true,resumeHTML:html,...(npw?{password:npw}:{})};
-    accts[editingEmail]=updated;
-    localStorage.setItem('pk_yt_accts',JSON.stringify(accts));
+    cachedAccts[editingEmail]=updated;
+    localStorage.setItem('pk_yt_accts',JSON.stringify(cachedAccts));
     const fbUser=auth.currentUser;
     if(fbUser){db.collection('youth_accounts').doc(fbUser.uid).update({name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,resumeHTML:html}).catch(()=>{});}
     const idx=DATA.findIndex(x=>x.id===old.id);
     if(idx>=0)DATA[idx]={...DATA[idx],name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,resume:true,resumeKey:rk};
     const em=editingEmail;editingEmail=null;
+    currentYtAcct=updated;
     buildChips();render();updateEnqBadge();updateAboutStats();closeA();
     emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc,candidate_location:loc,candidate_note:'Profile updated.',viewed_at:t,message_type:'Profile Updated — '+nm,to_email:N_EMAIL}).catch(()=>{});
     emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc,candidate_location:loc,candidate_note:'Profile updated.',viewed_at:t,message_type:'Profile Updated — '+nm,to_email:N_EMAIL2}).catch(()=>{});
-    openYtDash(accts[em]);
+    openYtDash(updated);
     return;
   }
 
@@ -611,10 +612,21 @@ function youthLogin(){
 }
 
 function openYtDash(acct,isNew){
-  const enqs=JSON.parse(localStorage.getItem('typc_enquiries')||'[]');
-  const n=enqs.filter(e=>e.candidateName===acct.name).length;
-  const hasResume=acct.resumeKey&&RESUMES[acct.resumeKey];
+  currentYtAcct=acct;
+  document.getElementById('yt-ov').classList.add('open');
   document.getElementById('yt-dash-title').textContent='My Profile';
+  document.getElementById('yt-dash-body').innerHTML='<div style="padding:50px 0;text-align:center;color:var(--ink-4);font-size:13px">Loading…</div>';
+  db.collection('hr_enquiries').where('candidateName','==',acct.name).get()
+    .then(snap=>renderYtDash(acct,isNew,snap.size))
+    .catch(()=>{
+      const enqs=JSON.parse(localStorage.getItem('typc_enquiries')||'[]');
+      const n=enqs.filter(e=>e.candidateName===acct.name).length;
+      renderYtDash(acct,isNew,n);
+    });
+}
+
+function renderYtDash(acct,isNew,n){
+  const hasResume=acct.resumeKey&&RESUMES[acct.resumeKey];
   document.getElementById('yt-dash-body').innerHTML=`
     ${isNew?`<div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:14px 16px;margin-bottom:16px;text-align:center">
       <div style="font-size:18px;margin-bottom:4px">🎉</div>
@@ -643,18 +655,17 @@ function openYtDash(acct,isNew){
     <div style="font-size:11.5px;color:var(--ink-3);line-height:1.6;margin-bottom:14px;padding:10px 12px;background:var(--bg);border-radius:8px">
       Pehli Kamai will personally call you when an HR is interested.<br>Questions? <strong>+91 9326691744</strong> or <strong>+91 99204 45917</strong>
     </div>
-    <button class="btn-lf-submit" onclick="closeYtDash();youthEditProfile('${acct.email}')" style="margin-bottom:10px">Edit my profile</button>
+    <button class="btn-lf-submit" onclick="closeYtDash();youthEditProfile()" style="margin-bottom:10px">Edit my profile</button>
     <button onclick="closeYtDash()" style="width:100%;padding:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Close</button>
   `;
-  document.getElementById('yt-ov').classList.add('open');
 }
 
 function closeYtDash(){document.getElementById('yt-ov').classList.remove('open');}
 
-function youthEditProfile(email){
-  const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
-  const acct=accts[email];
-  if(!acct)return;
+function youthEditProfile(){
+  const acct=currentYtAcct;
+  if(!acct){toast('Please sign in again to edit your profile.');return;}
+  const email=acct.email;
   openAdd();
   editingEmail=email;
   const t=document.getElementById('a-modal-title');if(t)t.textContent='Update my profile';
