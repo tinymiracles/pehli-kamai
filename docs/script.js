@@ -420,8 +420,6 @@ function saveProfile(){
   const ph=document.getElementById('a-ph').value.trim();
   const np={id,key,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,exp:ex,skills:sk,langs:lg,about:ab,exps:[],resume:true,resumeKey:key,track:trk};
   DATA.push(np);
-  document.getElementById('h-tot').textContent=DATA.length;
-  document.getElementById('s-tot').textContent=DATA.length;
   buildChips();render();updateEnqBadge();updateAboutStats();closeA();
 
   auth.createUserWithEmailAndPassword(email,pw)
@@ -904,6 +902,8 @@ function updateAboutStats(){
   const abTot=document.getElementById('ab-tot'); if(abTot) abTot.textContent=DATA.length;
   const abRes=document.getElementById('ab-res'); if(abRes) abRes.textContent=DATA.filter(d=>d.resume).length;
   const abSec=document.getElementById('ab-sec'); if(abSec) abSec.textContent=new Set(DATA.map(d=>d.sector)).size+'+';
+  const hTot=document.getElementById('h-tot'); if(hTot) hTot.textContent=DATA.length;
+  const sTot=document.getElementById('s-tot'); if(sTot) sTot.textContent=DATA.length;
 }
 buildChips();render();updateEnqBadge();updateAboutStats();
 
@@ -940,8 +940,6 @@ db.collection('candidates').orderBy('createdAt','asc').get().then(snap=>{
   });
   if(added>0){
     buildChips();render();
-    document.getElementById('h-tot').textContent=DATA.length;
-    document.getElementById('s-tot').textContent=DATA.length;
     updateAboutStats();
   }
 }).catch(()=>{});

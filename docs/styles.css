@@ -328,12 +328,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.45);padding:0;border-top:2p
 .ft-col a{color:rgba(255,255,255,.55);font-size:13px;cursor:pointer;text-decoration:none;transition:color .15s;display:block;}
 .ft-col a:hover{color:#ffffff;}
 .ft-col span{color:rgba(255,255,255,.45);font-size:13px;line-height:1.5;}
-.ft-contact-person{background:rgba(255,255,255,.04);border-left:2px solid var(--teal);border-radius:0 6px 6px 0;padding:9px 12px;display:flex;flex-direction:column;gap:3px;}
-.ft-contact-name{font-weight:600;color:rgba(255,255,255,.75);font-size:12px;}
-.ft-contact-email{color:rgba(255,255,255,.55);font-size:12.5px;text-decoration:none;transition:color .15s;}
+.ft-contact-name{font-weight:600;color:rgba(255,255,255,.7);font-size:12px;}
+.ft-contact-email{color:rgba(255,255,255,.55);font-size:13px;text-decoration:none;transition:color .15s;}
 .ft-contact-email:hover{color:#ffffff;}
-.ft-site-link{display:flex;align-items:center;gap:6px;}
-.ft-cta-btn{margin-top:6px;padding:9px 18px;background:var(--teal);border:none;color:white;border-radius:20px;font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;text-align:left;align-self:flex-start;transition:opacity .15s;}
+.ft-cta-btn{margin-top:10px;padding:9px 18px;background:var(--teal);border:none;color:white;border-radius:20px;font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;text-align:left;align-self:flex-start;transition:opacity .15s;}
 .ft-cta-btn:hover{opacity:.85;}
 .ft-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 40px;max-width:1240px;margin:0 auto;font-size:11px;color:rgba(255,255,255,.28);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
 @media(max-width:600px){.ft-inner{grid-template-columns:1fr;gap:32px;padding:40px 20px 28px;}.ft-bottom{padding:16px 20px;}}
