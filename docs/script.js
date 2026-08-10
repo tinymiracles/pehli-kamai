@@ -103,11 +103,48 @@ function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase
 
 // Page nav
 function showPage(p){
+  const leavingDoor = !document.getElementById('view-door').classList.contains('hidden') && p!=='door';
+  const enteringDoor = document.getElementById('view-door').classList.contains('hidden') && p==='door';
   document.querySelectorAll('[id^="view-"]').forEach(x=>x.classList.add('hidden'));
   const v=document.getElementById('view-'+p);if(v)v.classList.remove('hidden');
   document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-current','false'));
   const nl=document.getElementById('nl-'+p);if(nl)nl.setAttribute('aria-current','true');
+  // The shutter's render loop only stops when it's actually removed from the DOM
+  // (its own disconnectedCallback) — toggling display:none alone leaves it rendering
+  // invisibly forever. Detach it when leaving the door view; reattaching re-inits it,
+  // which conveniently also replays the intro for free.
+  if(leavingDoor){
+    const el=document.querySelector('#shutterHolder pk-shutter');
+    if(el){window.__pkShutter=el;el.remove();}
+    stopShutterLoop();
+  } else if(enteringDoor){
+    const holder=document.getElementById('shutterHolder');
+    if(holder && !holder.querySelector('pk-shutter')){
+      holder.appendChild(window.__pkShutter||document.createElement('pk-shutter'));
+      const s=holder.querySelector('pk-shutter'); if(!s.getAttribute('h')) s.setAttribute('h','840');
+    }
+    startShutterLoop();
+  }
   window.scrollTo(0,0);
+}
+
+// The intro isn't a one-shot thing you have to click a button to see again —
+// it quietly replays itself every so often while you're on the landing view.
+// Respects prefers-reduced-motion: settles on the open state instead of animating.
+const SHUTTER_LOOP_MS=13000;
+function startShutterLoop(){
+  stopShutterLoop();
+  const reduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const s=document.querySelector('#shutterHolder pk-shutter');
+  if(!s) return;
+  if(reduced){ if(s.setOpen) s.setOpen(1); return; }
+  window.__pkShutterLoop=setInterval(()=>{
+    const cur=document.querySelector('#shutterHolder pk-shutter');
+    if(cur && cur.replay) cur.replay();
+  }, SHUTTER_LOOP_MS);
+}
+function stopShutterLoop(){
+  if(window.__pkShutterLoop){ clearInterval(window.__pkShutterLoop); window.__pkShutterLoop=null; }
 }
 
 // Build track filter chips + location dropdown
@@ -894,11 +931,18 @@ function updateAboutStats(){
   const abSec=document.getElementById('ab-sec'); if(abSec) abSec.textContent=new Set(DATA.map(d=>d.sector)).size+'+';
   const hTot=document.getElementById('h-tot'); if(hTot) hTot.textContent=DATA.length;
   const sTot=document.getElementById('s-tot'); if(sTot) sTot.textContent=DATA.length;
+  const dTot=document.getElementById('d-tot'); if(dTot) dTot.textContent=DATA.length;
 }
 function boot(){
   buildChips();render();updateEnqBadge();updateAboutStats();
   updateHRHeader();
   mergeFirestoreCandidates();
+  const holder=document.getElementById('shutterHolder');
+  if(holder && !holder.querySelector('pk-shutter')){
+    const s=document.createElement('pk-shutter'); s.setAttribute('h','840');
+    holder.appendChild(s);
+  }
+  startShutterLoop();
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
 else boot();

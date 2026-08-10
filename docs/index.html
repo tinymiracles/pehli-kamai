@@ -19,7 +19,7 @@
 
 <!-- ━━ HEADER ━━ -->
 <header class="hdr">
-  <button class="brand" onclick="showPage('home')">
+  <button class="brand" onclick="showPage('door')">
     <svg class="wm-logo" width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g fill="var(--teal)" transform="translate(50,50)">
         <circle r="18"/>
@@ -43,7 +43,7 @@
     </div>
   </button>
   <nav class="tabs">
-    <button class="tab" id="nl-home" aria-current="true" onclick="showPage('home')">Home</button>
+    <button class="tab" id="nl-home" onclick="showPage('home')">Home</button>
     <button class="tab" id="nl-about" onclick="showPage('about')">About</button>
     <button class="tab" id="nl-contact" onclick="openCF()">Contact Us</button>
   </nav>
@@ -57,43 +57,35 @@
 </header>
 
 <!-- ━━ HOME PAGE ━━ -->
-<div id="view-home">
-
-  <section class="hero">
-    <div class="hero-in">
-      <div class="hero-brand">
-        <svg class="hero-logo-big" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <g fill="var(--teal)" transform="translate(50,50)">
-            <circle r="18"/>
-            <polygon points="0,-47 -4,-18 4,-18"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(30)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(60)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(90)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(120)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(150)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(180)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(210)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(240)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(270)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(300)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(330)"/>
-          </g>
-        </svg>
-        <div>
-          <h1 class="hero-h1">Pehli <em>Kamai</em></h1>
-          <div class="hero-by">by tiny miracles</div>
-        </div>
+<!-- ━━ DOOR (landing) ━━ -->
+<div id="view-door">
+  <section class="door">
+    <div class="door-shutter-holder" id="shutterHolder"></div>
+    <div class="door-overlay">
+      <div style="max-width:940px;">
+        <div class="eyebrow">Mumbai's first portal for hiring freshers</div>
+        <h1>Pehli <em>Kamai</em></h1>
+        <p>The first earning. Freshers across Mumbai, ekdum eager to work and looking for their first step.</p>
       </div>
-      <div class="hero-tagline">Welcome to Mumbai's first portal for hiring freshers</div>
-      <div class="hero-bar"></div>
-      <p class="hero-p">Need college students for a short-term survey? A hospitality hire that's a quick learner? A data entry operator who'll actually show up? Our candidates span accounting, data entry, hospitality, sales, creative media, and more — freshers across Mumbai, ekdum eager to work and looking for their first step.</p>
-      <div class="hero-stats">
-        <div class="h-stat"><div class="n" id="s-tot">43</div><div class="l">Candidates</div></div>
-        <div class="h-stat"><div class="n">10+</div><div class="l">Sectors</div></div>
-        <div class="h-stat"><div class="n">Mumbai</div><div class="l">Based</div></div>
+      <div class="doors">
+        <button class="door-card" onclick="showPage('home')">
+          <div class="rule"></div>
+          <h2>Looking to hire?</h2>
+          <p>Scroll through the profiles and give the candidates a call</p>
+          <div class="go">Browse <span id="d-tot">53</span> profiles &rarr;</div>
+        </button>
+        <button class="door-card lime" onclick="openAdd()">
+          <div class="rule lime"></div>
+          <h2>Naukri dhoond rahe ho?</h2>
+          <p>Upload your profile. Bindaas bano — khud bano.</p>
+          <div class="go">Apna profile banao &rarr;</div>
+        </button>
       </div>
     </div>
   </section>
+</div><!-- /door -->
+
+<div class="hidden" id="view-home">
 
   <div class="ss">
     <div class="ss-in">
