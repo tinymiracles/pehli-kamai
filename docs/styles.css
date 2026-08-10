@@ -1,16 +1,22 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+/* Brand tokens (--teal, --lime, --serif, --sans, etc.) now live in tokens.css,
+   loaded before this file. tokens.css does NOT redefine --white, --bg,
+   --ink-2/3/4/5, --line-d, --teal-dark, --lime-dark — those keep their
+   ORIGINAL light-mode values below on purpose. Sections not yet migrated to
+   the new dark design (Home's hero/search-strip/candidate cards, and every
+   still-light modal) still pair these variables with light backgrounds they
+   set themselves — aliasing them to dark values here regressed legibility
+   there (confirmed via an automated contrast scan). Each section gets its
+   dark treatment explicitly, with its own new-token values, as it's
+   migrated in a later phase — not via a blanket alias here. */
 :root{
-  --teal:#00838a;--teal-dark:#006068;--teal-soft:#e6f4f5;--teal-mid:#cceaeb;
-  --lime:#e3ed55;--lime-dark:#c8d240;--lime-soft:#f7facc;
-  --mauve:#914e72;--mauve-soft:#f5eaf0;
+  --teal-dark:#006068;--lime-dark:#c8d240;
   --white:#ffffff;--bg:#f8f9f9;
-  --ink:#0d2426;--ink-2:#1e3d40;--ink-3:#4a6b6e;--ink-4:#7a9c9f;--ink-5:#b0cbcd;
-  --line:#e4eced;--line-d:#c8d8da;
-  --serif:'Playfair Display',Georgia,serif;
-  --sans:'Inter',system-ui,sans-serif;
+  --ink-2:#1e3d40;--ink-3:#4a6b6e;--ink-4:#7a9c9f;--ink-5:#b0cbcd;
+  --line-d:#c8d8da;
 }
 html{scroll-behavior:smooth;}
-body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px;}
+body{font-family:var(--sans);background:var(--ink);color:var(--text);min-height:100vh;font-size:14px;}
 
 /* PAGE SYSTEM */
 .page{display:none;}
@@ -337,7 +343,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.45);padding:0;border-top:2p
 @media(max-width:600px){.ft-inner{grid-template-columns:1fr;gap:32px;padding:40px 20px 28px;}.ft-bottom{padding:16px 20px;}}
 
 /* ━━ TOAST ━━ */
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--ink);color:white;padding:11px 20px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--surface);border:1px solid var(--line-2);color:white;padding:11px 20px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.4);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 @media(max-width:700px){

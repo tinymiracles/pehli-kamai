@@ -10,56 +10,54 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css?v=2">
+<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="views.css?v=2">
 </head>
 <body>
 
 <!-- ━━ HEADER ━━ -->
 <header class="hdr">
-  <div class="hdr-in">
-    <a class="brand" onclick="showPage('home')">
-      <svg class="wm-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <g fill="var(--teal)" transform="translate(50,50)">
-          <circle r="18"/>
-          <polygon points="0,-47 -4,-18 4,-18"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(30)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(60)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(90)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(120)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(150)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(180)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(210)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(240)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(270)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(300)"/>
-          <polygon points="0,-47 -4,-18 4,-18" transform="rotate(330)"/>
-        </g>
-      </svg>
-      <div>
-        <div class="wm-name">Pehli <span>Kamai</span></div>
-        <span class="wm-sub">tiny miracles</span>
-      </div>
-    </a>
-    <nav class="nav-links">
-      <div class="nav-pill" id="nav-pill"></div>
-      <button class="nav-link active" id="nl-home" onclick="showPage('home')">Home</button>
-      <button class="nav-link" id="nl-about" onclick="showPage('about')">About</button>
-      <button class="nav-link" id="nl-contact" onclick="openCF()">Contact Us</button>
-    </nav>
-    <button class="nav-cand" onclick="showPage('home');setTimeout(()=>document.querySelector('.ss').scrollIntoView({behavior:'smooth'}),100)">Candidates</button>
-    <div class="hdr-mid">
-      <div class="hs"><span class="hs-n" id="h-tot">43</span><span class="hs-l">candidates</span></div>
+  <button class="brand" onclick="showPage('home')">
+    <svg class="wm-logo" width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <g fill="var(--teal)" transform="translate(50,50)">
+        <circle r="18"/>
+        <polygon points="0,-47 -4,-18 4,-18"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(30)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(60)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(90)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(120)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(150)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(180)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(210)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(240)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(270)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(300)"/>
+        <polygon points="0,-47 -4,-18 4,-18" transform="rotate(330)"/>
+      </g>
+    </svg>
+    <div>
+      <div class="brand-name">Pehli <span>Kamai</span></div>
+      <div class="brand-sub">By Tiny Miracles</div>
     </div>
-    <div class="hdr-actions" id="hdr-actions">
-      <button class="btn-hr-login" id="btn-hr-login" onclick="openSignIn()">Login</button>
-      <button class="btn-add" id="btn-add-profile" onclick="openAdd()">Add my profile</button>
-    </div>
+  </button>
+  <nav class="tabs">
+    <button class="tab" id="nl-home" aria-current="true" onclick="showPage('home')">Home</button>
+    <button class="tab" id="nl-about" onclick="showPage('about')">About</button>
+    <button class="tab" id="nl-contact" onclick="openCF()">Contact Us</button>
+  </nav>
+  <div class="hdr-right">
+    <span class="hdr-label"><span id="h-tot">53</span> candidates</span>
+    <span class="hdr-label">Shortlist</span>
+    <span class="pill-count" id="shortCount">0</span>
+    <button class="btn-ghost" id="btn-hr-login" onclick="openSignIn()">Login</button>
+    <button class="btn-add" id="btn-add-profile" onclick="openAdd()">Add my profile</button>
   </div>
 </header>
 
 <!-- ━━ HOME PAGE ━━ -->
-<div class="page active" id="page-home">
+<div id="view-home">
 
   <section class="hero">
     <div class="hero-in">
@@ -141,49 +139,61 @@
 </div><!-- /home -->
 
 <!-- ━━ ABOUT PAGE ━━ -->
-<div class="page" id="page-about">
-  <div class="about-wrap">
-    <h2>Our <em>story</em></h2>
-    <div class="ab-bar"></div>
-    <div class="ab-stats">
-      <div class="ab-stat"><div class="n" id="ab-tot">43</div><div class="l">Candidates</div></div>
-      <div class="ab-stat"><div class="n" id="ab-sec">10+</div><div class="l">Sectors</div></div>
+<div class="hidden" id="view-about">
+  <div class="about-wrap-new">
+    <h1 class="page-h1">Our <em>story</em></h1>
+  </div>
+  <div class="wrap about-grid">
+    <div>
+      <p class="lead"><strong>Pehli Kamai</strong> is an initiative by <strong>Tiny Miracles</strong>, a B-Corp certified social enterprise based in Mumbai and Amsterdam. For over a decade, Tiny Miracles has worked alongside communities across the city — on health, on education, on savings, on livelihoods — with one belief holding it all together: people don't lack ability, they lack access.</p>
+      <p style="margin-top:20px">Somewhere along the way, a pattern became impossible to ignore. The children we'd watched learn to read had become young adults. They'd finished their 10th, their 12th, some their graduation — often as first-generation learners with no homework or study support, often while working part-time, often without a single person at home who could explain what a resume was or what "HR round" meant, but always with hopes, dreams, and ambition. They'd taught themselves computers on borrowed phones. They'd signed up for Tally courses, animation courses, spoken English classes — on their own, with their own saved money.</p>
+      <p class="pull">And then they hit a wall that no course could fix: nobody would give them a job.</p>
     </div>
-    <p class="ab-body"><strong>Pehli Kamai</strong> is an initiative by <strong>Tiny Miracles</strong>, a B-Corp certified social enterprise based in Mumbai and Amsterdam. For over a decade, Tiny Miracles has worked alongside communities across the city — on health, on education, on savings, on livelihoods — with one belief holding it all together: people don't lack ability, they lack access.</p>
-    <p class="ab-body">Somewhere along the way, a pattern became impossible to ignore. The children we'd watched learn to read had become young adults. They'd finished their 10th, their 12th, some their graduation — often as first-generation learners, often while working part-time, often without a single person at home who could explain what a resume was or what "HR round" meant, but always with hopes, dreams, and ambition. They'd taught themselves computers on borrowed phones. They'd signed up for Tally courses, animation courses, spoken English classes — on their own, with their own saved money.</p>
-    <p class="ab-body">And then they hit a wall that no course could fix: nobody would give them a job.</p>
-    <button class="btn-teal" onclick="openCF()">Get in touch →</button>
+    <div class="stats">
+      <div><div class="stat-n" id="ab-tot">53</div><div class="stat-l">Candidates on the portal</div></div>
+      <div><div class="stat-n" id="ab-sec">10+</div><div class="stat-l">Sectors</div></div>
+    </div>
   </div>
 
-  <section class="why-pk" id="why-pk">
-  <div class="why-in">
-    <h2>So we built<br>the bridge ourselves</h2>
-    <div class="why-sub">Why this hire makes sense</div>
+  <div class="wrap" style="padding-top:56px;">
+    <h2 class="h2">So we built the bridge ourselves</h2>
+    <div class="stack" style="display:flex;flex-direction:column;gap:22px;max-width:700px;">
+      <p style="font-size:17px;line-height:1.78;color:var(--text-2);margin:0;">What we have understood is that companies in this city need freshers. Thousands of capable young people need jobs. On paper, that's a simple match. In practice, it isn't — and it's nobody's fault in particular. Hiring is rushed, resumes all look the same, and shortcuts creep in without anyone choosing them.</p>
+      <p style="font-size:17px;line-height:1.78;color:var(--text-2);margin:0;">A candidate's English, location they are from, clothes, or board of education quietly gets read before their ability does. We've caught ourselves doing it too, and are now unlearning.</p>
+    </div>
+  </div>
 
-    <p>What we have understood is that companies in this city need freshers. Thousands of capable young people need jobs. On paper, that's a simple match. In practice, it isn't — and it's nobody's fault in particular. Hiring is rushed, resumes all look the same, and shortcuts creep in without anyone choosing them.</p>
-    <p>A candidate's English, location they are from, clothes, or board of education quietly gets read before their ability does. We've caught ourselves doing it too, and are now unlearning.</p>
+  <div class="band">
     <p>We learnt that where you're from is not a qualification and not a warning sign. An accent is not a skill. A pin code is not a work ethic. Talent was never the shortage in this city — introductions were.</p>
+  </div>
 
-    <h3>Why this is a smarter hire for you</h3>
-    <div class="why-quote">When you set all that bias aside, here's what's left: young people who have solved real problems under real constraints, who understand India's actual mass-market customer better than most campus hires ever will, who are more resourceful and eager to get the job done.</div>
-    <p>None of that fits on a résumé. It shows up on the job.</p>
-    <p>Is there sometimes a skills gap? Yes — and that's exactly what our training closes. Candidates on this portal go through career-readiness preparation: reading a job description, building an honest resume, interviewing, and knowing what day one at a workplace actually looks like.</p>
-    <p>That's what Pehli Kamai is: the introduction. Meet the candidates, and then finish the sentence <em>"freshers these days—"</em> however you like. We think you'll be surprised.</p>
+  <div class="wrap" style="padding-top:56px;">
+    <h2 class="h2">Why this is a smarter hire for you</h2>
+    <div class="stack" style="display:flex;flex-direction:column;gap:22px;max-width:700px;">
+      <p style="font-size:17px;line-height:1.78;color:#cfe1e2;margin:0;">When you set all that bias aside, here's what's left: young people who have solved real problems under real constraints, who understand India's actual mass-market customer better than most campus hires ever will, who are more resourceful and eager to get the job done. None of that fits on a résumé. It shows up on the job.</p>
+      <p style="font-size:17px;line-height:1.78;color:var(--text-2);margin:0;">Is there sometimes a skills gap? Yes — and that's exactly what our training closes. Candidates on this portal go through career-readiness preparation: reading a job description, building an honest resume, interviewing, and knowing what day one at a workplace actually looks like.</p>
+    </div>
 
-    <div class="why-cta">
-      <div class="why-cta-card teal">
+    <div class="why-cta" style="margin-top:44px;">
+      <div class="why-cta-card lime">
         <h4>For youth</h4>
         <p>Upload your profile. Bindaas bano — khud bano.</p>
-        <button class="btn-lf-submit" style="margin-top:14px;width:auto;padding:10px 22px;font-size:13px" onclick="openAdd()">Add my profile →</button>
+        <button class="btn-add" style="margin-top:14px;background:var(--lime);color:#0d2426;" onclick="openAdd()">Add my profile →</button>
       </div>
       <div class="why-cta-card">
         <h4>For employers</h4>
         <p>Scroll through the profiles and give the candidates a call.</p>
-        <button class="btn-lf-submit" style="margin-top:14px;width:auto;padding:10px 22px;font-size:13px;background:var(--ink);border-color:var(--ink)" onclick="showPage('home');window.scrollTo({top:0,behavior:'smooth'})">Browse candidates →</button>
+        <button class="btn-add" style="margin-top:14px;" onclick="showPage('home');setTimeout(()=>document.querySelector('.ss').scrollIntoView({behavior:'smooth'}),100)">Browse candidates →</button>
       </div>
     </div>
   </div>
-</section>
+
+  <div class="wrap" style="padding-top:44px;padding-bottom:90px;">
+    <div class="closer">
+      <p>That's what Pehli Kamai is: the introduction. Meet the candidates, and then finish the sentence <em>"freshers these days—"</em> however you like. We think you'll be surprised.</p>
+      <button onclick="showPage('home');window.scrollTo({top:0,behavior:'smooth'})">Meet the candidates</button>
+    </div>
+  </div>
 </div>
 
 
@@ -221,7 +231,7 @@
 </div>
 
 <!-- ━━ ENQUIRIES PAGE ━━ -->
-<div class="page" id="page-enquiries">
+<div class="hidden" id="view-enquiries">
   <div class="enq-wrap">
     <h2>HR <em>Enquiries</em></h2>
     <div class="enq-bar"></div>

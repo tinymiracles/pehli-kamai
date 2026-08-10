@@ -103,18 +103,11 @@ function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase
 
 // Page nav
 function showPage(p){
-  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-  document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));
-  const nl=document.getElementById('nl-'+p);if(nl)nl.classList.add('active');
-  moveNavPill(nl);
+  document.querySelectorAll('[id^="view-"]').forEach(x=>x.classList.add('hidden'));
+  const v=document.getElementById('view-'+p);if(v)v.classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-current','false'));
+  const nl=document.getElementById('nl-'+p);if(nl)nl.setAttribute('aria-current','true');
   window.scrollTo(0,0);
-}
-function moveNavPill(el){
-  const pill=document.getElementById('nav-pill');if(!pill||!el)return;
-  pill.style.left=el.offsetLeft+'px';
-  pill.style.width=el.offsetWidth+'px';
-  pill.style.height=el.offsetHeight+'px';
 }
 
 // Build track filter chips + location dropdown
@@ -757,15 +750,12 @@ function updateHRHeader(){
     btn.onclick=()=>{if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}};
     if(addBtn){addBtn.style.display='none';}
   } else {
-    btn.className='btn-hr-login';
+    btn.className='btn-ghost';
     btn.textContent='Login';
     btn.onclick=openSignIn;
     if(addBtn){addBtn.style.display='';}
   }
 }
-
-// Init HR header state on load
-updateHRHeader();
 
 // ── ASSESSMENT ─────────────────────────────────────
 const AT_BG=[
@@ -905,9 +895,16 @@ function updateAboutStats(){
   const hTot=document.getElementById('h-tot'); if(hTot) hTot.textContent=DATA.length;
   const sTot=document.getElementById('s-tot'); if(sTot) sTot.textContent=DATA.length;
 }
-buildChips();render();updateEnqBadge();updateAboutStats();
+function boot(){
+  buildChips();render();updateEnqBadge();updateAboutStats();
+  updateHRHeader();
+  mergeFirestoreCandidates();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
+else boot();
 
 // Fetch new candidates added via the form and merge into DATA
+function mergeFirestoreCandidates(){
 db.collection('candidates').orderBy('createdAt','asc').get().then(snap=>{
   if(snap.empty) return;
   let added=0;
@@ -943,6 +940,5 @@ db.collection('candidates').orderBy('createdAt','asc').get().then(snap=>{
     updateAboutStats();
   }
 }).catch(()=>{});
+}
 
-// Init nav pill on load
-requestAnimationFrame(()=>moveNavPill(document.getElementById('nl-home')));

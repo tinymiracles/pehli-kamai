@@ -1,0 +1,98 @@
+/* ══════════════════════════════════════════════════════════════
+   PEHLI KAMAI — new mockup-derived layout & components
+   Loaded AFTER styles.css — wins on any class-name conflict, which
+   is how new sections override legacy ones as each view is migrated.
+   Only add a component here once its matching HTML actually exists —
+   an unused-but-colliding rule here would silently break an
+   old, not-yet-migrated section elsewhere on the site.
+
+   Filled in per phase:
+     Phase 2 — header/tabs, view switcher, about-grid/pull/stats/band/closer
+     Phase 3 — door, doors, door-card, replay
+     Phase 4 — grid, cand card, controls, chips (hire view)
+     Phase 5 — ticker, route/step, two-col, form-card, aside-card, phones (work view)
+     Phase 7 — contact view
+   ══════════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{box-sizing:border-box;}
+
+/* ── view switcher ── */
+.hidden{display:none!important;}
+.wrap{max-width:1240px;margin:0 auto;padding:0 44px;}
+
+/* ── header ── */
+.hdr{height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:28px;
+     padding:0 44px;background:var(--surface);position:sticky;top:0;z-index:300;}
+.brand{background:none;border:none;padding:0;text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;color:inherit;font-family:inherit;}
+.brand-name{font-family:var(--serif);font-style:italic;font-weight:700;font-size:19px;line-height:1;color:#fff;}
+.brand-name span{color:var(--lime);}
+.brand-sub{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-top:3px;}
+.tabs{display:flex;gap:4px;}
+.tab{background:transparent;border:none;font-size:13px;font-weight:600;color:var(--text-2);
+     padding:7px 15px;border-radius:var(--r-sm);font-family:var(--sans);cursor:pointer;transition:color .15s,background .15s;}
+.tab:hover{color:var(--text);}
+.tab[aria-current="true"]{background:rgba(227,237,85,.12);color:var(--lime);}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.hdr-label{font-size:12px;color:var(--text-3);}
+.pill-count{min-width:26px;height:26px;padding:0 8px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);border:1px solid var(--line-2);border-radius:13px;
+  font-size:12px;font-weight:700;color:var(--text);}
+.pill-count.on{background:var(--lime);border-color:var(--lime);color:#0d2426;}
+.btn-ghost{height:34px;padding:0 16px;background:none;border:1.5px solid rgba(255,255,255,.18);
+  border-radius:7px;font-size:12px;font-weight:600;color:#dbeceb;font-family:var(--sans);cursor:pointer;}
+.btn-ghost:hover{border-color:var(--lime);color:var(--lime);}
+@media(max-width:700px){
+  .hdr{padding:0 16px;height:auto;flex-wrap:wrap;gap:12px;padding-top:10px;padding-bottom:10px;}
+  .hdr-right{width:100%;margin-left:0;}
+  .tabs{overflow-x:auto;max-width:100%;}
+}
+
+/* ── shared type (used across views) ── */
+.page-h1{font-family:var(--serif);font-size:56px;font-weight:700;line-height:1.06;
+  letter-spacing:-.8px;margin:0 0 20px;color:#fff;max-width:990px;}
+.page-h1 em{font-style:italic;color:var(--lime);}
+.lede{font-size:16.5px;line-height:1.72;color:var(--text-2);margin:0;max-width:790px;}
+.h2{font-family:var(--serif);font-size:40px;font-weight:700;line-height:1.14;margin:0 0 24px;
+  color:#fff;max-width:760px;}
+.quote{font-family:var(--serif);font-size:30px;font-weight:400;font-style:italic;line-height:1.5;
+  color:#fff;margin:0;max-width:900px;}
+
+/* ── about page ── */
+.about-grid{display:grid;grid-template-columns:minmax(0,700px) 1fr;gap:60px;padding-top:38px;}
+.about-grid p{font-size:17px;line-height:1.78;color:var(--text-2);margin:0;}
+.about-grid p.lead{color:#cfe1e2;}
+.pull{font-family:var(--serif);font-size:27px;font-style:italic;line-height:1.5;
+  color:var(--lime)!important;margin:6px 0!important;}
+.stats{border-left:1px solid rgba(255,255,255,.12);padding-left:26px;display:flex;
+  flex-direction:column;gap:24px;}
+.stat-n{font-family:var(--serif);font-style:italic;font-size:34px;color:var(--teal-light);line-height:1;}
+.stat-l{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);margin-top:5px;}
+.band{margin:50px 0 0;padding:44px;background:var(--band);
+  border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);}
+.band p{max-width:960px;margin:0 auto;font-family:var(--serif);font-size:29px;font-style:italic;
+  line-height:1.55;color:#fff;}
+.closer{background:var(--card);border:1.5px solid rgba(227,237,85,.26);border-radius:var(--r-xl);
+  padding:38px 42px;display:flex;align-items:center;gap:38px;}
+.closer p{flex:1;font-family:var(--serif);font-size:26px;font-style:italic;line-height:1.55;
+  color:#fff;margin:0;}
+.closer button{flex:none;height:44px;padding:0 24px;background:var(--lime);border:none;
+  border-radius:var(--r-md);font-size:13.5px;font-weight:700;color:#0d2426;font-family:var(--sans);cursor:pointer;}
+.closer button:hover{opacity:.9;}
+.about-wrap-new{max-width:1240px;margin:0 auto;padding:74px 44px 0;}
+.why-cta{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.why-cta-card{background:var(--card);border:1.5px solid rgba(95,216,208,.24);border-radius:14px;padding:26px 24px;}
+.why-cta-card.lime{border-color:rgba(227,237,85,.26);}
+.why-cta-card h4{font-family:var(--serif);font-size:16px;font-weight:700;color:#fff;margin:0 0 8px;}
+.why-cta-card p{font-size:13px;line-height:1.65;margin:0;color:var(--text-2);}
+.why-cta-card .btn-add{height:32px;padding:0 16px;border-radius:var(--r-sm);font-size:11.5px;border:none;font-family:var(--sans);cursor:pointer;background:var(--teal);color:#fff;font-weight:700;}
+.why-cta-card .btn-add:hover{opacity:.88;}
+
+@media(max-width:1100px){
+  .about-grid{grid-template-columns:1fr;gap:28px;}
+  .page-h1{font-size:42px;}
+}
+@media(max-width:720px){
+  .wrap,.hdr{padding-left:20px;padding-right:20px;}
+  .about-wrap-new,.why-in-new{padding-left:20px;padding-right:20px;}
+  .closer{flex-direction:column;align-items:flex-start;gap:22px;}
+}

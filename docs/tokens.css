@@ -1,0 +1,40 @@
+/* ══════════════════════════════════════════════════════════════
+   PEHLI KAMAI — design tokens
+   This is the "change the colours" file. Everything else (styles.css,
+   views.css) reads these variables — edit values here, not elsewhere.
+   Source: manager's design handoff (dark teal/lime direction).
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  /* — surfaces — */
+  --ink:#07181a;        /* page background (darkest) */
+  --surface:#091d20;    /* header, raised bars */
+  --card:#0d2427;       /* cards, inputs, modals */
+  --band:#0b2225;       /* pull-quote / callout band */
+
+  /* — borders — */
+  --line:rgba(255,255,255,.09);   /* hairline */
+  --line-2:rgba(255,255,255,.14); /* control / focus border */
+
+  /* — brand (unchanged from the live site — same brand, same hexes) — */
+  --teal:#00838a;        /* primary action, HR-side accent */
+  --teal-light:#5fd8d0;  /* links, HR-side highlight */
+  --teal-soft:rgba(0,131,138,.16);   /* dark-mode equivalent of the old light teal tint */
+  --teal-mid:rgba(0,131,138,.32);
+  --lime:#e3ed55;        /* highlight, candidate-side accent */
+  --lime-soft:rgba(227,237,85,.14);  /* dark-mode equivalent of the old light lime tint */
+  --mauve:#c98fb0;       /* lightened for dark backgrounds (was #914e72 on white) */
+  --mauve-soft:rgba(201,143,176,.16);
+
+  /* — text — */
+  --text:#eaf4f4;    /* primary body text */
+  --text-2:#a8c4c6;  /* secondary text */
+  --text-3:#7fa5a8;  /* tertiary / meta */
+  --text-4:#6f9598;  /* labels */
+
+  /* — type — */
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+
+  /* — radius — */
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-pill:18px;
+}
