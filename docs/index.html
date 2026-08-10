@@ -59,30 +59,34 @@
 <!-- ━━ HOME PAGE ━━ -->
 <!-- ━━ DOOR (landing) ━━ -->
 <div id="view-door">
-  <section class="door">
-    <div class="door-shutter-holder" id="shutterHolder"></div>
-    <div class="door-overlay">
-      <div style="max-width:940px;">
-        <div class="eyebrow">Mumbai's first portal for hiring freshers</div>
-        <h1>Pehli <em>Kamai</em></h1>
-        <p>The first earning. Freshers across Mumbai, ekdum eager to work and looking for their first step.</p>
-      </div>
-      <div class="doors">
-        <button class="door-card" onclick="showPage('home')">
-          <div class="rule"></div>
-          <h2>Looking to hire?</h2>
-          <p>Scroll through the profiles and give the candidates a call</p>
-          <div class="go">Browse <span id="d-tot">53</span> profiles &rarr;</div>
-        </button>
-        <button class="door-card lime" onclick="openAdd()">
-          <div class="rule lime"></div>
-          <h2>Naukri dhoond rahe ho?</h2>
-          <p>Upload your profile. Bindaas bano — khud bano.</p>
-          <div class="go">Apna profile banao &rarr;</div>
-        </button>
-      </div>
+
+  <!-- ── section: opener ── -->
+  <section class="ed-section section-paper">
+    <div class="wrap ed-sec-in">
+      <span class="ed-cap">Mumbai's first job portal for freshers</span>
+      <h1 class="ed-mega">Pehli Kamai.<br><em>The first earning.</em></h1>
+      <p class="ed-dek">Freshers across Mumbai, ekdum eager to work — looking for their first step. <span id="d-tot">53</span> of them are on this page right now.</p>
     </div>
   </section>
+
+  <!-- ── section: HR side (teal leads HR) ── -->
+  <section class="ed-section section-teal">
+    <div class="wrap ed-sec-in">
+      <h2 class="ed-display">Looking to hire?</h2>
+      <p class="ed-dek">Scroll through the profiles and give the candidates a call — no agency fee, no drama, just people who showed up wanting the job.</p>
+      <button class="ed-pill" onclick="showPage('home')">Browse profiles &rarr;</button>
+    </div>
+  </section>
+
+  <!-- ── section: candidate side (lime leads candidate) ── -->
+  <section class="ed-section section-lime">
+    <div class="wrap ed-sec-in">
+      <h2 class="ed-display">Naukri dhoond rahe ho?</h2>
+      <p class="ed-dek">Upload your profile. Bindaas bano — khud bano. Koi fees nahin, no English test, no gatekeeping.</p>
+      <button class="ed-pill" onclick="openAdd()">Apna profile banao &rarr;</button>
+    </div>
+  </section>
+
 </div><!-- /door -->
 
 <div class="hidden" id="view-home">
