@@ -34,7 +34,29 @@
   /* — type — */
   --serif:'Playfair Display',Georgia,serif;
   --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:ui-monospace,'SF Mono','Consolas','Liberation Mono',monospace; /* tiny metadata only — dates, tags, labels */
 
   /* — radius — */
   --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-pill:18px;
+
+  /* ── editorial system (Part 2) ──────────────────────────────────
+     The dark tokens above are Part 1's (shutter/door-view) palette —
+     kept working, not reused here, so that code still renders correctly
+     if it's ever re-enabled. This is a separate light-by-default system:
+     a warm-neutral page with bold full-bleed teal/lime/ink SECTIONS
+     dropped in between, editorial-magazine style, not a single dark page. */
+  --paper:#f4f1ea;          /* default page background — warm, not pure white */
+  --ed-ink:#161616;         /* primary text on light backgrounds — near-black, warmed */
+  --ed-ink-2:#4a4b46;       /* secondary text on light backgrounds */
+  --ed-line:rgba(22,22,22,.12); /* hairline on light backgrounds */
+
+  /* extreme-contrast type scale — deliberately huge steps between adjacent
+     sizes (Ransom Note found ~8-10x ratios between a headline and its
+     caption in the SAME section; these tokens make that easy to hit
+     consistently instead of picking sizes ad hoc per component). */
+  --size-mega:clamp(64px,11vw,140px);   /* one-word/short-phrase hero statements */
+  --size-display:clamp(40px,6vw,72px);  /* section headlines */
+  --size-h2:clamp(26px,3.2vw,38px);     /* sub-headlines */
+  --size-body:17px;                     /* running/dek copy */
+  --size-caption:12px;                  /* the tiny register — dates, tags, tiny labels, --mono */
 }

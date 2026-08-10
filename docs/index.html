@@ -110,9 +110,14 @@
     <div class="track-rows" id="grid"></div>
   </div>
 
-  <section class="hiw">
+  <section class="hiw3d-section">
     <div class="hiw-in">
       <p class="hiw-p">"How it works is simple. You browse profiles. You shortlist. We make the introduction — and we stay in the loop until the candidate's first day, and after."</p>
+    </div>
+    <div class="hiw3d-stage">
+      <div class="hiw3d-hint">Click the resumes →</div>
+    </div>
+    <div class="hiw-in">
       <div class="hiw-ctas">
         <div class="hiw-card">
           <div class="hiw-card-label">Looking to hire?</div>
@@ -660,6 +665,27 @@
 <script src="shutter.js"></script>
 <script src="resumes-data.js"></script>
 <script src="script.js"></script>
+<!-- pk-hiw3d needs three.js's GLTFLoader, which only ships as an ES module —
+     this is the one component on the site loaded this way. Everything else
+     (shutter.js, script.js) stays a classic script using the UMD build above. -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="howitworks3d.js?v=2"></script>
+<script>
+  // resumeclick bubbles from the shadow-less custom element up through the
+  // document — wire it to the same "browse candidates" action the door
+  // card and CTA buttons already use.
+  document.addEventListener('resumeclick', () => {
+    showPage('home');
+    setTimeout(() => { const ss = document.querySelector('.ss'); if (ss) ss.scrollIntoView({ behavior: 'smooth' }); }, 60);
+  });
+</script>
 </body>
 </html>
 

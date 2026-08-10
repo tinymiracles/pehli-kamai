@@ -105,6 +105,9 @@ function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase
 function showPage(p){
   const leavingDoor = !document.getElementById('view-door').classList.contains('hidden') && p!=='door';
   const enteringDoor = document.getElementById('view-door').classList.contains('hidden') && p==='door';
+  const homeEl = document.getElementById('view-home');
+  const leavingHome = homeEl && !homeEl.classList.contains('hidden') && p!=='home';
+  const enteringHome = homeEl && homeEl.classList.contains('hidden') && p==='home';
   document.querySelectorAll('[id^="view-"]').forEach(x=>x.classList.add('hidden'));
   const v=document.getElementById('view-'+p);if(v)v.classList.remove('hidden');
   document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-current','false'));
@@ -124,6 +127,17 @@ function showPage(p){
       const s=holder.querySelector('pk-shutter'); if(!s.getAttribute('h')) s.setAttribute('h','840');
     }
     startShutterLoop();
+  }
+  // Same fix, same reason, for the how-it-works 3D scene sitting inside Home.
+  if(leavingHome){
+    const el=document.querySelector('.hiw3d-stage pk-hiw3d');
+    if(el){window.__pkHiw3d=el;el.remove();}
+  } else if(enteringHome){
+    const stage=document.querySelector('.hiw3d-stage');
+    if(stage && !stage.querySelector('pk-hiw3d')){
+      const hint=stage.querySelector('.hiw3d-hint');
+      stage.insertBefore(window.__pkHiw3d||document.createElement('pk-hiw3d'), hint||null);
+    }
   }
   window.scrollTo(0,0);
 }

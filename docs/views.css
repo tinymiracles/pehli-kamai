@@ -20,6 +20,30 @@
 .hidden{display:none!important;}
 .wrap{max-width:1240px;margin:0 auto;padding:0 44px;}
 
+/* ── editorial section colors (Part 2) ──────────────────────────
+   Each full-bleed section color needs its OWN correct text pairing —
+   lime is too light for light text, ink is too dark for dark text.
+   Use one of these on any section wrapper instead of picking bg/color
+   separately, so the pairing is never picked wrong. */
+body{background:var(--paper);color:var(--ed-ink);font-family:var(--sans);}
+.section-paper{background:var(--paper);color:var(--ed-ink);}
+.section-teal{background:var(--teal);color:#fff;}
+.section-lime{background:var(--lime);color:var(--ed-ink);}
+.section-ink{background:var(--ed-ink);color:#f4f1ea;}
+.section-teal a,.section-ink a{color:var(--lime);}
+.section-paper a,.section-lime a{color:var(--teal);}
+
+/* extreme-contrast editorial type, for use inside any .section-* */
+.ed-mega{font-family:var(--serif);font-style:italic;font-weight:700;font-size:var(--size-mega);
+  line-height:.98;letter-spacing:-2px;margin:0;text-wrap:balance;}
+.ed-display{font-family:var(--serif);font-weight:700;font-size:var(--size-display);
+  line-height:1.04;letter-spacing:-1px;margin:0;text-wrap:balance;}
+.ed-h2{font-family:var(--serif);font-weight:700;font-size:var(--size-h2);line-height:1.14;margin:0;}
+.ed-dek{font-family:var(--sans);font-size:var(--size-body);line-height:1.6;font-weight:500;
+  opacity:.82;margin:10px 0 0;max-width:640px;}
+.ed-cap{font-family:var(--mono);font-size:var(--size-caption);letter-spacing:.02em;
+  text-transform:uppercase;opacity:.62;}
+
 /* ── header ── */
 .hdr{height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:28px;
      padding:0 44px;background:var(--surface);position:sticky;top:0;z-index:300;}
@@ -129,6 +153,22 @@
   .door h1{font-size:44px;letter-spacing:-1px;}
   .doors{grid-template-columns:1fr;margin-top:28px;}
   .replay{top:auto;bottom:16px;right:16px;}
+}
+
+/* ── how-it-works, 3D — dark by nature (the scene needs a dark backdrop),
+   a deliberate exception on an otherwise-still-light Home page for now ── */
+.hiw3d-section{background:var(--ink);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:64px 0 72px;}
+.hiw3d-section .hiw-p{color:var(--text-2)!important;}
+.hiw3d-stage{position:relative;max-width:1000px;margin:0 auto 40px;padding:0 40px;}
+pk-hiw3d{display:block;width:100%;height:340px;cursor:default;}
+pk-hiw3d.hot{cursor:pointer;}
+.hiw3d-hint{position:absolute;left:56px;bottom:14px;font-size:11px;font-weight:600;
+  letter-spacing:.4px;color:var(--text-3);pointer-events:none;}
+@media(max-width:640px){
+  .hiw3d-stage{padding:0 20px;}
+  pk-hiw3d{height:260px;}
+  .hiw3d-hint{left:26px;}
 }
 
 @media(max-width:1100px){
