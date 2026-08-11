@@ -55,6 +55,34 @@ body{background:var(--paper);color:var(--ed-ink);font-family:var(--sans);}
   .ed-section{padding:64px 0;}
 }
 
+/* ── flat-illustration hero (Part 3, current direction) — two-column,
+   light background, one clean SVG illustration on the right instead of a
+   crowded composition, real text hierarchy on the left. ── */
+.fi-hero{max-width:1200px;margin:0 auto;min-height:calc(100vh - 64px);display:grid;
+  grid-template-columns:1fr 1fr;align-items:center;gap:40px;padding:0 60px;
+  background:var(--bg-light);color:var(--fi-ink);}
+body:has(#view-door:not(.hidden)){background:var(--bg-light);}
+.fi-copy{max-width:480px;}
+.fi-eyebrow{display:inline-flex;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--teal);background:var(--bg-light-tint);padding:7px 16px;
+  border-radius:20px;margin-bottom:22px;}
+.fi-h1{font-family:var(--serif);font-style:italic;font-weight:700;font-size:clamp(30px,4.4vw,48px);
+  line-height:1.14;margin:0 0 18px;letter-spacing:-.5px;color:var(--fi-ink);}
+.fi-h1 em{color:var(--teal);font-style:italic;}
+.fi-lede{font-family:var(--sans);font-size:16px;line-height:1.75;color:var(--fi-ink-2);margin:0 0 30px;}
+.fi-cta-row{display:flex;gap:12px;flex-wrap:wrap;}
+.fi-cta{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;background:var(--teal);
+  color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;}
+.fi-cta:hover{background:#00696e;}
+.fi-cta.ghost{background:transparent;border:1.5px solid var(--teal);color:var(--teal);}
+.fi-cta.ghost:hover{background:var(--bg-light-tint);}
+.fi-stage{position:relative;height:520px;}
+.fi-stage svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+@media(max-width:860px){
+  .fi-hero{grid-template-columns:1fr;padding:40px 24px;min-height:auto;gap:0;}
+  .fi-stage{height:340px;order:-1;margin-bottom:16px;}
+}
+
 /* extreme-contrast editorial type, for use inside any .section-* */
 .ed-mega{font-family:var(--serif);font-style:italic;font-weight:700;font-size:var(--size-mega);
   line-height:.98;letter-spacing:-2px;margin:0;text-wrap:balance;}
@@ -177,8 +205,8 @@ body{background:var(--paper);color:var(--ed-ink);font-family:var(--sans);}
   .replay{top:auto;bottom:16px;right:16px;}
 }
 
-/* ── how-it-works, 3D — dark by nature (the scene needs a dark backdrop),
-   a deliberate exception on an otherwise-still-light Home page for now ── */
+/* ── how-it-works, 3D scene (Part 1, parked/unused — kept working, not
+   deleted, in case 3D comes back later) ── */
 .hiw3d-section{background:var(--ink);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   padding:64px 0 72px;}
 .hiw3d-section .hiw-p{color:var(--text-2)!important;}
@@ -191,6 +219,37 @@ pk-hiw3d.hot{cursor:pointer;}
   .hiw3d-stage{padding:0 20px;}
   pk-hiw3d{height:260px;}
   .hiw3d-hint{left:26px;}
+}
+
+/* ── how-it-works, flat-illustration (Part 3, current) — light, matches the
+   door view's hero treatment. Page 2 of "the journey": getting found. ── */
+.fi-hiw{background:var(--bg-light);border-top:1px solid var(--bg-light-tint);border-bottom:1px solid var(--bg-light-tint);
+  padding:64px 0 72px;}
+.fi-hiw .hiw-p{color:var(--fi-ink-2)!important;}
+.fi-hiw-stage{position:relative;max-width:1000px;height:420px;margin:0 auto 40px;padding:0 40px;}
+.fi-hiw-stage svg{width:100%;height:100%;overflow:visible;}
+@media(max-width:640px){
+  .fi-hiw-stage{padding:0 20px;height:320px;}
+}
+.fi-hiw-label{display:block;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--fi-ink-2);margin-bottom:16px;}
+.fi-steps{max-width:1180px;margin:0 auto 48px;padding:0 40px;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:20px;}
+.fi-step{background:#fff;border:1px solid rgba(13,36,39,.08);border-radius:14px;padding:18px 18px 22px;
+  box-shadow:0 4px 20px rgba(13,36,39,.06);position:relative;}
+.fi-step-art{border-radius:8px;overflow:hidden;background:var(--bg-light-tint);margin-bottom:14px;aspect-ratio:5/3;}
+.fi-step-art svg{width:100%;height:100%;display:block;}
+.fi-step-num{position:absolute;top:-14px;left:14px;width:28px;height:28px;border-radius:50%;
+  background:var(--teal);color:#fff;font-family:var(--sans);font-weight:800;font-size:13px;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(13,36,39,.25);}
+.fi-step-num.lime{background:var(--lime);color:var(--fi-ink);}
+.fi-step h3{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--fi-ink);margin:6px 0 6px;}
+.fi-step p{font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--fi-ink-2);margin:0;}
+@media(max-width:1000px){
+  .fi-steps{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:640px){
+  .fi-steps{grid-template-columns:1fr;padding:0 20px;}
 }
 
 @media(max-width:1100px){

@@ -946,6 +946,7 @@ function updateAboutStats(){
   const hTot=document.getElementById('h-tot'); if(hTot) hTot.textContent=DATA.length;
   const sTot=document.getElementById('s-tot'); if(sTot) sTot.textContent=DATA.length;
   const dTot=document.getElementById('d-tot'); if(dTot) dTot.textContent=DATA.length;
+  const hiwTot=document.getElementById('hiw-tot'); if(hiwTot) hiwTot.textContent=DATA.length;
 }
 function boot(){
   buildChips();render();updateEnqBadge();updateAboutStats();

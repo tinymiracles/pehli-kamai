@@ -59,4 +59,17 @@
   --size-h2:clamp(26px,3.2vw,38px);     /* sub-headlines */
   --size-body:17px;                     /* running/dek copy */
   --size-caption:12px;                  /* the tiny register — dates, tags, tiny labels, --mono */
+
+  /* ── flat-illustration system (Part 3 — current direction) ─────────
+     Light, conventional two-column hero + flat vector character
+     illustrations, not the dark editorial system above (also superseded)
+     and not the 3D shutter (Part 1, still parked/unused). Landed on after
+     many rounds against real reference images — see the plan file. */
+  --bg-light:#f4faf9;      /* page background for the flat-illustration pages */
+  --bg-light-tint:#d4eeee; /* soft background shape behind hero illustrations */
+  --fi-ink:#0d2427;        /* text on light backgrounds — matches --ed-ink-adjacent but warmer-teal */
+  --fi-ink-2:#4a6b6e;      /* secondary text */
+  --skin:#e8b48c;          /* character illustration skin tone */
+  --skin-shade:#d99f75;    /* shaded/underside tone for the same */
+  --hair:#241a15;          /* character illustration hair */
 }

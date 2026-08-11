@@ -59,34 +59,67 @@
 <!-- ━━ HOME PAGE ━━ -->
 <!-- ━━ DOOR (landing) ━━ -->
 <div id="view-door">
-
-  <!-- ── section: opener ── -->
-  <section class="ed-section section-paper">
-    <div class="wrap ed-sec-in">
-      <span class="ed-cap">Mumbai's first job portal for freshers</span>
-      <h1 class="ed-mega">Pehli Kamai.<br><em>The first earning.</em></h1>
-      <p class="ed-dek">Freshers across Mumbai, ekdum eager to work — looking for their first step. <span id="d-tot">53</span> of them are on this page right now.</p>
+  <!-- Page 1 of "the journey": the search. Flat-illustration two-column intro —
+       copy verbatim from Part 1 of the content doc, on the left with real room
+       to breathe; a single illustration (not a crowded composition) on the
+       right — the candidate looking for the right opportunity, a lightbulb for
+       the idea, a target hit dead-centre for the goal landed, direction arrows
+       for the path. Landed on this after many rounds against real references —
+       see the plan file for the full history if picking this back up later. -->
+  <section class="fi-hero">
+    <div class="fi-copy">
+      <span class="fi-eyebrow">Mumbai's first job portal for freshers</span>
+      <h1 class="fi-h1">Welcome to Mumbai's first portal for <em>hiring freshers.</em></h1>
+      <p class="fi-lede">Need college students for a short-term survey? A hospitality hire that's a quick learner? A data entry operator who'll actually show up? Our candidates span accounting, data entry, hospitality, sales, creative media, and more.</p>
+      <div class="fi-cta-row">
+        <button class="fi-cta" onclick="showPage('home')">Browse profiles &rarr;</button>
+        <button class="fi-cta ghost" onclick="openAdd()">Naukri dhoond rahe ho? &rarr;</button>
+      </div>
+    </div>
+    <div class="fi-stage">
+      <svg viewBox="0 0 560 560">
+        <ellipse cx="290" cy="300" rx="220" ry="240" fill="var(--bg-light-tint)"/>
+        <g transform="translate(370,360)">
+          <circle r="60" fill="var(--lime)"/>
+          <circle r="42" fill="#fff"/>
+          <circle r="24" fill="var(--lime)"/>
+          <circle r="7" fill="var(--teal)"/>
+          <path d="M40,-40 L2,-2" stroke="var(--fi-ink)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M40,-40 L28,-42 L38,-30 Z" fill="var(--fi-ink)"/>
+        </g>
+        <g fill="var(--teal)" opacity="0.5">
+          <path d="M60,470 h50 v-14 l30,22 -30,22 v-14 h-50 Z"/>
+          <path d="M60,420 h34 v-10 l22,16 -22,16 v-10 h-34 Z" opacity="0.7"/>
+        </g>
+        <g transform="translate(150,90)">
+          <circle r="30" fill="#fff" stroke="var(--lime)" stroke-width="6"/>
+          <path d="M-9,10 L9,10 M-7,17 L7,17" stroke="#b9c73e" stroke-width="4" stroke-linecap="round"/>
+          <path d="M-13,-8 C-13,-20 -8,-28 0,-28 C8,-28 13,-20 13,-8 C13,0 8,4 6,10 L-6,10 C-8,4 -13,0 -13,-8 Z" fill="var(--lime)"/>
+        </g>
+        <g transform="translate(250,300)">
+          <path d="M-56,116 C-58,54 -40,8 0,8 C40,8 58,54 56,116 Z" fill="var(--teal)"/>
+          <path d="M4,10 C36,14 54,56 56,116 L18,116 C16,78 10,40 4,10 Z" fill="#045a5f" opacity="0.55"/>
+          <path d="M-16,12 L0,30 16,12" fill="none" stroke="#eaf4f4" stroke-width="5" stroke-linecap="round"/>
+          <path d="M-50,38 C-40,34 -30,36 -26,44 C-46,52 -66,74 -70,108 C-76,104 -80,96 -80,88 C-78,64 -66,46 -50,38 Z" fill="var(--teal)"/>
+          <path d="M-70,108 C-82,106 -90,114 -88,124 C-86,134 -74,136 -66,130 C-60,126 -60,116 -64,110 Z" fill="var(--skin)"/>
+          <path d="M50,38 C64,26 76,10 80,-10 C86,-6 90,2 88,10 C82,28 68,46 54,54 Z" fill="#045a5f" opacity="0.9"/>
+          <path d="M78,-14 C90,-20 106,-18 116,-8 C108,-2 96,-2 88,-8 Z" fill="var(--skin)"/>
+          <g transform="translate(96,-18) rotate(-28)">
+            <rect x="-8" y="-38" width="16" height="76" rx="7" fill="var(--fi-ink)"/>
+            <rect x="-11" y="30" width="22" height="14" rx="5" fill="#045a5f"/>
+            <circle cx="0" cy="-38" r="9" fill="var(--teal-light)"/>
+          </g>
+          <rect x="-11" y="-2" width="22" height="20" rx="8" fill="var(--skin)"/>
+          <circle cx="0" cy="-30" r="33" fill="var(--skin)"/>
+          <path d="M12,-52 C24,-46 32,-32 30,-16 C27,-18 24,-24 24,-30 C24,-24 18,-22 16,-28 C14,-20 6,-18 4,-26 Z" fill="var(--skin-shade)" opacity="0.7"/>
+          <path d="M-32,-30 C-36,-58 -18,-68 2,-66 C24,-64 40,-50 34,-26 C31,-34 30,-42 24,-44 C22,-36 14,-38 12,-46 C6,-40 -8,-40 -14,-46 C-16,-38 -24,-36 -26,-42 C-30,-38 -31,-34 -32,-30 Z" fill="var(--hair)"/>
+          <path d="M-19,-38 L-9,-40" stroke="var(--hair)" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="-13" cy="-31" r="3.2" fill="var(--fi-ink)"/>
+          <path d="M-6,-14 C-2,-11 2,-11 6,-14" fill="none" stroke="var(--fi-ink)" stroke-width="2.6" stroke-linecap="round"/>
+        </g>
+      </svg>
     </div>
   </section>
-
-  <!-- ── section: HR side (teal leads HR) ── -->
-  <section class="ed-section section-teal">
-    <div class="wrap ed-sec-in">
-      <h2 class="ed-display">Looking to hire?</h2>
-      <p class="ed-dek">Scroll through the profiles and give the candidates a call — no agency fee, no drama, just people who showed up wanting the job.</p>
-      <button class="ed-pill" onclick="showPage('home')">Browse profiles &rarr;</button>
-    </div>
-  </section>
-
-  <!-- ── section: candidate side (lime leads candidate) ── -->
-  <section class="ed-section section-lime">
-    <div class="wrap ed-sec-in">
-      <h2 class="ed-display">Naukri dhoond rahe ho?</h2>
-      <p class="ed-dek">Upload your profile. Bindaas bano — khud bano. Koi fees nahin, no English test, no gatekeeping.</p>
-      <button class="ed-pill" onclick="openAdd()">Apna profile banao &rarr;</button>
-    </div>
-  </section>
-
 </div><!-- /door -->
 
 <div class="hidden" id="view-home">
@@ -114,13 +147,150 @@
     <div class="track-rows" id="grid"></div>
   </div>
 
-  <section class="hiw3d-section">
+  <!-- Page 2 of "the journey": getting found. The synthesis composition —
+       verified candidate profile under HR's magnifying glass, real sector
+       tags from the content doc, the Pehli Kamai coin/envelope tying back to
+       the name — this is "How it works is simple..." made visual instead of
+       just a pull-quote. -->
+  <section class="fi-hiw">
     <div class="hiw-in">
+      <span class="fi-hiw-label">How it works</span>
       <p class="hiw-p">"How it works is simple. You browse profiles. You shortlist. We make the introduction — and we stay in the loop until the candidate's first day, and after."</p>
     </div>
-    <div class="hiw3d-stage">
-      <div class="hiw3d-hint">Click the resumes →</div>
+
+    <div class="fi-steps">
+      <!-- Step 1: You browse — the JOBS search-bar + telescope recreation -->
+      <div class="fi-step">
+        <div class="fi-step-art">
+          <svg viewBox="0 0 700 420"><g transform="translate(0,0)">
+            <ellipse cx="350" cy="380" rx="260" ry="14" fill="#0d2427" opacity="0.08"/>
+            <g transform="translate(120,220)">
+              <rect width="420" height="90" rx="45" fill="#ffffff" stroke="var(--fi-ink)" stroke-width="5"/>
+              <text x="150" y="60" text-anchor="middle" font-family="Inter" font-weight="800" font-size="46" fill="var(--teal)" letter-spacing="4">JOBS</text>
+              <circle cx="360" cy="45" r="34" fill="none" stroke="var(--fi-ink)" stroke-width="8"/>
+              <line x1="384" y1="69" x2="410" y2="95" stroke="var(--fi-ink)" stroke-width="12" stroke-linecap="round"/>
+            </g>
+            <g transform="translate(90,190)">
+              <path d="M-30,180 C-30,100 -18,60 0,60 C18,60 30,100 30,180 Z" fill="var(--lime)"/>
+              <path d="M-26,90 C-40,96 -46,112 -42,128 L-20,118 Z" fill="var(--lime)"/>
+              <circle cx="0" cy="42" r="24" fill="var(--skin)"/>
+              <path d="M-20,26 C-22,10 -8,2 0,2 C10,2 22,10 20,26 C18,18 12,20 10,14 C4,20 -6,20 -10,14 C-12,20 -18,18 -20,26 Z" fill="var(--hair)"/>
+              <g transform="translate(38,10)"><circle r="17" fill="#fff" stroke="var(--fi-ink)" stroke-width="2"/><text y="6" text-anchor="middle" font-size="18" font-weight="700" fill="var(--fi-ink)">?</text></g>
+            </g>
+            <g transform="translate(610,190)">
+              <path d="M-30,180 C-30,100 -18,60 0,60 C18,60 30,100 30,180 Z" fill="var(--teal)"/>
+              <path d="M-26,90 C-40,96 -46,112 -42,128 L-20,118 Z" fill="var(--teal)"/>
+              <rect x="14" y="98" width="30" height="24" rx="4" fill="var(--teal-light)" transform="rotate(20 29 110)"/>
+              <circle cx="0" cy="42" r="24" fill="var(--skin)"/>
+              <path d="M-20,26 C-22,10 -8,2 0,2 C10,2 22,10 20,26 C18,18 12,20 10,14 C4,20 -6,20 -10,14 C-12,20 -18,18 -20,26 Z" fill="var(--hair)"/>
+              <g transform="translate(-38,10)"><circle r="17" fill="#fff" stroke="var(--fi-ink)" stroke-width="2"/><text y="6" text-anchor="middle" font-size="16" fill="var(--lime)">&#9733;</text></g>
+            </g>
+            <g transform="translate(330,150)">
+              <path d="M-14,60 C-16,84 -20,100 -26,112" stroke="var(--fi-ink)" stroke-width="16" stroke-linecap="round" fill="none"/>
+              <path d="M14,60 C18,82 22,98 30,110" stroke="var(--fi-ink)" stroke-width="16" stroke-linecap="round" fill="none"/>
+              <circle cx="-27" cy="115" r="9" fill="var(--hair)"/><circle cx="31" cy="113" r="9" fill="var(--hair)"/>
+              <path d="M-30,60 C-30,10 -18,-24 0,-24 C18,-24 30,10 30,60 Z" fill="var(--teal)"/>
+              <path d="M4,-22 C24,-18 30,10 30,60 L14,60 C14,30 10,-4 4,-22 Z" fill="#045a5f" opacity="0.55"/>
+              <path d="M-26,-6 C-40,0 -48,16 -46,34" stroke="var(--teal)" stroke-width="18" stroke-linecap="round" fill="none"/>
+              <circle cx="-46" cy="38" r="10" fill="var(--skin)"/>
+              <path d="M24,-8 C36,-20 46,-36 48,-54" stroke="#045a5f" stroke-width="17" stroke-linecap="round" fill="none"/>
+              <circle cx="49" cy="-58" r="9" fill="var(--skin)"/>
+              <g transform="translate(58,-64) rotate(-32)"><rect x="-7" y="-30" width="14" height="60" rx="6" fill="var(--fi-ink)"/><rect x="-9" y="24" width="18" height="10" rx="4" fill="#045a5f"/><circle cx="0" cy="-30" r="7" fill="var(--teal-light)"/></g>
+              <rect x="-9" y="-40" width="18" height="18" rx="7" fill="var(--skin)"/>
+              <circle cx="0" cy="-62" r="27" fill="var(--skin)"/>
+              <path d="M-26,-64 C-29,-86 -14,-94 2,-92 C18,-90 30,-80 26,-62 C24,-70 18,-74 15,-70 C10,-78 -8,-78 -13,-70 C-16,-74 -22,-70 -24,-64 Z" fill="var(--hair)"/>
+            </g>
+          </g></svg>
+        </div>
+        <div class="fi-step-num">1</div>
+        <h3>You browse</h3>
+        <p>Search <span id="hiw-tot">53</span> fresher profiles by sector, location, or availability.</p>
+      </div>
+
+      <!-- Step 2: You shortlist — the profile-card + magnifying-glass recreation -->
+      <div class="fi-step">
+        <div class="fi-step-art">
+          <svg viewBox="0 0 640 420"><g transform="translate(0,-30)">
+            <g transform="translate(70,150)"><rect width="150" height="200" rx="6" fill="#fff"/><rect width="150" height="22" rx="6" fill="var(--bg-light-tint)"/><circle cx="75" cy="80" r="34" fill="#c9d8d8"/><text x="75" y="182" text-anchor="middle" font-size="15" fill="#b9cccc" letter-spacing="2">&#9733;&#9733;&#9733;&#9734;&#9734;</text></g>
+            <g transform="translate(420,150)"><rect width="150" height="200" rx="6" fill="#fff"/><rect width="150" height="22" rx="6" fill="var(--bg-light-tint)"/><circle cx="75" cy="80" r="34" fill="#c9d8d8"/><text x="75" y="182" text-anchor="middle" font-size="15" fill="#b9cccc" letter-spacing="2">&#9733;&#9733;&#9733;&#9734;&#9734;</text></g>
+            <g transform="translate(230,90)">
+              <rect x="4" y="10" width="180" height="260" rx="8" fill="#000" opacity="0.08"/>
+              <rect width="180" height="260" rx="8" fill="#fff"/>
+              <rect width="180" height="26" rx="8" fill="var(--bg-light-tint)"/>
+              <circle cx="90" cy="105" r="46" fill="var(--teal)"/>
+              <circle cx="158" cy="26" r="17" fill="#fff"/><circle cx="158" cy="26" r="14" fill="#2f9e57"/>
+              <path d="M150,26 155,32 167,18" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="30" y="168" width="120" height="10" rx="5" fill="var(--fi-ink)" opacity="0.82"/>
+              <text x="90" y="216" text-anchor="middle" font-size="19" fill="var(--lime)" letter-spacing="3">&#9733;&#9733;&#9733;&#9733;&#9733;</text>
+              <rect x="40" y="230" width="100" height="20" rx="10" fill="var(--teal)"/>
+            </g>
+            <g transform="translate(300,150) rotate(28)"><circle r="44" fill="rgba(255,255,255,.28)" stroke="var(--fi-ink)" stroke-width="9"/><line x1="31" y1="31" x2="78" y2="78" stroke="var(--fi-ink)" stroke-width="15" stroke-linecap="round"/></g>
+          </g></svg>
+        </div>
+        <div class="fi-step-num lime">2</div>
+        <h3>You shortlist</h3>
+        <p>Pick the candidates you want to talk to. Download the list.</p>
+      </div>
+
+      <!-- Step 3: We introduce — presenter-on-screen + stat icons -->
+      <div class="fi-step">
+        <div class="fi-step-art">
+          <svg viewBox="0 0 700 420">
+            <rect x="150" y="80" width="400" height="260" rx="10" fill="var(--fi-ink)"/>
+            <rect x="168" y="98" width="364" height="200" rx="4" fill="#eaf4f4"/>
+            <rect x="150" y="340" width="400" height="16" rx="4" fill="#1a3438"/>
+            <rect x="150" y="356" width="120" height="14" rx="4" fill="var(--fi-ink)"/>
+            <g transform="translate(350,190)">
+              <path d="M-38,80 C-38,20 -20,-16 0,-16 C20,-16 38,20 38,80 Z" fill="var(--teal)"/>
+              <path d="M-14,-16 C-16,-40 0,-52 18,-48 C32,-44 40,-30 36,-14 C32,-22 24,-26 20,-22 C14,-30 -4,-30 -10,-22 C-14,-26 -14,-20 -14,-16 Z" fill="var(--hair)"/>
+              <circle cx="0" cy="-36" r="22" fill="var(--skin)"/>
+              <path d="M-24,20 C-40,26 -48,42 -46,58" stroke="var(--teal)" stroke-width="14" stroke-linecap="round" fill="none"/>
+              <circle cx="-46" cy="60" r="8" fill="var(--skin)"/>
+            </g>
+            <circle cx="580" cy="120" r="26" fill="#fff"/>
+            <circle cx="580" cy="120" r="18" fill="#e6f7e9"/>
+            <path d="M572,120 578,127 590,110" fill="none" stroke="#2f9e57" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <g transform="translate(90,140)"><rect width="80" height="54" rx="10" fill="#fff"/><path d="M0,54 L20,54 L10,70 Z" fill="#fff"/><rect x="12" y="16" width="56" height="6" rx="3" fill="var(--bg-light-tint)"/><rect x="12" y="30" width="40" height="6" rx="3" fill="var(--bg-light-tint)"/></g>
+            <g transform="translate(560,240)" stroke="var(--lime)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M0,20 L20,-10 L40,5 L60,-25"/></g>
+            <g transform="translate(100,260)"><circle r="16" fill="none" stroke="var(--teal-light)" stroke-width="7"/><path d="M0,-16 A16,16 0 0 1 14,8" stroke="var(--lime)" stroke-width="7" fill="none"/></g>
+          </svg>
+        </div>
+        <div class="fi-step-num">3</div>
+        <h3>We introduce</h3>
+        <p>We make the introduction and set up the first conversation.</p>
+      </div>
+
+      <!-- Step 4: Pehli kamai — pinned notes on a corkboard -->
+      <div class="fi-step">
+        <div class="fi-step-art">
+          <svg viewBox="0 0 700 420">
+            <rect width="700" height="420" rx="10" fill="#c99a68"/>
+            <g opacity="0.15" fill="#8a6438"><circle cx="60" cy="70" r="2"/><circle cx="140" cy="200" r="2"/><circle cx="600" cy="90" r="2"/><circle cx="520" cy="320" r="2"/><circle cx="240" cy="340" r="2"/><circle cx="420" cy="60" r="2"/></g>
+            <g transform="translate(150,90) rotate(-4)">
+              <rect width="220" height="130" rx="6" fill="var(--lime)"/>
+              <text x="110" y="55" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-weight="700" font-size="26" fill="var(--fi-ink)">Pehli</text>
+              <text x="110" y="90" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-weight="700" font-size="26" fill="var(--fi-ink)">Kamai</text>
+              <circle cx="110" cy="0" r="9" fill="#e04b4b" stroke="#8a2020" stroke-width="1.5"/>
+            </g>
+            <g transform="translate(410,60) rotate(5)">
+              <rect width="170" height="110" rx="6" fill="#fff"/>
+              <text x="85" y="50" text-anchor="middle" font-family="Inter" font-weight="800" font-size="22" fill="var(--teal)">Day 1</text>
+              <text x="85" y="78" text-anchor="middle" font-family="Inter" font-size="13" fill="var(--fi-ink-2)">and after</text>
+              <circle cx="85" cy="0" r="9" fill="var(--teal)" stroke="#045a5f" stroke-width="1.5"/>
+            </g>
+            <g transform="translate(220,250) rotate(3)">
+              <rect width="180" height="110" rx="6" fill="var(--teal-light)"/>
+              <text x="90" y="60" text-anchor="middle" font-size="42" font-family="Inter">&#127881;</text>
+              <circle cx="90" cy="0" r="9" fill="#e3ed55" stroke="#b9c73e" stroke-width="1.5"/>
+            </g>
+          </svg>
+        </div>
+        <div class="fi-step-num lime">4</div>
+        <h3>Pehli kamai</h3>
+        <p>We stay in the loop until the candidate's first day, and after.</p>
+      </div>
     </div>
+
     <div class="hiw-in">
       <div class="hiw-ctas">
         <div class="hiw-card">
@@ -131,7 +301,7 @@
         <div class="hiw-card">
           <div class="hiw-card-hindi">Naukri dhoond rahe ho?</div>
           <p>Upload your profile. Bindaas bano — khud bano.</p>
-          <button class="btn-add" style="background:var(--ink)" onclick="openAdd()">Add my profile →</button>
+          <button class="btn-add" style="background:var(--teal)" onclick="openAdd()">Add my profile →</button>
         </div>
       </div>
     </div>
