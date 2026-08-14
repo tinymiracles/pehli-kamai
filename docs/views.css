@@ -78,6 +78,9 @@ body:has(#view-door:not(.hidden)){background:var(--bg-light);}
 .fi-cta.ghost:hover{background:var(--bg-light-tint);}
 .fi-stage{position:relative;height:520px;}
 .fi-stage svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.fi-hero-video-wrap{position:absolute;inset:0;border-radius:28px;overflow:hidden;
+  background:var(--bg-light-tint);box-shadow:0 12px 40px rgba(13,36,39,.12);}
+.fi-hero-video{width:100%;height:100%;object-fit:cover;display:block;}
 @media(max-width:860px){
   .fi-hero{grid-template-columns:1fr;padding:40px 24px;min-height:auto;gap:0;}
   .fi-stage{height:340px;order:-1;margin-bottom:16px;}
