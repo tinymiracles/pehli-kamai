@@ -252,6 +252,35 @@ pk-hiw3d.hot{cursor:pointer;}
   .fi-steps{grid-template-columns:1fr;padding:0 20px;}
 }
 
+/* ── sectors band, flat-illustration (Part 3) — "the range of first jobs",
+   three vignettes (retail / office & data entry / technical & healthcare)
+   recreated from the manager's DomoAI style-reference video, redrawn as
+   flat vector in brand colors rather than embedding the watermarked/
+   low-res source frames. Sits directly under the how-it-works steps. ── */
+.fi-sectors{background:var(--bg-light-tint);padding:64px 0 72px;}
+.fi-sectors-in{max-width:1180px;margin:0 auto 32px;padding:0 40px;}
+.fi-sectors-in h2{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--fi-ink);margin:6px 0 8px;}
+.fi-sectors-in p{font-family:var(--sans);font-size:14.5px;color:var(--fi-ink-2);margin:0;max-width:560px;}
+.fi-sectors-grid{max-width:1180px;margin:0 auto;padding:0 40px;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:22px;}
+.fi-sector-card{background:#fff;border-radius:14px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(13,36,39,.06);}
+.fi-sector-art{aspect-ratio:4/3;background:var(--bg-light);}
+.fi-sector-art svg{width:100%;height:100%;display:block;}
+.fi-sector-body{padding:16px 18px 20px;}
+.fi-sector-tag{display:inline-flex;font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.6px;text-transform:uppercase;color:var(--teal);background:var(--bg-light-tint);
+  padding:4px 10px;border-radius:20px;margin-bottom:10px;}
+.fi-sector-card h3{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--fi-ink);margin:0 0 6px;}
+.fi-sector-card p{font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--fi-ink-2);margin:0;}
+@media(max-width:1000px){
+  .fi-sectors-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:640px){
+  .fi-sectors-in{padding:0 20px;}
+  .fi-sectors-grid{grid-template-columns:1fr;padding:0 20px;}
+}
+
 @media(max-width:1100px){
   .about-grid{grid-template-columns:1fr;gap:28px;}
   .page-h1{font-size:42px;}
