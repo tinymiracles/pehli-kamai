@@ -81,6 +81,31 @@
         <video class="fi-hero-video" autoplay muted loop playsinline>
           <source src="assets/video/hero-jobs.mp4" type="video/mp4">
         </video>
+        <!-- covers the source video's baked-in "DomoAI" watermark, which
+             sits in the top-left corner (position drifts slightly across
+             the montage's stitched clips) and can't be cropped out cleanly —
+             a soft vignette + on-brand corner mark instead of a bare patch. -->
+        <div class="fi-hero-video-scrim"></div>
+        <div class="fi-hero-video-badge">
+          <svg width="16" height="16" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g fill="var(--lime)" transform="translate(50,50)">
+              <circle r="18"/>
+              <polygon points="0,-47 -4,-18 4,-18"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(30)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(60)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(90)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(120)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(150)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(180)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(210)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(240)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(270)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(300)"/>
+              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(330)"/>
+            </g>
+          </svg>
+          <span>Pehli Kamai</span>
+        </div>
       </div>
     </div>
   </section>
