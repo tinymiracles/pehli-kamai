@@ -9,6 +9,7 @@ firebase.initializeApp({
 });
 const db=firebase.firestore();
 const auth=firebase.auth();
+const storage=firebase.storage();
 
 const allData = [
   {id:1,key:'alisha',name:'Alisha Shaikh Aslam',location:'Mumbai',sectors:['Admin & Data Entry'],note:'Looking in Admin and Data Entry',urgent:false,resume:false},
@@ -381,18 +382,27 @@ function buildResumeHTML(d){
   </div>`;
 }
 
+// Optional "already have a resume?" upload -- kept separate from the
+// auto-generated resume (candidates still get that either way). The file
+// itself is held here until saveProfile() runs, then uploaded straight to
+// Firebase Storage (already configured -- storageBucket in the Firebase
+// config above) rather than embedded as base64 anywhere, since a 5MB file
+// would blow well past Firestore's 1MB document limit.
 function handleFile(input){
   const file=input.files[0];if(!file)return;
   if(file.size>5*1024*1024){toast('File too large — max 5MB');return;}
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const b64=e.target.result.split(',')[1];
-    const isImg=file.type.startsWith('image/');
-    pendingResume={t:isImg?'imgs':'pdf',d:isImg?[b64]:b64};
-    document.getElementById('rdrop-lbl').innerHTML=`✅ <strong>${file.name}</strong> ready`;
-    document.getElementById('resume-drop').style.borderColor='var(--teal)';
-  };
-  reader.readAsDataURL(file);
+  const okTypes=['application/pdf','image/jpeg','image/jpg','image/png'];
+  if(!okTypes.includes(file.type)){toast('Please upload a PDF or image (JPG/PNG).');return;}
+  pendingResume=file;
+  document.getElementById('rdrop-lbl').innerHTML=`✅ <strong>${file.name}</strong> ready — <span style="text-decoration:underline;cursor:pointer" onclick="event.stopPropagation();clearPendingResume()">remove</span>`;
+  document.getElementById('resume-drop').style.borderColor='var(--teal)';
+}
+
+function clearPendingResume(){
+  pendingResume=null;
+  document.getElementById('rdrop-lbl').innerHTML='Drop a PDF or image here, or click to browse (max 5MB)';
+  document.getElementById('resume-drop').style.borderColor='var(--line-d)';
+  document.getElementById('resume-file').value='';
 }
 
 function handleDrop(e){
@@ -401,6 +411,28 @@ function handleDrop(e){
   const file=e.dataTransfer.files[0];if(!file)return;
   const dt=new DataTransfer();dt.items.add(file);
   const inp=document.getElementById('resume-file');inp.files=dt.files;handleFile(inp);
+}
+
+// Uploads the pending file (if any) to Storage under this user's uid and
+// saves the resulting URL onto their Firestore docs + local cache. Runs
+// after the signup/edit itself already succeeded -- best-effort, same
+// fire-and-forget pattern as the Sheet logger and email notifications, so a
+// Storage hiccup never blocks the actual profile save.
+function uploadPendingResume(uid,email){
+  if(!pendingResume)return;
+  const file=pendingResume;
+  const ext=(file.name.split('.').pop()||'pdf').toLowerCase();
+  storage.ref(`resumes/${uid}/resume.${ext}`).put(file)
+    .then(snap=>snap.ref.getDownloadURL())
+    .then(url=>{
+      db.collection('youth_accounts').doc(uid).update({resumeFileURL:url}).catch(()=>{});
+      db.collection('candidates').where('email','==',email).limit(1).get()
+        .then(snap=>{if(!snap.empty)snap.docs[0].ref.update({resumeFileURL:url}).catch(()=>{});}).catch(()=>{});
+      const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
+      if(accts[email]){accts[email].resumeFileURL=url;localStorage.setItem('pk_yt_accts',JSON.stringify(accts));}
+      if(currentYtAcct&&currentYtAcct.email===email)currentYtAcct.resumeFileURL=url;
+    })
+    .catch(()=>{});
 }
 
 function openAdd(){
@@ -412,6 +444,9 @@ function openAdd(){
   const ayr=document.getElementById('a-yr');if(ayr)ayr.value='';
   toggleExp(false);
   toggleVol(false);
+  const rdrop=document.getElementById('rdrop-lbl');if(rdrop)rdrop.innerHTML='Drop a PDF or image here, or click to browse (max 5MB)';
+  const rdz=document.getElementById('resume-drop');if(rdz)rdz.style.borderColor='var(--line-d)';
+  const rfi=document.getElementById('resume-file');if(rfi)rfi.value='';
   const sc=document.getElementById('a-sc');
   while(sc.options.length)sc.remove(0);
   sc.add(new Option('Select sector...',''));
@@ -458,7 +493,10 @@ function saveProfile(){
     cachedAccts[editingEmail]=updated;
     localStorage.setItem('pk_yt_accts',JSON.stringify(cachedAccts));
     const fbUser=auth.currentUser;
-    if(fbUser){db.collection('youth_accounts').doc(fbUser.uid).update({name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,resumeHTML:html}).catch(()=>{});}
+    if(fbUser){
+      db.collection('youth_accounts').doc(fbUser.uid).update({name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,resumeHTML:html}).catch(()=>{});
+      uploadPendingResume(fbUser.uid,editingEmail);
+    }
     const idx=DATA.findIndex(x=>x.id===old.id);
     if(idx>=0)DATA[idx]={...DATA[idx],name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,resume:true,resumeKey:rk};
     const em=editingEmail;editingEmail=null;
@@ -494,6 +532,7 @@ function saveProfile(){
       db.collection('youth_accounts').doc(uid).set(acct).catch(()=>{});
       db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,createdAt:new Date().toISOString()}).catch(()=>{});
       logSignup('youth',{name:nm,email,phone:ph,edu:ed,institution:inst,sector:sc,location:loc,skills:sk.join(', '),about:ab,resumeHtml:html});
+      uploadPendingResume(uid,email);
       const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
       accts[email]={...acct,password:pw};
       localStorage.setItem('pk_yt_accts',JSON.stringify(accts));
@@ -734,6 +773,7 @@ function renderYtDash(acct,isNew,n){
       </div>
     </div>
     ${hasResume?`<button onclick="closeYtDash();openR(${acct.id||'curId'})" style="display:block;width:100%;padding:11px;background:var(--teal);color:white;text-align:center;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:10px;box-sizing:border-box;cursor:pointer;border:none;font-family:var(--sans)">📄 View my resume</button>`:''}
+    ${acct.resumeFileURL?`<a href="${acct.resumeFileURL}" target="_blank" style="display:block;width:100%;padding:11px;background:transparent;color:var(--teal);text-align:center;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:10px;box-sizing:border-box;cursor:pointer;border:1.5px solid var(--teal);font-family:var(--sans);text-decoration:none">📎 View my uploaded resume</a>`:''}
     <div style="font-size:11.5px;color:var(--ink-3);line-height:1.6;margin-bottom:14px;padding:10px 12px;background:var(--bg);border-radius:8px">
       Pehli Kamai will personally call you when an HR is interested.<br>Questions? <strong>+91 9326691744</strong> or <strong>+91 99204 45917</strong>
     </div>
@@ -764,6 +804,7 @@ function youthEditProfile(){
     document.getElementById('a-ab').value=acct.about||'';
     if(acct.expCompany){hasWorkExp=true;toggleExp(true);document.getElementById('a-exco').value=acct.expCompany||'';document.getElementById('a-exdu').value=acct.expDuration||'';document.getElementById('a-exro').value=acct.expRole||'';}
     if(acct.volOrg){hasVolunteered=true;toggleVol(true);document.getElementById('a-volorg').value=acct.volOrg||'';document.getElementById('a-voldur').value=acct.volDuration||'';document.getElementById('a-volrole').value=acct.volRole||'';}
+    if(acct.resumeFileURL){document.getElementById('rdrop-lbl').innerHTML=`✅ You already have a resume uploaded (<a href="${acct.resumeFileURL}" target="_blank" onclick="event.stopPropagation()">view it</a>) — drop a new file here to replace it`;document.getElementById('resume-drop').style.borderColor='var(--teal)';}
     const emf=document.getElementById('a-em-yt');emf.value=email;emf.readOnly=true;emf.style.opacity='.65';
     const pw=document.getElementById('a-pw');const pw2=document.getElementById('a-pw2');
     if(pw){pw.value='';pw.placeholder='Leave blank to keep current';}if(pw2){pw2.value='';pw2.placeholder='Leave blank to keep current';}

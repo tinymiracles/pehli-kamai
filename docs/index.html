@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css?v=3">
 <link rel="stylesheet" href="styles.css?v=2">
@@ -505,6 +506,15 @@
         <div><label>What kind of work are you looking for? *</label><textarea id="a-ab" rows="3" placeholder="Tell employers what you're looking for and what makes you a good hire. 2–3 sentences is enough."></textarea></div>
 
         <div style="margin:4px 0 2px">
+          <div style="font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:6px">Already have a resume? <span style="font-weight:400;color:var(--ink-4)">(optional)</span></div>
+          <div style="font-size:11.5px;color:var(--ink-4);margin-bottom:10px">We'll still create one for you either way — this just gets attached alongside it.</div>
+          <input type="file" id="resume-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFile(this)"/>
+          <div class="resume-drop" id="resume-drop" ondragover="event.preventDefault()" ondrop="handleDrop(event)" onclick="document.getElementById('resume-file').click()">
+            <div class="resume-drop-lbl" id="rdrop-lbl">Drop a PDF or image here, or click to browse (max 5MB)</div>
+          </div>
+        </div>
+
+        <div style="margin:14px 0 2px">
           <div style="font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:10px">Have you worked somewhere before?</div>
           <div style="display:flex;gap:8px">
             <button type="button" class="af-yn act" id="af-exp-no" onclick="toggleExp(false)">No</button>
