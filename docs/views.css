@@ -57,18 +57,15 @@ body{background:var(--paper);color:var(--ed-ink);font-family:var(--sans);}
 
 /* ── flat-illustration hero (Part 3, current direction) — true full-bleed
    video banner, edge to edge, headline overlaid directly on the footage.
-   The source video's baked-in "DomoAI" watermark sits in its top-left
-   corner. Cropping it away entirely (a heavy bottom-biased object-position)
-   also cropped people's heads off at this wide/short aspect ratio — not an
-   acceptable trade. Instead: only a mild downward bias (keeps every figure
-   fully in frame) plus a small corner patch sized to the watermark itself,
-   not a band across the whole video. ── */
-body:has(#view-door:not(.hidden)){background:var(--bg-light);}
+   The earlier source clip had a baked-in watermark that needed a cropping
+   workaround; the current clip is a clean re-export, so this is now just
+   plain centered cropping — no bias needed. ── */
+body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 .fi-hero-banner{background:var(--bg-light);}
 .fi-hero-stage{position:relative;overflow:hidden;width:100%;
   height:clamp(380px,58vh,500px);background:var(--bg-light-tint);}
 .fi-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:50% 58%;display:block;}
+  object-position:50% 50%;display:block;}
 .fi-hero-top-scrim{position:absolute;top:0;left:0;width:100%;height:16%;
   background:linear-gradient(to bottom,rgba(13,36,39,.55) 0%,rgba(13,36,39,0) 100%);
   pointer-events:none;}
@@ -94,7 +91,7 @@ body:has(#view-door:not(.hidden)){background:var(--bg-light);}
 .fi-cta.ghost:hover{background:rgba(255,255,255,.2);}
 @media(max-width:860px){
   .fi-hero-stage{height:min(70vh,540px);}
-  .fi-hero-video{object-position:68% 50%;}
+  .fi-hero-video{object-position:50% 50%;}
   .fi-hero-copy{left:22px;right:22px;bottom:24px;}
   .fi-hero-video-badge{width:52%;height:18%;padding:12px 0 0 16px;border-radius:0 0 46px 0;}
 }
@@ -249,8 +246,25 @@ pk-hiw3d.hot{cursor:pointer;}
 }
 .fi-hiw-label{display:block;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1.2px;
   text-transform:uppercase;color:var(--fi-ink-2);margin-bottom:16px;}
-.fi-steps{max-width:1180px;margin:0 auto 48px;padding:0 40px;display:grid;
+.fi-steps{position:relative;max-width:1180px;margin:0 auto 48px;padding:0 40px;display:grid;
   grid-template-columns:repeat(4,1fr);gap:20px;}
+/* connecting "journey" rail across the 4 steps, matching the manager's
+   v3.html reference — a threaded line with a dot animating step-to-step,
+   not just static numbered cards. Only makes sense at the 4-col layout. */
+.fi-steps-rail{position:absolute;top:-14px;left:74px;right:74px;height:2px;
+  background:var(--bg-light-tint);z-index:0;pointer-events:none;}
+.fi-steps-dot{position:absolute;top:50%;left:0;width:11px;height:11px;border-radius:50%;
+  background:var(--lime);transform:translate(-50%,-50%);
+  box-shadow:0 0 0 5px var(--lime-soft);
+  animation:fiStepsDotMove 7s cubic-bezier(.65,0,.35,1) infinite;}
+@keyframes fiStepsDotMove{
+  0%,6%{left:0%;}
+  27%,33%{left:33.33%;}
+  60%,66%{left:66.66%;}
+  94%,100%{left:100%;}
+}
+@media(prefers-reduced-motion:reduce){.fi-steps-dot{animation:none;left:0%;}}
+@media(max-width:1000px){.fi-steps-rail{display:none;}}
 .fi-step{background:#fff;border:1px solid rgba(13,36,39,.08);border-radius:14px;padding:18px 18px 22px;
   box-shadow:0 4px 20px rgba(13,36,39,.06);position:relative;}
 .fi-step-art{border-radius:8px;overflow:hidden;background:var(--bg-light-tint);margin-bottom:14px;aspect-ratio:5/3;}

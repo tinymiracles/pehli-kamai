@@ -121,8 +121,6 @@ function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase
 
 // Page nav
 function showPage(p){
-  const leavingDoor = !document.getElementById('view-door').classList.contains('hidden') && p!=='door';
-  const enteringDoor = document.getElementById('view-door').classList.contains('hidden') && p==='door';
   const homeEl = document.getElementById('view-home');
   const leavingHome = homeEl && !homeEl.classList.contains('hidden') && p!=='home';
   const enteringHome = homeEl && homeEl.classList.contains('hidden') && p==='home';
@@ -130,22 +128,6 @@ function showPage(p){
   const v=document.getElementById('view-'+p);if(v)v.classList.remove('hidden');
   document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-current','false'));
   const nl=document.getElementById('nl-'+p);if(nl)nl.setAttribute('aria-current','true');
-  // The shutter's render loop only stops when it's actually removed from the DOM
-  // (its own disconnectedCallback) — toggling display:none alone leaves it rendering
-  // invisibly forever. Detach it when leaving the door view; reattaching re-inits it,
-  // which conveniently also replays the intro for free.
-  if(leavingDoor){
-    const el=document.querySelector('#shutterHolder pk-shutter');
-    if(el){window.__pkShutter=el;el.remove();}
-    stopShutterLoop();
-  } else if(enteringDoor){
-    const holder=document.getElementById('shutterHolder');
-    if(holder && !holder.querySelector('pk-shutter')){
-      holder.appendChild(window.__pkShutter||document.createElement('pk-shutter'));
-      const s=holder.querySelector('pk-shutter'); if(!s.getAttribute('h')) s.setAttribute('h','840');
-    }
-    startShutterLoop();
-  }
   // Same fix, same reason, for the how-it-works 3D scene sitting inside Home.
   if(leavingHome){
     const el=document.querySelector('.hiw3d-stage pk-hiw3d');

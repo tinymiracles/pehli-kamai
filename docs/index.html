@@ -19,7 +19,7 @@
 
 <!-- ━━ HEADER ━━ -->
 <header class="hdr">
-  <button class="brand" onclick="showPage('door')">
+  <button class="brand" onclick="showPage('home');window.scrollTo({top:0,behavior:'smooth'})">
     <svg class="wm-logo" width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g fill="var(--teal)" transform="translate(50,50)">
         <circle r="18"/>
@@ -43,7 +43,7 @@
     </div>
   </button>
   <nav class="tabs">
-    <button class="tab" id="nl-home" onclick="showPage('home')">Home</button>
+    <button class="tab" id="nl-home" onclick="showPage('home')" aria-current="true">Home</button>
     <button class="tab" id="nl-about" onclick="showPage('about')">About</button>
     <button class="tab" id="nl-contact" onclick="openCF()">Contact Us</button>
   </nav>
@@ -54,25 +54,25 @@
   </div>
 </header>
 
-<!-- ━━ HOME PAGE ━━ -->
-<!-- ━━ DOOR (landing) ━━ -->
-<div id="view-door">
-  <!-- Page 1 of "the journey": the search. Flat-illustration two-column intro —
-       copy verbatim from Part 1 of the content doc, on the left with real room
-       to breathe; a single illustration (not a crowded composition) on the
-       right — the candidate looking for the right opportunity, a lightbulb for
-       the idea, a target hit dead-centre for the goal landed, direction arrows
-       for the path. Landed on this after many rounds against real references —
-       see the plan file for the full history if picking this back up later. -->
+<!-- ━━ HOME PAGE ━━ (hero + everything else, one continuous scroll —
+     previously a separate "door" landing view you had to navigate away
+     from; merged so the page actually scrolls instead of dead-ending
+     into the footer right after the hero) ━━ -->
+<div id="view-home">
+
+  <!-- Page 1 of "the journey": the search. Flat-illustration full-bleed
+       video banner, headline overlaid — copy verbatim from Part 1 of the
+       content doc. Landed on this after many rounds against real
+       references — see the plan file for the full history if picking
+       this back up later. -->
   <section class="fi-hero-banner">
     <div class="fi-hero-stage">
       <video class="fi-hero-video" autoplay muted loop playsinline>
         <source src="assets/video/hero-jobs.mp4" type="video/mp4">
       </video>
-      <!-- full-width top+bottom scrim: covers the source video's baked-in
-           "DomoAI" watermark at any crop/aspect ratio (no gap for it to
-           peek through, unlike a corner patch), and doubles as the
-           legibility scrim for the overlaid headline. -->
+      <!-- full-width top+bottom scrim: legibility for the overlaid headline
+           (the watermark that used to require this as a cover-up is gone
+           now that the source clip itself was re-exported clean). -->
       <div class="fi-hero-top-scrim"></div>
       <div class="fi-hero-bottom-scrim"></div>
       <div class="fi-hero-video-badge">
@@ -96,18 +96,15 @@
         <span>Pehli Kamai</span>
       </div>
       <div class="fi-hero-copy">
-        <h1 class="fi-h1">Welcome to Mumbai's first portal for <em>hiring freshers.</em></h1>
+        <h1 class="fi-h1">Welcome to <em>Pehli Kamai.</em></h1>
         <p class="fi-lede">Need college students for a short-term survey? A hospitality hire that's a quick learner? A data entry operator who'll actually show up? Our candidates span accounting, data entry, hospitality, sales, creative media, and more.</p>
         <div class="fi-cta-row">
-          <button class="fi-cta" onclick="showPage('home')">Browse profiles &rarr;</button>
+          <button class="fi-cta" onclick="document.querySelector('.ss').scrollIntoView({behavior:'smooth'})">Browse profiles &rarr;</button>
           <button class="fi-cta ghost" onclick="openAdd()">Naukri dhoond rahe ho? &rarr;</button>
         </div>
       </div>
     </div>
   </section>
-</div><!-- /door -->
-
-<div class="hidden" id="view-home">
 
   <div class="ss">
     <div class="ss-in">
@@ -144,6 +141,10 @@
     </div>
 
     <div class="fi-steps">
+      <!-- connecting "journey" rail — a dot animates step-to-step on a loop,
+           matching the manager's v3.html reference (hidden below the 4-col
+           breakpoint, where it wouldn't line up with the cards). -->
+      <div class="fi-steps-rail"><span class="fi-steps-dot"></span></div>
       <!-- Step 1: You browse — the JOBS search-bar + telescope recreation -->
       <div class="fi-step">
         <div class="fi-step-art">
