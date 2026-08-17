@@ -43,14 +43,22 @@
     </div>
   </button>
   <nav class="tabs">
-    <button class="tab" id="nl-home" onclick="showPage('home')" aria-current="true">Home</button>
-    <button class="tab" id="nl-about" onclick="showPage('about')">About</button>
-    <button class="tab" id="nl-contact" onclick="openCF()">Contact Us</button>
+    <button class="tab" id="nl-home" onclick="showPage('home')" aria-current="true">Hire a fresher</button>
+    <button class="tab" onclick="showPage('home');setTimeout(()=>document.querySelector('.fi-hiw').scrollIntoView({behavior:'smooth'}),100)">How it works</button>
+    <button class="tab" onclick="showPage('home');setTimeout(()=>document.querySelector('.track-section').scrollIntoView({behavior:'smooth'}),100)">Candidates</button>
+    <button class="tab" onclick="openAdd()">Kaam chahiye</button>
+    <button class="tab" id="nl-about" onclick="showPage('about')">Our story</button>
   </nav>
   <div class="hdr-right">
-    <span class="hdr-label"><span id="h-tot">53</span> candidates</span>
-    <button class="btn-ghost" id="btn-hr-login" onclick="openSignIn()">Login</button>
-    <button class="btn-add" id="btn-add-profile" onclick="openAdd()">Add my profile</button>
+    <button class="btn-add" id="btn-add-profile" onclick="openAdd()">Upload your profile</button>
+    <button class="hdr-menu-btn" id="hdr-menu-btn" onclick="toggleHdrMenu()" aria-label="More">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="hdr-menu" id="hdr-menu">
+      <span class="hdr-menu-label"><span id="h-tot">53</span> candidates</span>
+      <button class="hdr-menu-item" onclick="openSignIn();toggleHdrMenu()">HR Login</button>
+      <button class="hdr-menu-item" onclick="openCF();toggleHdrMenu()">Contact Us</button>
+    </div>
   </div>
 </header>
 
@@ -70,38 +78,27 @@
       <video class="fi-hero-video" autoplay muted loop playsinline>
         <source src="assets/video/hero-jobs.mp4" type="video/mp4">
       </video>
-      <!-- full-width top+bottom scrim: legibility for the overlaid headline
-           (the watermark that used to require this as a cover-up is gone
-           now that the source clip itself was re-exported clean). -->
-      <div class="fi-hero-top-scrim"></div>
-      <div class="fi-hero-bottom-scrim"></div>
-      <div class="fi-hero-video-badge">
-        <svg width="16" height="16" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <g fill="var(--lime)" transform="translate(50,50)">
-            <circle r="18"/>
-            <polygon points="0,-47 -4,-18 4,-18"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(30)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(60)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(90)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(120)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(150)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(180)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(210)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(240)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(270)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(300)"/>
-            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(330)"/>
-          </g>
-        </svg>
-        <span>Pehli Kamai</span>
-      </div>
+      <!-- light left-to-right scrim: the copy panel sits on this instead of
+           directly on the footage, so dark text stays legible regardless of
+           what's playing underneath (matches the manager's v3.html
+           reference — a light content panel over the video, not white text
+           on a dark curtain). -->
+      <div class="fi-hero-light-scrim"></div>
       <div class="fi-hero-copy">
-        <h1 class="fi-h1">Welcome to <em>Pehli Kamai.</em></h1>
+        <span class="fi-hero-badge">Mumbai's first portal for hiring freshers</span>
+        <h1 class="fi-h1">Pehli <em>Kamai</em></h1>
+        <div class="fi-hero-rule"></div>
         <p class="fi-lede">Need college students for a short-term survey? A hospitality hire that's a quick learner? A data entry operator who'll actually show up? Our candidates span accounting, data entry, hospitality, sales, creative media, and more.</p>
+        <div class="fi-hero-stats">
+          <div class="fi-hero-stat"><div class="fi-hero-stat-n" id="hero-tot">53</div><div class="fi-hero-stat-l">Candidates</div></div>
+          <div class="fi-hero-stat"><div class="fi-hero-stat-n">10+</div><div class="fi-hero-stat-l">Sectors</div></div>
+          <div class="fi-hero-stat"><div class="fi-hero-stat-n">Mumbai</div><div class="fi-hero-stat-l">Based</div></div>
+        </div>
         <div class="fi-cta-row">
           <button class="fi-cta" onclick="document.querySelector('.ss').scrollIntoView({behavior:'smooth'})">Browse profiles &rarr;</button>
           <button class="fi-cta ghost" onclick="openAdd()">Naukri dhoond rahe ho? &rarr;</button>
         </div>
+        <div class="fi-hero-foot">— Live resumes from the portal</div>
       </div>
     </div>
   </section>

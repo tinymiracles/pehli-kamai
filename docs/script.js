@@ -496,6 +496,15 @@ function saveProfile(){
 
 function closeA(){document.getElementById('a-ov').classList.remove('open');}
 
+// ── header hamburger menu ────────────────────────────────
+function toggleHdrMenu(){document.getElementById('hdr-menu').classList.toggle('open');}
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('hdr-menu'), btn=document.getElementById('hdr-menu-btn');
+  if(menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target!==btn && !btn.contains(e.target)){
+    menu.classList.remove('open');
+  }
+});
+
 // ── EXPORT ──────────────────────────────────────
 
 // ── CONTACT FORM ─────────────────────────────────
@@ -949,6 +958,7 @@ function updateAboutStats(){
   const sTot=document.getElementById('s-tot'); if(sTot) sTot.textContent=DATA.length;
   const dTot=document.getElementById('d-tot'); if(dTot) dTot.textContent=DATA.length;
   const hiwTot=document.getElementById('hiw-tot'); if(hiwTot) hiwTot.textContent=DATA.length;
+  const heroTot=document.getElementById('hero-tot'); if(heroTot) heroTot.textContent=DATA.length;
 }
 function boot(){
   buildChips();render();updateEnqBadge();updateAboutStats();

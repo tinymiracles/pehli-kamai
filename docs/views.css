@@ -55,45 +55,47 @@ body{background:var(--paper);color:var(--ed-ink);font-family:var(--sans);}
   .ed-section{padding:64px 0;}
 }
 
-/* ── flat-illustration hero (Part 3, current direction) — true full-bleed
-   video banner, edge to edge, headline overlaid directly on the footage.
-   The earlier source clip had a baked-in watermark that needed a cropping
-   workaround; the current clip is a clean re-export, so this is now just
-   plain centered cropping — no bias needed. ── */
+/* ── flat-illustration hero (Part 3, current direction) — full-bleed video
+   banner with a light content panel over the left side (not white text on
+   a dark curtain), matching the manager's v3.html reference: badge, big
+   two-tone italic wordmark, underline rule, lede, inline stat cards, CTAs. ── */
 body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 .fi-hero-banner{background:var(--bg-light);}
 .fi-hero-stage{position:relative;overflow:hidden;width:100%;
-  height:clamp(380px,58vh,500px);background:var(--bg-light-tint);}
+  height:clamp(460px,68vh,620px);background:var(--bg-light-tint);}
 .fi-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   object-position:50% 50%;display:block;}
-.fi-hero-top-scrim{position:absolute;top:0;left:0;width:100%;height:16%;
-  background:linear-gradient(to bottom,rgba(13,36,39,.55) 0%,rgba(13,36,39,0) 100%);
+.fi-hero-light-scrim{position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(255,255,255,.95) 0%,rgba(255,255,255,.88) 40%,rgba(255,255,255,.4) 62%,rgba(255,255,255,0) 80%);
   pointer-events:none;}
-.fi-hero-bottom-scrim{position:absolute;bottom:0;left:0;width:100%;height:44%;
-  background:linear-gradient(to top,rgba(13,36,39,.82) 0%,rgba(13,36,39,.3) 58%,rgba(13,36,39,0) 100%);
-  pointer-events:none;}
-.fi-hero-video-badge{position:absolute;top:0;left:0;width:36%;height:22%;max-width:280px;max-height:170px;
-  display:flex;align-items:flex-start;gap:7px;padding:16px 0 0 22px;border-radius:0 0 60px 0;
-  background:linear-gradient(135deg,rgba(13,36,39,.9) 0%,rgba(13,36,39,.9) 45%,rgba(13,36,39,0) 100%);
-  font-family:var(--sans);font-size:12.5px;font-weight:700;color:#fff;letter-spacing:.2px;pointer-events:none;}
-.fi-hero-video-badge svg{width:17px;height:17px;flex-shrink:0;}
-.fi-hero-copy{position:absolute;left:5vw;right:5vw;bottom:36px;color:#fff;max-width:1140px;margin:0 auto;}
-.fi-h1{font-family:var(--serif);font-style:italic;font-weight:700;font-size:clamp(28px,4vw,44px);
-  line-height:1.15;margin:0 0 16px;letter-spacing:-.5px;color:#fff;max-width:680px;}
-.fi-h1 em{color:var(--lime);font-style:italic;}
-.fi-lede{font-family:var(--sans);font-size:15.5px;line-height:1.7;color:rgba(255,255,255,.82);
-  margin:0 0 26px;max-width:560px;}
-.fi-cta-row{display:flex;gap:12px;flex-wrap:wrap;}
-.fi-cta{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;background:var(--lime);
-  color:var(--fi-ink);border:none;border-radius:8px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;}
-.fi-cta:hover{background:#d3e34a;}
-.fi-cta.ghost{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.6);color:#fff;}
-.fi-cta.ghost:hover{background:rgba(255,255,255,.2);}
+.fi-hero-copy{position:absolute;top:50%;left:6vw;transform:translateY(-50%);max-width:540px;color:var(--fi-ink);}
+.fi-hero-badge{display:inline-flex;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;color:#fff;background:var(--teal);padding:9px 18px;border-radius:24px;margin-bottom:24px;}
+.fi-h1{font-family:var(--serif);font-style:italic;font-weight:700;font-size:clamp(46px,6.4vw,80px);
+  line-height:1;margin:0 0 18px;letter-spacing:-.5px;color:var(--fi-ink);}
+.fi-h1 em{color:var(--teal-light);font-style:italic;}
+.fi-hero-rule{width:88px;height:4px;background:var(--lime);border-radius:2px;margin-bottom:24px;}
+.fi-lede{font-family:var(--sans);font-size:15.5px;line-height:1.7;color:var(--fi-ink-2);
+  margin:0 0 26px;max-width:480px;}
+.fi-hero-stats{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap;}
+.fi-hero-stat{background:#fff;border:1px solid rgba(13,36,39,.08);border-radius:12px;padding:14px 18px;
+  box-shadow:0 4px 16px rgba(13,36,39,.07);min-width:88px;}
+.fi-hero-stat-n{font-family:var(--serif);font-style:italic;font-weight:700;font-size:24px;
+  color:var(--teal-light);line-height:1;margin-bottom:5px;}
+.fi-hero-stat-l{font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--fi-ink-2);}
+.fi-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
+.fi-cta{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;background:var(--teal);
+  color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;}
+.fi-cta:hover{background:#0c6b64;}
+.fi-cta.ghost{background:transparent;border:1.5px solid var(--teal);color:var(--teal);}
+.fi-cta.ghost:hover{background:var(--bg-light-tint);}
+.fi-hero-foot{font-family:var(--sans);font-size:12.5px;color:var(--fi-ink-2);}
 @media(max-width:860px){
-  .fi-hero-stage{height:min(70vh,540px);}
-  .fi-hero-video{object-position:50% 50%;}
-  .fi-hero-copy{left:22px;right:22px;bottom:24px;}
-  .fi-hero-video-badge{width:52%;height:18%;padding:12px 0 0 16px;border-radius:0 0 46px 0;}
+  .fi-hero-stage{height:min(88vh,720px);}
+  .fi-hero-light-scrim{background:linear-gradient(to top,rgba(255,255,255,.96) 0%,rgba(255,255,255,.9) 48%,rgba(255,255,255,0) 82%);}
+  .fi-hero-copy{top:auto;left:22px;right:22px;bottom:24px;transform:none;max-width:none;}
+  .fi-h1{font-size:clamp(38px,11vw,56px);}
 }
 
 /* extreme-contrast editorial type, for use inside any .section-* */
@@ -128,6 +130,22 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 .btn-ghost{height:34px;padding:0 16px;background:none;border:1.5px solid var(--ed-ink);
   border-radius:7px;font-size:12px;font-weight:600;color:var(--ed-ink);font-family:var(--sans);cursor:pointer;}
 .btn-ghost:hover{background:var(--ed-ink);color:var(--paper);}
+/* hamburger + dropdown — keeps the main nav row down to the handful of
+   links that matter (matches the manager's v3.html reference), tucking
+   candidate count / HR login / contact into one menu instead of crowding
+   the bar. */
+.hdr-menu-btn{position:relative;width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  background:none;border:1.5px solid var(--ed-ink);border-radius:9px;color:var(--ed-ink);cursor:pointer;flex-shrink:0;}
+.hdr-menu-btn:hover{background:var(--bg-light-tint);}
+.hdr-menu{position:absolute;top:calc(100% + 10px);right:44px;min-width:200px;background:#fff;
+  border:1px solid rgba(13,36,39,.1);border-radius:12px;box-shadow:0 12px 32px rgba(13,36,39,.14);
+  padding:8px;display:none;flex-direction:column;gap:2px;z-index:400;}
+.hdr-menu.open{display:flex;}
+.hdr-menu-label{font-family:var(--mono);font-size:11px;color:var(--fi-ink-2);text-transform:uppercase;
+  padding:8px 12px 6px;letter-spacing:.4px;}
+.hdr-menu-item{background:none;border:none;text-align:left;padding:9px 12px;border-radius:7px;
+  font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--fi-ink);cursor:pointer;}
+.hdr-menu-item:hover{background:var(--bg-light-tint);}
 @media(max-width:700px){
   .hdr{padding:0 16px;height:auto;flex-wrap:wrap;gap:12px;padding-top:10px;padding-bottom:10px;}
   .hdr-right{width:100%;margin-left:0;}
