@@ -519,6 +519,21 @@
           <div><label>What did you do there?</label><input id="a-exro" type="text" placeholder="e.g. Handled billing and customer queries at checkout"/></div>
         </div>
 
+        <div style="margin:14px 0 2px">
+          <div style="font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:10px">Have you done any volunteering?</div>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="af-yn act" id="af-vol-no" onclick="toggleVol(false)">No</button>
+            <button type="button" class="af-yn" id="af-vol-yes" onclick="toggleVol(true)">Yes</button>
+          </div>
+        </div>
+        <div id="af-vol-fields" style="display:none;flex-direction:column;gap:11px">
+          <div class="lf-row-2">
+            <div><label>Organisation / Cause</label><input id="a-volorg" type="text" placeholder="e.g. Tiny Miracles, local NGO, temple/community drive"/></div>
+            <div><label>How long?</label><input id="a-voldur" type="text" placeholder="e.g. 3 months, 2 years"/></div>
+          </div>
+          <div><label>What did you do there?</label><input id="a-volrole" type="text" placeholder="e.g. Taught kids on weekends, helped organise a relief drive"/></div>
+        </div>
+
         <div style="border-top:1px solid var(--line);padding-top:14px;margin-top:6px">
           <div class="af-section-lbl">Create your account</div>
         </div>

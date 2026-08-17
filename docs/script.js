@@ -343,6 +343,14 @@ function toggleExp(show){
   document.getElementById('af-exp-fields').style.display=show?'flex':'none';
 }
 
+let hasVolunteered=false;
+function toggleVol(show){
+  hasVolunteered=show;
+  document.getElementById('af-vol-yes').classList.toggle('act',show);
+  document.getElementById('af-vol-no').classList.toggle('act',!show);
+  document.getElementById('af-vol-fields').style.display=show?'flex':'none';
+}
+
 function buildResumeHTML(d){
   const edu=`${d.edu||''}${d.institution?' — '+d.institution:''}${d.passYear?', '+d.passYear:''}`;
   const expSec=d.expCompany?`
@@ -350,6 +358,12 @@ function buildResumeHTML(d){
       <div class="gr-label">Experience</div>
       <div class="gr-item-title">${d.expCompany}${d.expDuration?' &nbsp;·&nbsp; '+d.expDuration:''}</div>
       ${d.expRole?`<div class="gr-item-desc">${d.expRole}</div>`:''}
+    </div>`:'';
+  const volSec=d.volOrg?`
+    <div class="gr-section">
+      <div class="gr-label">Volunteering</div>
+      <div class="gr-item-title">${d.volOrg}${d.volDuration?' &nbsp;·&nbsp; '+d.volDuration:''}</div>
+      ${d.volRole?`<div class="gr-item-desc">${d.volRole}</div>`:''}
     </div>`:'';
   const skillList=(d.skills||[]).join(' &nbsp;·&nbsp; ');
   const langList=(d.langs||[]).join(' &nbsp;·&nbsp; ');
@@ -361,6 +375,7 @@ function buildResumeHTML(d){
     ${d.about?`<div class="gr-section"><div class="gr-label">Objective</div><div class="gr-text">${d.about}</div></div>`:''}
     <div class="gr-section"><div class="gr-label">Education</div><div class="gr-text">${edu}</div></div>
     ${expSec}
+    ${volSec}
     ${skillList?`<div class="gr-section"><div class="gr-label">Skills</div><div class="gr-chips">${skillList}</div></div>`:''}
     ${langList?`<div class="gr-section"><div class="gr-label">Languages</div><div class="gr-chips">${langList}</div></div>`:''}
   </div>`;
@@ -389,13 +404,14 @@ function handleDrop(e){
 }
 
 function openAdd(){
-  editingEmail=null;pendingResume=null;atTrack='';hasWorkExp=false;
+  editingEmail=null;pendingResume=null;atTrack='';hasWorkExp=false;hasVolunteered=false;
   const t=document.getElementById('a-modal-title');if(t)t.textContent='Add your profile';
-  ['a-nm','a-sk','a-ab','a-ph','a-lg','a-loc','a-inst','a-em-yt','a-pw','a-pw2','a-exco','a-exdu','a-exro'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  ['a-nm','a-sk','a-ab','a-ph','a-lg','a-loc','a-inst','a-em-yt','a-pw','a-pw2','a-exco','a-exdu','a-exro','a-volorg','a-voldur','a-volrole'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
   const emf=document.getElementById('a-em-yt');if(emf){emf.readOnly=false;emf.style.opacity='';}
   document.getElementById('a-ed').value='';
   const ayr=document.getElementById('a-yr');if(ayr)ayr.value='';
   toggleExp(false);
+  toggleVol(false);
   const sc=document.getElementById('a-sc');
   while(sc.options.length)sc.remove(0);
   sc.add(new Option('Select sector...',''));
@@ -419,11 +435,14 @@ function saveProfile(){
   const exco=hasWorkExp?document.getElementById('a-exco').value.trim():'';
   const exdu=hasWorkExp?document.getElementById('a-exdu').value.trim():'';
   const exro=hasWorkExp?document.getElementById('a-exro').value.trim():'';
+  const volorg=hasVolunteered?document.getElementById('a-volorg').value.trim():'';
+  const voldur=hasVolunteered?document.getElementById('a-voldur').value.trim():'';
+  const volrole=hasVolunteered?document.getElementById('a-volrole').value.trim():'';
   const ex=exco?'experienced':'fresher';
   const rl=sc+' — Looking for work';
   const trk=atTrack||Object.entries(TRACK_SECTORS).find(([,ss])=>ss.includes(sc))?.[0]||'corporate';
   const t=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
-  const resumeD={name:nm,edu:ed,institution:inst,passYear:yr,sector:sc,location:loc,skills:sk,langs:lg,about:ab,expCompany:exco,expDuration:exdu,expRole:exro};
+  const resumeD={name:nm,edu:ed,institution:inst,passYear:yr,sector:sc,location:loc,skills:sk,langs:lg,about:ab,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole};
 
   // ── EDIT MODE ──
   if(editingEmail){
@@ -435,7 +454,7 @@ function saveProfile(){
     const rk='new_'+Date.now();
     const html=buildResumeHTML(resumeD);
     RESUMES[rk]={t:'html',d:html};
-    const updated={...old,name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,resumeKey:rk,resume:true,resumeHTML:html,...(npw?{password:npw}:{})};
+    const updated={...old,name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeKey:rk,resume:true,resumeHTML:html,...(npw?{password:npw}:{})};
     cachedAccts[editingEmail]=updated;
     localStorage.setItem('pk_yt_accts',JSON.stringify(cachedAccts));
     const fbUser=auth.currentUser;
@@ -471,9 +490,9 @@ function saveProfile(){
   auth.createUserWithEmailAndPassword(email,pw)
     .then(cred=>{
       const uid=cred.user.uid;
-      const acct={uid,id,email,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,resumeKey:key,resume:true,track:trk,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,resumeHTML:html,createdAt:new Date().toISOString()};
+      const acct={uid,id,email,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,resumeKey:key,resume:true,track:trk,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,createdAt:new Date().toISOString()};
       db.collection('youth_accounts').doc(uid).set(acct).catch(()=>{});
-      db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,resumeHTML:html,createdAt:new Date().toISOString()}).catch(()=>{});
+      db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,createdAt:new Date().toISOString()}).catch(()=>{});
       logSignup('youth',{name:nm,email,phone:ph,edu:ed,institution:inst,sector:sc,location:loc,skills:sk.join(', '),about:ab,resumeHtml:html});
       const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
       accts[email]={...acct,password:pw};
@@ -744,6 +763,7 @@ function youthEditProfile(){
     document.getElementById('a-lg').value=(acct.langs||[]).join(', ')||'';
     document.getElementById('a-ab').value=acct.about||'';
     if(acct.expCompany){hasWorkExp=true;toggleExp(true);document.getElementById('a-exco').value=acct.expCompany||'';document.getElementById('a-exdu').value=acct.expDuration||'';document.getElementById('a-exro').value=acct.expRole||'';}
+    if(acct.volOrg){hasVolunteered=true;toggleVol(true);document.getElementById('a-volorg').value=acct.volOrg||'';document.getElementById('a-voldur').value=acct.volDuration||'';document.getElementById('a-volrole').value=acct.volRole||'';}
     const emf=document.getElementById('a-em-yt');emf.value=email;emf.readOnly=true;emf.style.opacity='.65';
     const pw=document.getElementById('a-pw');const pw2=document.getElementById('a-pw2');
     if(pw){pw.value='';pw.placeholder='Leave blank to keep current';}if(pw2){pw2.value='';pw2.placeholder='Leave blank to keep current';}
