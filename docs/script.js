@@ -69,6 +69,24 @@ const EJ_PK='iDYGDYpxhT7wKJ12d',EJ_SID='service_ob0zrq2',EJ_TID='template_1wuqmd
 const N_EMAIL='meghna@tinymiracles.com',N_EMAIL2='rishikesh@tinymiracles.com',N_WA='919326691744';
 emailjs.init(EJ_PK);
 
+// ── SHEET/DRIVE LOGGER ───────────────────────────────────────────────
+// Mirrors every HR and youth signup into a Google Sheet, and saves each
+// youth's auto-generated resume into a Drive folder. Paste your deployed
+// Apps Script Web App URL here (see setup-sheet-logger.md) — leave blank
+// to disable, e.g. before it's deployed.
+const SHEET_LOG_URL='';
+function logSignup(type,payload){
+  if(!SHEET_LOG_URL)return;
+  try{
+    fetch(SHEET_LOG_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({type,...payload})
+    }).catch(()=>{});
+  }catch(e){}
+}
+
 // Map allData to OG format
 function inferTrack(sectors){
   const soc=['Teaching','Community','Social','Field Work','Health','Environment','NSS','Education Support'];
@@ -472,6 +490,7 @@ function saveProfile(){
       const acct={uid,id,email,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,resumeKey:key,resume:true,track:trk,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,resumeHTML:html,createdAt:new Date().toISOString()};
       db.collection('youth_accounts').doc(uid).set(acct).catch(()=>{});
       db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,resumeHTML:html,createdAt:new Date().toISOString()}).catch(()=>{});
+      logSignup('youth',{name:nm,email,phone:ph,edu:ed,institution:inst,sector:sc,location:loc,skills:sk.join(', '),about:ab,resumeHtml:html});
       const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
       accts[email]={...acct,password:pw};
       localStorage.setItem('pk_yt_accts',JSON.stringify(accts));
@@ -780,6 +799,7 @@ function hrSignUp(){
       cred.user.sendEmailVerification();
       const hrData={uid:cred.user.uid,name:nm,phone:ph,email:em,company:co,industry:ind,city:city,role:'hr',createdAt:new Date().toISOString()};
       db.collection('hr_accounts').doc(cred.user.uid).set(hrData).catch(()=>{});
+      logSignup('hr',{name:nm,phone:ph,email:em,org:co,industry:ind,city:city});
       hrUser={name:nm,phone:ph,email:em,company:co,industry:ind,city:city};
       localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
       closeHRLogin();updateHRHeader();
