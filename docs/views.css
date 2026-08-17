@@ -70,7 +70,7 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
    dominant full-bleed image; a bottom-up scrim (not a left-right one)
    keeps the corner text legible against whatever's playing underneath. */
 .fi-hero-light-scrim{position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(255,255,255,.95) 0%,rgba(255,255,255,.8) 24%,rgba(255,255,255,.32) 46%,rgba(255,255,255,0) 68%);
+  background:linear-gradient(to top,rgba(255,255,255,.6) 0%,rgba(255,255,255,.46) 24%,rgba(255,255,255,.18) 46%,rgba(255,255,255,0) 68%);
   pointer-events:none;}
 .fi-hero-copy{position:absolute;left:6vw;right:6vw;bottom:8vh;max-width:560px;color:var(--fi-ink);}
 .fi-hero-badge{display:inline-flex;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1px;
