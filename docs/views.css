@@ -58,24 +58,26 @@ body{background:var(--paper);color:var(--ed-ink);font-family:var(--sans);}
 /* ── flat-illustration hero (Part 3, current direction) — true full-bleed
    video banner, edge to edge, headline overlaid directly on the footage.
    The source video's baked-in "DomoAI" watermark sits in its top-left
-   corner; rather than covering it with a heavy scrim, object-position
-   biases the crop toward the bottom-right so the watermark's corner is
-   cropped away by the shape of the banner itself (see the desktop 50%/100%
-   and mobile 100%/50% biases below) — only a thin residual fade is kept as
-   a safety margin, not a curtain over the footage. ── */
+   corner. Cropping it away entirely (a heavy bottom-biased object-position)
+   also cropped people's heads off at this wide/short aspect ratio — not an
+   acceptable trade. Instead: only a mild downward bias (keeps every figure
+   fully in frame) plus a small corner patch sized to the watermark itself,
+   not a band across the whole video. ── */
 body:has(#view-door:not(.hidden)){background:var(--bg-light);}
 .fi-hero-banner{background:var(--bg-light);}
 .fi-hero-stage{position:relative;overflow:hidden;width:100%;
   height:clamp(380px,58vh,500px);background:var(--bg-light-tint);}
 .fi-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:50% 100%;display:block;}
+  object-position:50% 58%;display:block;}
 .fi-hero-top-scrim{position:absolute;top:0;left:0;width:100%;height:16%;
-  background:linear-gradient(to bottom,rgba(13,36,39,.7) 0%,rgba(13,36,39,0) 100%);
+  background:linear-gradient(to bottom,rgba(13,36,39,.55) 0%,rgba(13,36,39,0) 100%);
   pointer-events:none;}
-.fi-hero-bottom-scrim{position:absolute;bottom:0;left:0;width:100%;height:46%;
-  background:linear-gradient(to top,rgba(13,36,39,.85) 0%,rgba(13,36,39,.35) 60%,rgba(13,36,39,0) 100%);
+.fi-hero-bottom-scrim{position:absolute;bottom:0;left:0;width:100%;height:44%;
+  background:linear-gradient(to top,rgba(13,36,39,.82) 0%,rgba(13,36,39,.3) 58%,rgba(13,36,39,0) 100%);
   pointer-events:none;}
-.fi-hero-video-badge{position:absolute;top:18px;left:24px;display:flex;align-items:center;gap:7px;
+.fi-hero-video-badge{position:absolute;top:0;left:0;width:36%;height:22%;max-width:280px;max-height:170px;
+  display:flex;align-items:flex-start;gap:7px;padding:16px 0 0 22px;border-radius:0 0 60px 0;
+  background:linear-gradient(135deg,rgba(13,36,39,.9) 0%,rgba(13,36,39,.9) 45%,rgba(13,36,39,0) 100%);
   font-family:var(--sans);font-size:12.5px;font-weight:700;color:#fff;letter-spacing:.2px;pointer-events:none;}
 .fi-hero-video-badge svg{width:17px;height:17px;flex-shrink:0;}
 .fi-hero-copy{position:absolute;left:5vw;right:5vw;bottom:36px;color:#fff;max-width:1140px;margin:0 auto;}
@@ -92,9 +94,9 @@ body:has(#view-door:not(.hidden)){background:var(--bg-light);}
 .fi-cta.ghost:hover{background:rgba(255,255,255,.2);}
 @media(max-width:860px){
   .fi-hero-stage{height:min(70vh,540px);}
-  .fi-hero-video{object-position:100% 50%;}
+  .fi-hero-video{object-position:68% 50%;}
   .fi-hero-copy{left:22px;right:22px;bottom:24px;}
-  .fi-hero-video-badge{top:14px;left:16px;}
+  .fi-hero-video-badge{width:52%;height:18%;padding:12px 0 0 16px;border-radius:0 0 46px 0;}
 }
 
 /* extreme-contrast editorial type, for use inside any .section-* */
