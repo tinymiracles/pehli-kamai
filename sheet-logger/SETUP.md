@@ -1,9 +1,9 @@
 # Signup logger — setup
 
-This mirrors every HR and youth signup on the live site into a Google Sheet,
-and saves each youth's auto-generated resume into a Drive folder. It costs
-nothing to run and needs no server — it's a small script tied to your own
-Google account.
+This mirrors every HR signup, youth signup, and "Let's talk" contact-form
+submission on the live site into a Google Sheet, and saves each youth's
+auto-generated resume into a Drive folder. It costs nothing to run and needs
+no server — it's a small script tied to your own Google account.
 
 This has to be set up once, by you (or whoever owns the Google account you
 want the Sheet/Drive folder to live in) — Claude can't click through Google's
@@ -51,12 +51,13 @@ permission screens on your behalf.
    ```js
    const SHEET_LOG_URL='https://script.google.com/macros/s/AKfycb.../exec';
    ```
-3. Commit and push. From then on, every HR signup and every new youth
-   profile on the live site will add a row to your Sheet — HR signups on
-   an "HR Signups" tab, youth signups (with a link to their auto-generated
-   resume, saved in a "Pehli Kamai — Resumes" Drive folder) on a "Youth
-   Signups" tab. Both tabs are created automatically the first time
-   something is logged.
+3. Commit and push. From then on, every HR signup, every new youth profile,
+   and every "Let's talk" contact-form submission on the live site will add
+   a row to your Sheet — HR signups on an "HR Signups" tab, youth signups
+   (with a link to their auto-generated resume, saved in a "Pehli Kamai —
+   Resumes" Drive folder) on a "Youth Signups" tab, and contact-form
+   messages on a "Contact Enquiries" tab. All three tabs are created
+   automatically the first time something is logged.
 
 ## Notes
 

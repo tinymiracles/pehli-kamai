@@ -1,9 +1,10 @@
 /**
  * Pehli Kamai — signup logger
  *
- * Receives every new HR and youth signup from the live site and:
- *  - appends a row to a "HR Signups" or "Youth Signups" tab in this
- *    script's bound Google Sheet
+ * Receives every new HR signup, youth signup, and "Let's talk" contact-form
+ * submission from the live site and:
+ *  - appends a row to a "HR Signups", "Youth Signups", or "Contact
+ *    Enquiries" tab in this script's bound Google Sheet
  *  - for youth signups, saves the auto-generated resume (HTML) as a
  *    file in a "Pehli Kamai — Resumes" Drive folder and puts a link to
  *    it in the sheet row
@@ -23,6 +24,8 @@ function doPost(e) {
       logHR_(data);
     } else if (data.type === 'youth') {
       logYouth_(data);
+    } else if (data.type === 'contact') {
+      logContact_(data);
     }
   } catch (err) {
     logError_(err);
@@ -76,6 +79,18 @@ function logYouth_(data) {
     data.skills || '',
     data.about || '',
     resumeLink
+  ]);
+}
+
+function logContact_(data) {
+  const sheet = getSheet_('Contact Enquiries', ['Timestamp', 'Name', 'Organisation', 'Email', 'I am a...', 'Message']);
+  sheet.appendRow([
+    new Date(),
+    data.name || '',
+    data.org || '',
+    data.email || '',
+    data.contactType || '',
+    data.msg || ''
   ]);
 }
 

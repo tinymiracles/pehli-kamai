@@ -525,12 +525,21 @@ function submitContact(){
   if(!name||!email||!msg){toast('Please fill all required fields.');return;}
   const org=document.getElementById('cf-org').value.trim();
   const type=document.getElementById('cf-type').value;
-  emailjs.send(EJ_SID,EJ_TID,{
-    to_email:N_EMAIL,candidate_name:name,
-    candidate_sectors:type,candidate_location:org||'Not specified',
+
+  // Backup copy in Firestore -- this form previously only fired an email,
+  // with no structured record if EmailJS ever silently failed.
+  db.collection('contact_enquiries').add({name,email,org,contactType:type,msg,createdAt:new Date().toISOString()}).catch(()=>{});
+  // Mirror to the Sheet too, same as HR/youth signups.
+  logSignup('contact',{name,email,org,contactType:type,msg});
+
+  const contactEmailData={
+    candidate_name:name,candidate_sectors:type,candidate_location:org||'Not specified',
     candidate_note:msg,viewed_at:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),
     message_type:'📩 Contact Form — '+type
-  }).then(()=>{
+  };
+  // Notify both Meghna and Rishikesh, same as the other notification flows.
+  emailjs.send(EJ_SID,EJ_TID,{...contactEmailData,to_email:N_EMAIL2}).catch(()=>{});
+  emailjs.send(EJ_SID,EJ_TID,{...contactEmailData,to_email:N_EMAIL}).then(()=>{
     document.getElementById('cf-form-body').style.display='none';
     document.getElementById('cf-thanks').style.display='block';
   }).catch(()=>{window.open(`mailto:${N_EMAIL}?subject=${encodeURIComponent('Enquiry from '+name)}&body=${encodeURIComponent(msg)}`);toast('Opening email…');});
