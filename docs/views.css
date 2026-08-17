@@ -70,6 +70,7 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
    dominant full-bleed image; a dark bottom-up scrim + white text (was a
    light scrim + dark text) keeps the corner legible against footage
    without washing the video out. */
+.fi-hero-tint{position:absolute;inset:0;background:rgba(4,14,13,.4);pointer-events:none;}
 .fi-hero-scrim{position:absolute;inset:0;
   background:linear-gradient(to top,rgba(6,20,18,.86) 0%,rgba(6,20,18,.72) 30%,rgba(6,20,18,.58) 55%,rgba(6,20,18,.4) 80%,rgba(6,20,18,.15) 100%);
   pointer-events:none;}

@@ -78,8 +78,11 @@
       <video class="fi-hero-video" autoplay muted loop playsinline>
         <source src="assets/video/hero-jobs.mp4" type="video/mp4">
       </video>
-      <!-- dark bottom-up scrim + white text (matches the manager's full-screen
-           reference) instead of the earlier light panel + dark text. -->
+      <!-- flat dark tint over the whole frame -- masks compression artifacts
+           in the source footage uniformly, not just where the copy sits --
+           plus the bottom-up scrim on top of it for extra contrast under
+           the text. -->
+      <div class="fi-hero-tint"></div>
       <div class="fi-hero-scrim"></div>
       <div class="fi-hero-copy">
         <h1 class="fi-h1">Pehli <em>Kamai</em></h1>
