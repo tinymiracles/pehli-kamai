@@ -66,45 +66,43 @@
        the idea, a target hit dead-centre for the goal landed, direction arrows
        for the path. Landed on this after many rounds against real references —
        see the plan file for the full history if picking this back up later. -->
-  <section class="fi-hero">
-    <div class="fi-copy">
-      <span class="fi-eyebrow">Mumbai's first job portal for freshers</span>
-      <h1 class="fi-h1">Welcome to Mumbai's first portal for <em>hiring freshers.</em></h1>
-      <p class="fi-lede">Need college students for a short-term survey? A hospitality hire that's a quick learner? A data entry operator who'll actually show up? Our candidates span accounting, data entry, hospitality, sales, creative media, and more.</p>
-      <div class="fi-cta-row">
-        <button class="fi-cta" onclick="showPage('home')">Browse profiles &rarr;</button>
-        <button class="fi-cta ghost" onclick="openAdd()">Naukri dhoond rahe ho? &rarr;</button>
+  <section class="fi-hero-banner">
+    <div class="fi-hero-stage">
+      <video class="fi-hero-video" autoplay muted loop playsinline>
+        <source src="assets/video/hero-jobs.mp4" type="video/mp4">
+      </video>
+      <!-- full-width top+bottom scrim: covers the source video's baked-in
+           "DomoAI" watermark at any crop/aspect ratio (no gap for it to
+           peek through, unlike a corner patch), and doubles as the
+           legibility scrim for the overlaid headline. -->
+      <div class="fi-hero-top-scrim"></div>
+      <div class="fi-hero-bottom-scrim"></div>
+      <div class="fi-hero-video-badge">
+        <svg width="16" height="16" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <g fill="var(--lime)" transform="translate(50,50)">
+            <circle r="18"/>
+            <polygon points="0,-47 -4,-18 4,-18"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(30)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(60)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(90)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(120)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(150)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(180)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(210)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(240)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(270)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(300)"/>
+            <polygon points="0,-47 -4,-18 4,-18" transform="rotate(330)"/>
+          </g>
+        </svg>
+        <span>Pehli Kamai</span>
       </div>
-    </div>
-    <div class="fi-stage">
-      <div class="fi-hero-video-wrap">
-        <video class="fi-hero-video" autoplay muted loop playsinline>
-          <source src="assets/video/hero-jobs.mp4" type="video/mp4">
-        </video>
-        <!-- covers the source video's baked-in "DomoAI" watermark, which
-             sits in the top-left corner (position drifts slightly across
-             the montage's stitched clips) and can't be cropped out cleanly —
-             a soft vignette + on-brand corner mark instead of a bare patch. -->
-        <div class="fi-hero-video-scrim"></div>
-        <div class="fi-hero-video-badge">
-          <svg width="16" height="16" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <g fill="var(--lime)" transform="translate(50,50)">
-              <circle r="18"/>
-              <polygon points="0,-47 -4,-18 4,-18"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(30)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(60)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(90)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(120)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(150)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(180)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(210)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(240)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(270)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(300)"/>
-              <polygon points="0,-47 -4,-18 4,-18" transform="rotate(330)"/>
-            </g>
-          </svg>
-          <span>Pehli Kamai</span>
+      <div class="fi-hero-copy">
+        <h1 class="fi-h1">Welcome to Mumbai's first portal for <em>hiring freshers.</em></h1>
+        <p class="fi-lede">Need college students for a short-term survey? A hospitality hire that's a quick learner? A data entry operator who'll actually show up? Our candidates span accounting, data entry, hospitality, sales, creative media, and more.</p>
+        <div class="fi-cta-row">
+          <button class="fi-cta" onclick="showPage('home')">Browse profiles &rarr;</button>
+          <button class="fi-cta ghost" onclick="openAdd()">Naukri dhoond rahe ho? &rarr;</button>
         </div>
       </div>
     </div>
