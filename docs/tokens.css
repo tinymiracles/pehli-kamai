@@ -15,13 +15,13 @@
   --line:rgba(255,255,255,.09);   /* hairline */
   --line-2:rgba(255,255,255,.14); /* control / focus border */
 
-  /* — brand (unchanged from the live site — same brand, same hexes) — */
-  --teal:#00838a;        /* primary action, HR-side accent */
-  --teal-light:#5fd8d0;  /* links, HR-side highlight */
-  --teal-soft:rgba(0,131,138,.16);   /* dark-mode equivalent of the old light teal tint */
-  --teal-mid:rgba(0,131,138,.32);
-  --lime:#e3ed55;        /* highlight, candidate-side accent */
-  --lime-soft:rgba(227,237,85,.14);  /* dark-mode equivalent of the old light lime tint */
+  /* — brand — pinned to the manager's "Pehli Kamai v3.html" reference — */
+  --teal:#0e7a72;        /* primary action, HR-side accent */
+  --teal-light:#0f8a80;  /* stat numbers / lighter accent */
+  --teal-soft:rgba(14,122,114,.16);   /* dark-mode equivalent of the old light teal tint */
+  --teal-mid:rgba(14,122,114,.32);
+  --lime:#c9dd6a;        /* highlight, candidate-side accent */
+  --lime-soft:rgba(201,221,106,.14);  /* dark-mode equivalent of the old light lime tint */
   --mauve:#c98fb0;       /* lightened for dark backgrounds (was #914e72 on white) */
   --mauve-soft:rgba(201,143,176,.16);
 
@@ -32,8 +32,8 @@
   --text-4:#6f9598;  /* labels */
 
   /* — type — */
-  --serif:'Playfair Display',Georgia,serif;
-  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Manrope',system-ui,-apple-system,sans-serif;
   --mono:ui-monospace,'SF Mono','Consolas','Liberation Mono',monospace; /* tiny metadata only — dates, tags, labels */
 
   /* — radius — */
@@ -64,11 +64,14 @@
      Light, conventional two-column hero + flat vector character
      illustrations, not the dark editorial system above (also superseded)
      and not the 3D shutter (Part 1, still parked/unused). Landed on after
-     many rounds against real reference images — see the plan file. */
-  --bg-light:#f4faf9;      /* page background for the flat-illustration pages */
-  --bg-light-tint:#d4eeee; /* soft background shape behind hero illustrations */
-  --fi-ink:#0d2427;        /* text on light backgrounds — matches --ed-ink-adjacent but warmer-teal */
-  --fi-ink-2:#4a6b6e;      /* secondary text */
+     many rounds against real reference images — see the plan file.
+     Colors/fonts below are pinned to the manager's "Pehli Kamai v3.html"
+     reference build (extracted via computed styles, not eyeballed) — do
+     not drift from these hexes without re-checking that file. */
+  --bg-light:#ffffff;      /* page background — plain white in the reference, not tinted */
+  --bg-light-tint:#eaf3f0; /* subtle surface tint (pills, card headers) — much lighter than before */
+  --fi-ink:#0c3b33;        /* headings/text on light backgrounds */
+  --fi-ink-2:#5e7370;      /* secondary text / inactive nav */
   --skin:#e8b48c;          /* character illustration skin tone */
   --skin-shade:#d99f75;    /* shaded/underside tone for the same */
   --hair:#241a15;          /* character illustration hair */

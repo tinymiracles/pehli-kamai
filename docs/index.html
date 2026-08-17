@@ -10,8 +10,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="tokens.css?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css?v=3">
 <link rel="stylesheet" href="styles.css?v=2">
 <link rel="stylesheet" href="views.css?v=2">
 </head>
@@ -49,8 +49,6 @@
   </nav>
   <div class="hdr-right">
     <span class="hdr-label"><span id="h-tot">53</span> candidates</span>
-    <span class="hdr-label">Shortlist</span>
-    <span class="pill-count" id="shortCount">0</span>
     <button class="btn-ghost" id="btn-hr-login" onclick="openSignIn()">Login</button>
     <button class="btn-add" id="btn-add-profile" onclick="openAdd()">Add my profile</button>
   </div>
@@ -142,7 +140,7 @@
   <section class="fi-hiw">
     <div class="hiw-in">
       <span class="fi-hiw-label">How it works</span>
-      <p class="hiw-p">"How it works is simple. You browse profiles. You shortlist. We make the introduction — and we stay in the loop until the candidate's first day, and after."</p>
+      <p class="hiw-p">"How it works is simple. You browse profiles. You pick who you like. We make the introduction — and we stay in the loop until the candidate's first day, and after."</p>
     </div>
 
     <div class="fi-steps">
@@ -194,7 +192,7 @@
         <p>Search <span id="hiw-tot">53</span> fresher profiles by sector, location, or availability.</p>
       </div>
 
-      <!-- Step 2: You shortlist — the profile-card + magnifying-glass recreation -->
+      <!-- Step 2: You pick — the profile-card + magnifying-glass recreation -->
       <div class="fi-step">
         <div class="fi-step-art">
           <svg viewBox="0 0 640 420"><g transform="translate(0,-30)">
@@ -215,7 +213,7 @@
           </g></svg>
         </div>
         <div class="fi-step-num lime">2</div>
-        <h3>You shortlist</h3>
+        <h3>You pick</h3>
         <p>Pick the candidates you want to talk to. Download the list.</p>
       </div>
 
