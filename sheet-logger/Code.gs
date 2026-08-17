@@ -37,16 +37,29 @@ function doPost(e) {
   return ContentService.createTextOutput('ok');
 }
 
+// Lock only around the check-and-create step, not the whole request --
+// under a burst of simultaneous signups, two requests could both see a tab
+// (e.g. "Youth Signups") doesn't exist yet and both try to create it at
+// once. A lock across the entire request would be worse: hundreds of
+// people queuing one by one could time each other out. This keeps the
+// lock brief (a lookup, and rarely a create) so appendRow calls -- the
+// common case once the tab already exists -- never wait on it.
 function getSheet_(name, headers) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(name);
-  if (!sheet) {
-    sheet = ss.insertSheet(name);
-    sheet.appendRow(headers);
-    sheet.setFrozenRows(1);
-    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(name);
+    if (!sheet) {
+      sheet = ss.insertSheet(name);
+      sheet.appendRow(headers);
+      sheet.setFrozenRows(1);
+      sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
+    }
+    return sheet;
+  } finally {
+    lock.releaseLock();
   }
-  return sheet;
 }
 
 function logHR_(data) {
