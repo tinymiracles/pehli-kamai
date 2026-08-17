@@ -978,6 +978,8 @@ function boot(){
     holder.appendChild(s);
   }
   startShutterLoop();
+  const heroVid=document.querySelector('.fi-hero-video');
+  if(heroVid) heroVid.playbackRate=0.6;
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
 else boot();
