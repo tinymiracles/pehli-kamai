@@ -71,7 +71,7 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
    light scrim + dark text) keeps the corner legible against footage
    without washing the video out. */
 .fi-hero-scrim{position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(6,20,18,.82) 0%,rgba(6,20,18,.6) 26%,rgba(6,20,18,.26) 48%,rgba(6,20,18,0) 70%);
+  background:linear-gradient(to top,rgba(6,20,18,.86) 0%,rgba(6,20,18,.72) 30%,rgba(6,20,18,.58) 55%,rgba(6,20,18,.4) 80%,rgba(6,20,18,.15) 100%);
   pointer-events:none;}
 .fi-hero-copy{position:absolute;left:6vw;right:6vw;bottom:8vh;max-width:560px;color:#fff;}
 .fi-hero-badge{display:inline-flex;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1px;
