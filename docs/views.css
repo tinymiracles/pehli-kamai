@@ -67,19 +67,20 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
   object-position:50% 50%;display:block;}
 /* corner treatment: copy sits in the bottom-left corner of the full-page
    video instead of a mid-height left panel, so the video reads as the
-   dominant full-bleed image; a bottom-up scrim (not a left-right one)
-   keeps the corner text legible against whatever's playing underneath. */
-.fi-hero-light-scrim{position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(255,255,255,.6) 0%,rgba(255,255,255,.46) 24%,rgba(255,255,255,.18) 46%,rgba(255,255,255,0) 68%);
+   dominant full-bleed image; a dark bottom-up scrim + white text (was a
+   light scrim + dark text) keeps the corner legible against footage
+   without washing the video out. */
+.fi-hero-scrim{position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(6,20,18,.82) 0%,rgba(6,20,18,.6) 26%,rgba(6,20,18,.26) 48%,rgba(6,20,18,0) 70%);
   pointer-events:none;}
-.fi-hero-copy{position:absolute;left:6vw;right:6vw;bottom:8vh;max-width:560px;color:var(--fi-ink);}
+.fi-hero-copy{position:absolute;left:6vw;right:6vw;bottom:8vh;max-width:560px;color:#fff;}
 .fi-hero-badge{display:inline-flex;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1px;
   text-transform:uppercase;color:#fff;background:var(--teal);padding:9px 18px;border-radius:24px;margin-bottom:24px;}
 .fi-h1{font-family:var(--serif);font-style:italic;font-weight:700;font-size:clamp(46px,6.4vw,80px);
-  line-height:1;margin:0 0 18px;letter-spacing:-.5px;color:var(--fi-ink);}
+  line-height:1;margin:0 0 18px;letter-spacing:-.5px;color:#fff;}
 .fi-h1 em{color:inherit;font-style:italic;}
 .fi-hero-rule{width:88px;height:4px;background:var(--lime);border-radius:2px;margin-bottom:24px;}
-.fi-lede{font-family:var(--sans);font-size:15.5px;line-height:1.7;color:var(--fi-ink-2);
+.fi-lede{font-family:var(--sans);font-size:15.5px;line-height:1.7;color:rgba(255,255,255,.86);
   margin:0 0 26px;max-width:480px;}
 .fi-hero-stats{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap;}
 .fi-hero-stat{background:#fff;border:1px solid rgba(13,36,39,.08);border-radius:12px;padding:14px 18px;
@@ -92,9 +93,9 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 .fi-cta{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;background:var(--teal);
   color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;}
 .fi-cta:hover{background:#0c6b64;}
-.fi-cta.ghost{background:transparent;border:1.5px solid var(--teal);color:var(--teal);}
-.fi-cta.ghost:hover{background:var(--bg-light-tint);}
-.fi-hero-foot{font-family:var(--sans);font-size:12.5px;color:var(--fi-ink-2);}
+.fi-cta.ghost{background:transparent;border:1.5px solid #fff;color:#fff;}
+.fi-cta.ghost:hover{background:rgba(255,255,255,.14);}
+.fi-hero-foot{font-family:var(--sans);font-size:12.5px;color:rgba(255,255,255,.8);}
 @media(max-width:860px){
   .fi-hero-stage{height:calc(100vh - 56px);min-height:520px;}
   .fi-hero-copy{left:22px;right:22px;bottom:28px;max-width:none;}
