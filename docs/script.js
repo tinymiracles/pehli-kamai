@@ -972,6 +972,20 @@ function boot(){
   startShutterLoop();
   const heroVid=document.querySelector('.fi-hero-video');
   if(heroVid) heroVid.playbackRate=0.6;
+
+  // Sector cards animate in as they scroll into view instead of just
+  // appearing — fires once per card, then leaves it alone.
+  const sectorCards=document.querySelectorAll('.fi-sector-card');
+  if(sectorCards.length && 'IntersectionObserver' in window){
+    const io=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}
+      });
+    },{threshold:0.2});
+    sectorCards.forEach(c=>io.observe(c));
+  } else {
+    sectorCards.forEach(c=>c.classList.add('in-view'));
+  }
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
 else boot();

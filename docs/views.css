@@ -312,9 +312,28 @@ pk-hiw3d.hot{cursor:pointer;}
 .fi-sectors-grid{max-width:1180px;margin:0 auto;padding:0 40px;display:grid;
   grid-template-columns:repeat(3,1fr);gap:22px;}
 .fi-sector-card{background:#fff;border-radius:14px;overflow:hidden;
-  box-shadow:0 4px 20px rgba(13,36,39,.06);}
-.fi-sector-art{aspect-ratio:4/3;background:var(--bg-light);}
+  box-shadow:0 4px 20px rgba(13,36,39,.06);
+  opacity:0;transform:translateY(28px);
+  transition:opacity .6s ease var(--reveal-delay,0s),transform .6s ease var(--reveal-delay,0s);}
+.fi-sector-card:nth-child(1){--reveal-delay:0s;}
+.fi-sector-card:nth-child(2){--reveal-delay:.12s;}
+.fi-sector-card:nth-child(3){--reveal-delay:.24s;}
+.fi-sector-card.in-view{opacity:1;transform:translateY(0);}
+.fi-sector-card:hover{transform:translateY(-7px);box-shadow:0 16px 34px rgba(13,36,39,.15);
+  transition:transform .25s ease,box-shadow .25s ease;}
+@media(prefers-reduced-motion:reduce){
+  .fi-sector-card{opacity:1;transform:none;transition:box-shadow .25s ease;}
+  .fi-sector-card:hover{transform:none;}
+}
+.fi-sector-art{aspect-ratio:4/3;background:var(--bg-light);overflow:hidden;}
 .fi-sector-art svg{width:100%;height:100%;display:block;}
+/* small ambient motion inside each illustration — a subtle continuous
+   float, not a one-shot reveal, so the cards read as "alive" rather than
+   static clip-art once they've already animated in. */
+.fi-float{animation:fiFloat 3.6s ease-in-out infinite;}
+.fi-float-slow{animation:fiFloat 4.6s ease-in-out infinite;}
+@keyframes fiFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+@media(prefers-reduced-motion:reduce){.fi-float,.fi-float-slow{animation:none;}}
 .fi-sector-body{padding:16px 18px 20px;}
 .fi-sector-tag{display:inline-flex;font-family:var(--mono);font-size:11px;font-weight:700;
   letter-spacing:.6px;text-transform:uppercase;color:var(--teal);background:var(--bg-light-tint);
