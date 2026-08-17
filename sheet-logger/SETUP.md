@@ -54,10 +54,10 @@ permission screens on your behalf.
 3. Commit and push. From then on, every HR signup, every new youth profile,
    and every "Let's talk" contact-form submission on the live site will add
    a row to your Sheet — HR signups on an "HR Signups" tab, youth signups
-   (with a link to their auto-generated resume, saved in a "Pehli Kamai —
-   Resumes" Drive folder) on a "Youth Signups" tab, and contact-form
-   messages on a "Contact Enquiries" tab. All three tabs are created
-   automatically the first time something is logged.
+   (with a link to their auto-generated resume, saved to the Drive folder
+   set in `Code.gs`'s `RESUME_FOLDER_ID`) on a "Youth Signups" tab, and
+   contact-form messages on a "Contact Enquiries" tab. All three tabs are
+   created automatically the first time something is logged.
 
 ## Notes
 

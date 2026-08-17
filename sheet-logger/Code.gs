@@ -6,8 +6,8 @@
  *  - appends a row to a "HR Signups", "Youth Signups", or "Contact
  *    Enquiries" tab in this script's bound Google Sheet
  *  - for youth signups, saves the auto-generated resume (HTML) as a
- *    file in a "Pehli Kamai — Resumes" Drive folder and puts a link to
- *    it in the sheet row
+ *    file in a specific Drive folder (see RESUME_FOLDER_ID below) and
+ *    puts a link to it in the sheet row
  *
  * See SETUP.md in this folder for how to deploy this and wire it up —
  * this file is not run automatically, it has to be pasted into a Google
@@ -15,7 +15,11 @@
  * that step — it needs your own Google account's permission).
  */
 
-const DRIVE_FOLDER_NAME = 'Pehli Kamai — Resumes';
+// The folder ID from your Drive folder's share link:
+// https://drive.google.com/drive/folders/THIS_PART?usp=sharing
+// Must be a folder your own Google account (the one running this script)
+// can write to.
+const RESUME_FOLDER_ID = '1Eyp_USesa7Od-YHGq_qw7NBhTlG_H54I';
 
 function doPost(e) {
   try {
@@ -95,9 +99,7 @@ function logContact_(data) {
 }
 
 function getFolder_() {
-  const folders = DriveApp.getFoldersByName(DRIVE_FOLDER_NAME);
-  if (folders.hasNext()) return folders.next();
-  return DriveApp.createFolder(DRIVE_FOLDER_NAME);
+  return DriveApp.getFolderById(RESUME_FOLDER_ID);
 }
 
 function saveResumeToDrive_(name, html) {
