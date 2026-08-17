@@ -276,12 +276,14 @@ function openHI(){
   document.getElementById('hi-modal-name').textContent=d.name;
   document.getElementById('hi-form-body').style.display='block';
   document.getElementById('hi-thanks').style.display='none';
-  document.getElementById('hcf-name').value='';
-  document.getElementById('hcf-phone').value='';
-  document.getElementById('hcf-email').value='';
-  document.getElementById('hcf-company').value='';
+  // Logged-in HR: prefill from their account instead of a blank form every
+  // time — still editable, in case they're submitting for a colleague.
+  document.getElementById('hcf-name').value=hrUser?hrUser.name||'':'';
+  document.getElementById('hcf-phone').value=hrUser?hrUser.phone||'':'';
+  document.getElementById('hcf-email').value=hrUser?hrUser.email||'':'';
+  document.getElementById('hcf-company').value=hrUser?hrUser.company||'':'';
   document.getElementById('hi-ov').classList.add('open');
-  setTimeout(()=>document.getElementById('hcf-name').focus(),100);
+  setTimeout(()=>document.getElementById(hrUser?'hcf-phone':'hcf-name').focus(),100);
 }
 
 function closeHI(){
