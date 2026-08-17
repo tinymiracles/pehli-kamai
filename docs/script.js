@@ -70,11 +70,11 @@ const N_EMAIL='meghna@tinymiracles.com',N_EMAIL2='rishikesh@tinymiracles.com',N_
 emailjs.init(EJ_PK);
 
 // ── SHEET/DRIVE LOGGER ───────────────────────────────────────────────
-// Mirrors every HR and youth signup into a Google Sheet, and saves each
-// youth's auto-generated resume into a Drive folder. Paste your deployed
-// Apps Script Web App URL here (see setup-sheet-logger.md) — leave blank
-// to disable, e.g. before it's deployed.
-const SHEET_LOG_URL='';
+// Mirrors every HR signup, youth signup, and contact-form submission into
+// a Google Sheet, and saves each youth's auto-generated resume into a Drive
+// folder. Deployed Apps Script Web App URL (see sheet-logger/SETUP.md) —
+// leave blank to disable.
+const SHEET_LOG_URL='https://script.google.com/macros/s/AKfycbygblsCHsQEFIqlqIfTgCt9OdN0uvngk7eKnPs9BAB2t31pk857-kAv82p8ZBYUwyoY/exec';
 function logSignup(type,payload){
   if(!SHEET_LOG_URL)return;
   try{
