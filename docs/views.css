@@ -155,24 +155,31 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 
 /* ── shared type (used across views) ── */
 .page-h1{font-family:var(--serif);font-size:56px;font-weight:700;line-height:1.06;
-  letter-spacing:-.8px;margin:0 0 20px;color:#fff;max-width:990px;}
-.page-h1 em{font-style:italic;color:var(--lime);}
-.lede{font-size:16.5px;line-height:1.72;color:var(--text-2);margin:0;max-width:790px;}
+  letter-spacing:-.8px;margin:0 0 20px;color:var(--ed-ink);max-width:990px;}
+.page-h1 em{font-style:italic;color:var(--teal);}
+.lede{font-size:16.5px;line-height:1.72;color:var(--ed-ink-2);margin:0;max-width:790px;}
 .h2{font-family:var(--serif);font-size:40px;font-weight:700;line-height:1.14;margin:0 0 24px;
-  color:#fff;max-width:760px;}
+  color:var(--ed-ink);max-width:760px;}
 .quote{font-family:var(--serif);font-size:30px;font-weight:400;font-style:italic;line-height:1.5;
-  color:#fff;margin:0;max-width:900px;}
+  color:var(--ed-ink);margin:0;max-width:900px;}
 
-/* ── about page ── */
+/* ── about page ──
+   This whole block used to assume a dark ambient page background (white/
+   pale text, lime accents that pop on dark) — but "Our story" actually
+   renders on the light --paper background, which made most of its text
+   render near-invisible (a genuine bug, not a caching artifact — confirmed
+   against the live site with an automated contrast scan, not just eyeballed).
+   .band/.closer/.why-cta-card are unaffected: those set their own dark
+   background locally, so white text there is correct as-is. ── */
 .about-grid{display:grid;grid-template-columns:minmax(0,700px) 1fr;gap:60px;padding-top:38px;}
-.about-grid p{font-size:17px;line-height:1.78;color:var(--text-2);margin:0;}
-.about-grid p.lead{color:#cfe1e2;}
+.about-grid p{font-size:17px;line-height:1.78;color:var(--ed-ink-2);margin:0;}
+.about-grid p.lead{color:var(--ed-ink);}
 .pull{font-family:var(--serif);font-size:27px;font-style:italic;line-height:1.5;
-  color:var(--lime)!important;margin:6px 0!important;}
-.stats{border-left:1px solid rgba(255,255,255,.12);padding-left:26px;display:flex;
+  color:var(--teal)!important;margin:6px 0!important;}
+.stats{border-left:1px solid rgba(13,36,39,.12);padding-left:26px;display:flex;
   flex-direction:column;gap:24px;}
 .stat-n{font-family:var(--serif);font-style:italic;font-size:34px;color:var(--teal-light);line-height:1;}
-.stat-l{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);margin-top:5px;}
+.stat-l{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--ed-ink-2);margin-top:5px;}
 .band{margin:50px 0 0;padding:44px;background:var(--band);
   border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);}
 .band p{max-width:960px;margin:0 auto;font-family:var(--serif);font-size:29px;font-style:italic;

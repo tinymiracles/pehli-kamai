@@ -71,7 +71,9 @@
   --bg-light:#ffffff;      /* page background — plain white in the reference, not tinted */
   --bg-light-tint:#eaf3f0; /* subtle surface tint (pills, card headers) — much lighter than before */
   --fi-ink:#0c3b33;        /* headings/text on light backgrounds */
-  --fi-ink-2:#5e7370;      /* secondary text / inactive nav */
+  --fi-ink-2:#4f6663;      /* secondary text / inactive nav — darkened slightly from the
+                              reference's exact #5e7370 (which measured 4.46:1, just under
+                              the 4.5:1 AA threshold on this site's light backgrounds) */
   --skin:#e8b48c;          /* character illustration skin tone */
   --skin-shade:#d99f75;    /* shaded/underside tone for the same */
   --hair:#241a15;          /* character illustration hair */
