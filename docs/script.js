@@ -451,6 +451,7 @@ function openAdd(){
   const rdrop=document.getElementById('rdrop-lbl');if(rdrop)rdrop.innerHTML='Drop a PDF or image here, or click to browse (max 5MB)';
   const rdz=document.getElementById('resume-drop');if(rdz)rdz.style.borderColor='var(--line-d)';
   const rfi=document.getElementById('resume-file');if(rfi)rfi.value='';
+  ['a-age','a-consent-terms','a-consent-profile','a-consent-donor'].forEach(i=>{const el=document.getElementById(i);if(el)el.checked=false;});
   const sc=document.getElementById('a-sc');
   while(sc.options.length)sc.remove(0);
   sc.add(new Option('Select sector...',''));
@@ -497,13 +498,14 @@ function saveProfile(){
     // your password now actually goes through Firebase Auth's own
     // updatePassword() below, instead of just being written into
     // localStorage and never really taking effect.
-    const updated={...old,name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeKey:rk,resume:true,resumeHTML:html};
+    const donorConsentEl=document.getElementById('a-consent-donor');
+    const updated={...old,name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeKey:rk,resume:true,resumeHTML:html,donorConsent:donorConsentEl?donorConsentEl.checked:!!old.donorConsent};
     delete updated.password;
     cachedAccts[editingEmail]=updated;
     localStorage.setItem('pk_yt_accts',JSON.stringify(cachedAccts));
     const fbUser=auth.currentUser;
     if(fbUser){
-      db.collection('youth_accounts').doc(fbUser.uid).update({name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,resumeHTML:html}).catch(()=>{});
+      db.collection('youth_accounts').doc(fbUser.uid).update({name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,resumeHTML:html,donorConsent:updated.donorConsent}).catch(()=>{});
       uploadPendingResume(fbUser.uid,editingEmail);
       if(npw)fbUser.updatePassword(npw).then(()=>toast('Password updated.')).catch(()=>toast('Could not update password -- try signing in again first.'));
     }
@@ -525,6 +527,10 @@ function saveProfile(){
   if(!email){toast('Please enter your email.');return;}
   if(!pw||pw.length<6){toast('Password must be at least 6 characters.');return;}
   if(pw!==pw2){toast('Passwords do not match.');return;}
+  if(!document.getElementById('a-age').checked){toast('Please confirm you are 18 or older.');return;}
+  if(!document.getElementById('a-consent-terms').checked){toast('Please agree to the Privacy Policy and Terms & Conditions.');return;}
+  if(!document.getElementById('a-consent-profile').checked){toast('Please consent to your profile being shown to employers.');return;}
+  const donorConsent=document.getElementById('a-consent-donor').checked;
 
   const key='new_'+Date.now();
   const html=buildResumeHTML(resumeD);
@@ -538,9 +544,9 @@ function saveProfile(){
   auth.createUserWithEmailAndPassword(email,pw)
     .then(cred=>{
       const uid=cred.user.uid;
-      const acct={uid,id,email,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,resumeKey:key,resume:true,track:trk,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,createdAt:new Date().toISOString()};
+      const acct={uid,id,email,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,resumeKey:key,resume:true,track:trk,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,ageConfirmed18:true,donorConsent,createdAt:new Date().toISOString()};
       db.collection('youth_accounts').doc(uid).set(acct).catch(()=>{});
-      db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,createdAt:new Date().toISOString()}).catch(()=>{});
+      db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,donorConsent,createdAt:new Date().toISOString()}).catch(()=>{});
       logSignup('youth',{name:nm,email,phone:ph,edu:ed,institution:inst,sector:sc,location:loc,skills:sk.join(', '),about:ab,resumeHtml:html});
       uploadPendingResume(uid,email);
       // Cache the profile for the "Firestore doc missing" fallback in
@@ -587,6 +593,7 @@ function openCF(){
   document.getElementById('cf-thanks').style.display='none';
   document.getElementById('cf-form-body').style.display='block';
   ['cf-name','cf-org','cf-email','cf-msg'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  const cons=document.getElementById('cf-consent');if(cons)cons.checked=false;
 }
 function closeCF(){document.getElementById('cf-ov').classList.remove('open');}
 
@@ -595,6 +602,7 @@ function submitContact(){
   const email=document.getElementById('cf-email').value.trim();
   const msg=document.getElementById('cf-msg').value.trim();
   if(!name||!email||!msg){toast('Please fill all required fields.');return;}
+  if(!document.getElementById('cf-consent').checked){toast('Please agree to the Privacy Policy to send this.');return;}
   const org=document.getElementById('cf-org').value.trim();
   const type=document.getElementById('cf-type').value;
 
@@ -820,6 +828,12 @@ function youthEditProfile(){
     if(acct.expCompany){hasWorkExp=true;toggleExp(true);document.getElementById('a-exco').value=acct.expCompany||'';document.getElementById('a-exdu').value=acct.expDuration||'';document.getElementById('a-exro').value=acct.expRole||'';}
     if(acct.volOrg){hasVolunteered=true;toggleVol(true);document.getElementById('a-volorg').value=acct.volOrg||'';document.getElementById('a-voldur').value=acct.volDuration||'';document.getElementById('a-volrole').value=acct.volRole||'';}
     if(acct.resumeFileURL){document.getElementById('rdrop-lbl').innerHTML=`✅ You already have a resume uploaded (<a href="${acct.resumeFileURL}" target="_blank" onclick="event.stopPropagation()">view it</a>) — drop a new file here to replace it`;document.getElementById('resume-drop').style.borderColor='var(--teal)';}
+    // Already agreed once at signup -- reflect that instead of showing
+    // freshly-unticked boxes for someone who's just editing their profile.
+    document.getElementById('a-age').checked=true;
+    document.getElementById('a-consent-terms').checked=true;
+    document.getElementById('a-consent-profile').checked=true;
+    document.getElementById('a-consent-donor').checked=!!acct.donorConsent;
     const emf=document.getElementById('a-em-yt');emf.value=email;emf.readOnly=true;emf.style.opacity='.65';
     const pw=document.getElementById('a-pw');const pw2=document.getElementById('a-pw2');
     if(pw){pw.value='';pw.placeholder='Leave blank to keep current';}if(pw2){pw2.value='';pw2.placeholder='Leave blank to keep current';}
@@ -874,6 +888,7 @@ function hrSignUp(){
   const pw=document.getElementById('hr-up-pw').value;
   if(!nm||!ph||!em||!co||!ind||!city||!pw){toast('Please fill all required fields.');return;}
   if(pw.length<6){toast('Password must be at least 6 characters.');return;}
+  if(!document.getElementById('hr-consent-terms').checked){toast('Please agree to the Privacy Policy and Terms & Conditions.');return;}
   auth.createUserWithEmailAndPassword(em,pw)
     .then(cred=>{
       cred.user.sendEmailVerification();
