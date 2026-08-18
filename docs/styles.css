@@ -323,24 +323,45 @@ body{font-family:var(--sans);background:var(--ink);color:var(--text);min-height:
 @media(max-width:640px){.hiw{padding:48px 20px;}.hiw-ctas{grid-template-columns:1fr;}}
 
 /* ━━ FOOTER ━━ */
-footer{background:var(--ink);color:rgba(255,255,255,.45);padding:0;border-top:2px solid var(--teal);}
-.ft-inner{max-width:1240px;margin:0 auto;padding:56px 40px 40px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;}
-.ft-brand-name{font-family:var(--serif);font-size:22px;font-weight:700;font-style:italic;color:#ffffff;margin-bottom:4px;}
+/* Footer — deliberately its own palette (warm cream/near-black/mustard),
+   matching the parent tinymiracles.com footer by direct request, rather
+   than the teal/lime used everywhere else on Pehli Kamai. Footer = "who's
+   behind this," so echoing the parent org's own look here is intentional,
+   not a token-system drift. */
+footer{background:#f0e6d6;color:#1c1c1a;padding:0;position:relative;}
+.ft-inner{max-width:1240px;margin:0 auto;padding:64px 40px 48px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;}
+.ft-brand-block{display:flex;flex-direction:column;align-items:flex-start;}
+.ft-brand-name{font-family:var(--serif);font-size:24px;font-weight:700;font-style:italic;color:#1c1c1a;margin-bottom:4px;}
 .ft-brand-name span{color:var(--teal);}
-.ft-brand-sub{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px;}
-.ft-brand-desc{font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.7;}
-.ft-col-label{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--teal);display:inline-block;}
-.ft-col{display:flex;flex-direction:column;gap:10px;}
-.ft-col a{color:rgba(255,255,255,.55);font-size:13px;cursor:pointer;text-decoration:none;transition:color .15s;display:block;}
-.ft-col a:hover{color:#ffffff;}
-.ft-col span{color:rgba(255,255,255,.45);font-size:13px;line-height:1.5;}
-.ft-contact-name{font-weight:600;color:rgba(255,255,255,.7);font-size:12px;}
-.ft-contact-email{color:rgba(255,255,255,.55);font-size:13px;text-decoration:none;transition:color .15s;}
-.ft-contact-email:hover{color:#ffffff;}
-.ft-cta-btn{margin-top:10px;padding:9px 18px;background:var(--teal);border:none;color:white;border-radius:20px;font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;text-align:left;align-self:flex-start;transition:opacity .15s;}
-.ft-cta-btn:hover{opacity:.85;}
-.ft-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 40px;max-width:1240px;margin:0 auto;font-size:11px;color:rgba(255,255,255,.28);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
-@media(max-width:600px){.ft-inner{grid-template-columns:1fr;gap:32px;padding:40px 20px 28px;}.ft-bottom{padding:16px 20px;}}
+.ft-brand-sub{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(28,28,26,.5);margin-bottom:16px;}
+.ft-brand-desc{font-size:13px;color:rgba(28,28,26,.68);line-height:1.7;max-width:320px;margin-bottom:22px;}
+.ft-be-btn{display:inline-flex;align-items:center;gap:10px;background:#f0c419;border:none;color:#1c1c1a;
+  padding:13px 22px;border-radius:4px;font-family:var(--sans);font-size:13px;font-weight:800;
+  letter-spacing:.03em;text-transform:uppercase;cursor:pointer;transition:transform .15s,background .15s;}
+.ft-be-btn span{transition:transform .15s;}
+.ft-be-btn:hover{background:#e6ba0f;}
+.ft-be-btn:hover span{transform:translateX(3px);}
+.ft-col-label{font-family:var(--sans);font-size:15px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;
+  color:#1c1c1a;margin-bottom:16px;}
+.ft-col{display:flex;flex-direction:column;gap:11px;}
+.ft-col a{color:rgba(28,28,26,.72);font-size:14px;cursor:pointer;text-decoration:none;transition:color .15s;display:block;}
+.ft-col a:hover{color:#1c1c1a;}
+.ft-col span{color:rgba(28,28,26,.6);font-size:14px;line-height:1.5;}
+.ft-contact-email{color:rgba(28,28,26,.72);font-size:14px;text-decoration:none;transition:color .15s;}
+.ft-contact-email:hover{color:#1c1c1a;}
+.ft-report-link{color:var(--teal)!important;font-weight:700;}
+.ft-bottom{border-top:1px solid rgba(28,28,26,.12);padding:20px 40px;max-width:1240px;margin:0 auto;
+  font-size:11.5px;color:rgba(28,28,26,.55);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.ft-top-btn{position:absolute;right:32px;bottom:32px;width:44px;height:44px;border-radius:50%;
+  background:#1c1c1a;color:#f0e6d6;border:none;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:opacity .15s;}
+.ft-top-btn:hover{opacity:.8;}
+@media(max-width:900px){.ft-inner{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){
+  .ft-inner{grid-template-columns:1fr;gap:32px;padding:48px 20px 32px;}
+  .ft-bottom{padding:16px 20px;flex-direction:column;align-items:flex-start;}
+  .ft-top-btn{right:20px;bottom:20px;width:38px;height:38px;}
+}
 
 /* ━━ TOAST ━━ */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--surface);border:1px solid var(--line-2);color:white;padding:11px 20px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.4);}

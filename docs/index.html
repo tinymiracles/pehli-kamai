@@ -1047,36 +1047,40 @@
 
 <footer>
   <div class="ft-inner">
-    <div>
+    <div class="ft-brand-block">
       <div class="ft-brand-name">Pehli <span>Kamai</span></div>
       <div class="ft-brand-sub">by tiny miracles</div>
       <div class="ft-brand-desc">Connecting Mumbai's youth with their first real opportunity. We work with young people from underserved communities to find dignified employment.</div>
+      <button class="ft-be-btn" onclick="showPage('home');document.querySelector('.ss').scrollIntoView({behavior:'smooth'})">Browse profiles <span>→</span></button>
     </div>
     <div class="ft-col">
-      <div class="ft-col-label">Quick Links</div>
+      <div class="ft-col-label">Explore</div>
       <a onclick="showPage('home')">Home</a>
       <a onclick="showPage('home');setTimeout(()=>document.querySelector('.ss').scrollIntoView({behavior:'smooth'}),100)">Candidates</a>
       <a onclick="showPage('about')">About Us</a>
       <a onclick="openSignIn()">HR Login</a>
     </div>
     <div class="ft-col">
-      <div class="ft-col-label">Contact Us</div>
+      <div class="ft-col-label">Contact</div>
       <a href="mailto:pehlikamaitm@gmail.com" class="ft-contact-email">pehlikamaitm@gmail.com</a>
-      <a href="https://tinymiracles.com" target="_blank" style="margin-top:4px">tinymiracles.com</a>
-      <button onclick="openCF()" class="ft-cta-btn">Send us a message →</button>
+      <a href="https://tinymiracles.com" target="_blank">tinymiracles.com</a>
+      <a onclick="openCF()">Send us a message →</a>
     </div>
     <div class="ft-col">
       <div class="ft-col-label">Legal</div>
       <a onclick="showPage('privacy')">Privacy Policy</a>
       <a onclick="showPage('terms')">Terms &amp; Conditions</a>
       <a onclick="showPage('grievance')">Grievance Redressal</a>
-      <a onclick="openGrievance()" style="color:var(--lime)">Report a concern →</a>
+      <a onclick="openGrievance()" class="ft-report-link">Report a concern →</a>
     </div>
   </div>
   <div class="ft-bottom">
-    <span>© 2026 Betterworld Designs Private Limited · Pehli Kamai by tiny miracles · Mumbai, India</span>
-    <span>Making first opportunities happen</span>
+    <span>© 2026 Pehli Kamai · Mumbai, India</span>
+    <span>Tiny Miracles operates as Betterworld Designs Pvt. Ltd in India</span>
   </div>
+  <button class="ft-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+  </button>
 </footer>
 
 <div class="toast" id="toast"><span id="t-m"></span></div>
