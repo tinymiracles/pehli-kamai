@@ -59,6 +59,7 @@
       <span class="hdr-menu-label"><span id="h-tot">53</span> candidates</span>
       <button class="hdr-menu-item" onclick="openSignIn();toggleHdrMenu()">HR Login</button>
       <button class="hdr-menu-item" onclick="openCF();toggleHdrMenu()">Contact Us</button>
+      <button class="hdr-menu-item" onclick="openGrievance();toggleHdrMenu()">Report a concern</button>
     </div>
   </div>
 </header>
@@ -548,6 +549,49 @@
   </div>
 </div>
 
+<!-- ━━ REPORT A CONCERN / GRIEVANCE MODAL ━━ -->
+<div class="ov" id="gr-ov" onclick="if(event.target===this)closeGrievance()">
+  <div class="modal" style="max-width:480px;padding:32px 28px;">
+    <button class="modal-x" onclick="closeGrievance()">✕</button>
+    <h2 style="font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:4px">Report a <em style="font-style:italic;color:var(--teal)">concern.</em></h2>
+    <div class="ct-bar" style="margin-bottom:16px"></div>
+    <div id="gr-form-body">
+    <p style="font-size:13px;color:var(--ink-3);margin-bottom:22px;line-height:1.65">A data/privacy question, or something that felt wrong with an employer, a candidate, or an introduction — tell us. This goes straight to our team, gets a reference number, and is logged so it doesn't get lost. You won't lose access to the platform for reporting something.</p>
+    <div class="ct-form">
+      <div class="ct-row"><label>Your name *</label><input type="text" id="gr-name" placeholder="e.g. Priya Shah"/></div>
+      <div class="ct-row"><label>Email *</label><input type="email" id="gr-email" placeholder="your@email.com"/></div>
+      <div class="ct-row"><label>What kind of concern is this? *</label>
+        <select id="gr-category">
+          <option value="Data or privacy">Data or privacy</option>
+          <option value="Something felt wrong with an employer">Something felt wrong with an employer</option>
+          <option value="Something felt wrong with a candidate">Something felt wrong with a candidate</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="ct-row"><label>What happened? *</label><textarea id="gr-desc" placeholder="Tell us what happened, as much detail as you can share…"></textarea></div>
+      <div class="ct-row">
+        <label>Screenshot (optional)</label>
+        <input type="file" id="gr-file" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleGrievanceFile(this)"/>
+        <div class="resume-drop" id="gr-drop" ondragover="event.preventDefault()" ondrop="handleGrievanceDrop(event)" onclick="document.getElementById('gr-file').click()">
+          <div class="resume-drop-lbl" id="gr-drop-lbl">Drop a screenshot here, or click to browse (max 5MB)</div>
+        </div>
+      </div>
+      <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--ink-3);cursor:pointer;margin:14px 0">
+        <input type="checkbox" id="gr-consent" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
+        By sending this, I agree to Pehli Kamai's <a onclick="event.preventDefault();closeGrievance();showPage('privacy')" href="#" style="color:var(--teal);font-weight:700">Privacy Policy</a>. *
+      </label>
+      <button class="btn-ct-submit" onclick="submitGrievance()">Send report</button>
+    </div>
+    </div>
+    <div id="gr-thanks" style="display:none;text-align:center;padding:24px 0">
+      <div style="font-size:32px;margin-bottom:12px">✅</div>
+      <div style="font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink)">Report received</div>
+      <div style="font-size:13px;color:var(--ink-3);margin-top:8px">Reference: <strong id="gr-ref-no" style="color:var(--ink)"></strong></div>
+      <div style="font-size:12.5px;color:var(--ink-3);margin-top:10px;line-height:1.6">We'll acknowledge within 2 business days, and aim to resolve this within 30 days. Save your reference number for follow-up.</div>
+    </div>
+  </div>
+</div>
+
 <!-- ━━ ENQUIRIES PAGE ━━ -->
 <div class="hidden" id="view-enquiries">
   <div class="enq-wrap">
@@ -1026,6 +1070,7 @@
       <a onclick="showPage('privacy')">Privacy Policy</a>
       <a onclick="showPage('terms')">Terms &amp; Conditions</a>
       <a onclick="showPage('grievance')">Grievance Redressal</a>
+      <a onclick="openGrievance()" style="color:var(--lime)">Report a concern →</a>
     </div>
   </div>
   <div class="ft-bottom">

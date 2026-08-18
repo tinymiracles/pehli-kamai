@@ -1,13 +1,17 @@
 /**
  * Pehli Kamai — signup logger
  *
- * Receives every new HR signup, youth signup, and "Let's talk" contact-form
- * submission from the live site and:
- *  - appends a row to a "HR Signups", "Youth Signups", or "Contact
- *    Enquiries" tab in this script's bound Google Sheet
+ * Receives every new HR signup, youth signup, "Let's talk" contact-form
+ * submission, and "Report a concern" grievance from the live site and:
+ *  - appends a row to a "HR Signups", "Youth Signups", "Contact
+ *    Enquiries", or "Grievances" tab in this script's bound Google Sheet
  *  - for youth signups, saves the auto-generated resume (HTML) as a
  *    file in a specific Drive folder (see RESUME_FOLDER_ID below) and
  *    puts a link to it in the sheet row
+ *  - for grievances, adds a "Status" column (Open by default) -- update
+ *    it by hand as you work through each one; this tab is the grievance
+ *    register itself, doubling as the team's tracking dashboard until
+ *    there's a real admin page for it
  *
  * See SETUP.md in this folder for how to deploy this and wire it up —
  * this file is not run automatically, it has to be pasted into a Google
@@ -30,6 +34,8 @@ function doPost(e) {
       logYouth_(data);
     } else if (data.type === 'contact') {
       logContact_(data);
+    } else if (data.type === 'grievance') {
+      logGrievance_(data);
     }
   } catch (err) {
     logError_(err);
@@ -108,6 +114,19 @@ function logContact_(data) {
     data.email || '',
     data.contactType || '',
     data.msg || ''
+  ]);
+}
+
+function logGrievance_(data) {
+  const sheet = getSheet_('Grievances', ['Timestamp', 'Reference', 'Name', 'Email', 'Category', 'What happened', 'Status']);
+  sheet.appendRow([
+    new Date(),
+    data.refNo || '',
+    data.name || '',
+    data.email || '',
+    data.category || '',
+    data.description || '',
+    'Open'
   ]);
 }
 

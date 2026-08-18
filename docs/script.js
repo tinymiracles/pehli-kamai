@@ -629,6 +629,86 @@ function submitContact(){
   }).catch(()=>{window.open(`mailto:${N_EMAIL}?subject=${encodeURIComponent('Enquiry from '+name)}&body=${encodeURIComponent(msg)}`);toast('Opening email…');});
 }
 
+// ── REPORT A CONCERN / GRIEVANCE ──────────────────
+// A real ticket, not just an email: gets a reference number, a Firestore
+// record (the trackable source of truth), a mirrored row in the Sheet
+// (a "Grievances" tab with a Status column the team updates by hand --
+// same lightweight, no-new-backend pattern as HR approval), and an
+// immediate notification to all three team addresses. Screenshots go to
+// Firebase Storage, same as resume uploads, for the same reason: too big
+// for a Firestore document field.
+let pendingGrievanceFile=null;
+
+function openGrievance(){
+  document.getElementById('gr-ov').classList.add('open');
+  document.getElementById('gr-thanks').style.display='none';
+  document.getElementById('gr-form-body').style.display='block';
+  ['gr-name','gr-email','gr-desc'].forEach(i=>{document.getElementById(i).value='';});
+  document.getElementById('gr-category').selectedIndex=0;
+  document.getElementById('gr-consent').checked=false;
+  pendingGrievanceFile=null;
+  document.getElementById('gr-drop-lbl').textContent='Drop a screenshot here, or click to browse (max 5MB)';
+  document.getElementById('gr-drop').style.borderColor='var(--line-d)';
+  document.getElementById('gr-file').value='';
+  // Pre-fill from whoever's actually signed in, same idea as the HR
+  // interest form prefill -- one less thing to retype.
+  if(hrUser){document.getElementById('gr-name').value=hrUser.name||'';document.getElementById('gr-email').value=hrUser.email||'';}
+  else if(currentYtAcct){document.getElementById('gr-name').value=currentYtAcct.name||'';document.getElementById('gr-email').value=currentYtAcct.email||'';}
+}
+function closeGrievance(){document.getElementById('gr-ov').classList.remove('open');}
+
+function handleGrievanceFile(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>5*1024*1024){toast('Screenshot too large — max 5MB');return;}
+  if(!['image/jpeg','image/jpg','image/png'].includes(file.type)){toast('Please attach a JPG or PNG screenshot.');return;}
+  pendingGrievanceFile=file;
+  document.getElementById('gr-drop-lbl').innerHTML=`✅ <strong>${file.name}</strong> attached`;
+  document.getElementById('gr-drop').style.borderColor='var(--teal)';
+}
+function handleGrievanceDrop(e){
+  e.preventDefault();
+  document.getElementById('gr-drop').style.borderColor='var(--line-d)';
+  const file=e.dataTransfer.files[0];if(!file)return;
+  const dt=new DataTransfer();dt.items.add(file);
+  const inp=document.getElementById('gr-file');inp.files=dt.files;handleGrievanceFile(inp);
+}
+
+function genRefNo(){
+  return 'GR-'+Math.random().toString(36).slice(2,8).toUpperCase();
+}
+
+function submitGrievance(){
+  const name=document.getElementById('gr-name').value.trim();
+  const email=document.getElementById('gr-email').value.trim();
+  const category=document.getElementById('gr-category').value;
+  const desc=document.getElementById('gr-desc').value.trim();
+  if(!name||!email||!desc){toast('Please fill your name, email, and what happened.');return;}
+  if(!document.getElementById('gr-consent').checked){toast('Please agree to the Privacy Policy to send this.');return;}
+
+  const refNo=genRefNo();
+  const t=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+  const finish=(screenshotURL,screenshotNote)=>{
+    db.collection('grievances').add({refNo,name,email,category,description:desc,screenshotURL:screenshotURL||'',status:'open',createdAt:new Date().toISOString()}).catch(()=>{});
+    logSignup('grievance',{refNo,name,email,category,description:desc});
+    const grData={candidate_name:name,candidate_sectors:category,candidate_location:screenshotNote||'No screenshot attached',candidate_note:desc,viewed_at:t,message_type:'🚩 Grievance '+refNo+' — '+category};
+    emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL}).catch(()=>{});
+    emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL2}).catch(()=>{});
+    emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL3}).catch(()=>{});
+    document.getElementById('gr-form-body').style.display='none';
+    document.getElementById('gr-ref-no').textContent=refNo;
+    document.getElementById('gr-thanks').style.display='block';
+  };
+
+  if(pendingGrievanceFile){
+    const ext=(pendingGrievanceFile.name.split('.').pop()||'jpg').toLowerCase();
+    storage.ref(`grievances/${refNo}/screenshot.${ext}`).put(pendingGrievanceFile)
+      .then(snap=>snap.ref.getDownloadURL())
+      .then(url=>finish(url,url))
+      .catch(()=>finish('','Screenshot attached but failed to upload — ask the reporter to resend it.'));
+  } else {
+    finish('',null);
+  }
+}
 
 // ── ENQUIRIES ────────────────────────────────────
 function saveEnquiry(enq){
