@@ -202,10 +202,11 @@ function render(){
   document.getElementById('rc').textContent=f.length;
   const g=document.getElementById('grid');
   if(!f.length){g.innerHTML=`<div class="empty" style="padding:60px 40px"><div style="font-size:28px;color:var(--teal-mid)">✦</div><div class="empty-h">No candidates found.</div></div>`;return;}
+  const full=canSeeFull();
   const card=d=>`<div class="pcard" onclick="openP(${d.id})">
-    <div class="pc-name">${d.name}</div>
+    <div class="pc-name">${full?d.name:maskName(d.name)}</div>
     <div class="pc-sector">${d.sector}</div>
-    <div class="pc-area">📍 ${d.location}${d.location.toLowerCase().includes('mumbai')?'':`, Mumbai`}</div>
+    <div class="pc-area">📍 ${full?d.location+(d.location.toLowerCase().includes('mumbai')?'':', Mumbai'):'Mumbai'}</div>
     <div class="pc-avail"><span class="avail-dot"></span>Available</div>
   </div>`;
   const ROWS=4;
@@ -222,10 +223,11 @@ function render(){
 
 function openR(id){
   const d=DATA.find(x=>x.id===id);if(!d)return;curId=id;
+  const full=canSeeFull();
   const av=document.getElementById('rm-av');
-  av.textContent=hrUser?ini(d.name):'?';
-  av.style.background=hrUser?'var(--teal)':'var(--ink-5)';
-  document.getElementById('rm-nm').textContent=hrUser?d.name:'Candidate';
+  av.textContent=full?ini(d.name):'?';
+  av.style.background=full?'var(--teal)':'var(--ink-5)';
+  document.getElementById('rm-nm').textContent=full?d.name:maskName(d.name);
   document.getElementById('rm-rl').textContent=d.sector;
   const body=document.getElementById('rm-body');
   const redact=`<div style="background:var(--bg);border-bottom:1px solid var(--line);padding:8px 16px;font-size:11px;color:var(--ink-4);text-align:center">Contact info in this resume is not displayed — express interest to connect with this candidate.</div>`;
@@ -250,22 +252,24 @@ function toPf(){closeR();openP(curId);}
 
 function openP(id){
   const d=DATA.find(x=>x.id===id);if(!d)return;curId=id;
+  const full=canSeeFull();
+  const shownName=full?d.name:maskName(d.name);
   const av=document.getElementById('pm-av');
-  av.textContent=ini(d.name);
+  av.textContent=ini(shownName);
   av.style.background='var(--teal)';
   const nm=document.getElementById('pm-nm');
-  nm.textContent=d.name;nm.style.fontSize='';
+  nm.textContent=shownName;nm.style.fontSize='';
   document.getElementById('pm-rl').textContent=d.sector;
   document.getElementById('pm-ab').textContent=d.about;
-  document.getElementById('pm-tgs').innerHTML=`<span class="tag t-edu">${d.edu}</span><span class="tag t-sec">${d.sector}</span><span class="tag t-loc">📍 ${d.location}</span>${d.resume?'<span class="tag t-res">Resume</span>':''}`;
+  document.getElementById('pm-tgs').innerHTML=`<span class="tag t-edu">${d.edu}</span><span class="tag t-sec">${d.sector}</span><span class="tag t-loc">📍 ${full?d.location:'Mumbai'}</span>${d.resume?'<span class="tag t-res">Resume</span>':''}`;
   document.getElementById('pm-exs').style.display='none';
   document.getElementById('pm-sk').innerHTML=d.skills.map(s=>`<span class="sk">${s}</span>`).join('');
   document.getElementById('pm-lg').innerHTML=d.langs.map(l=>`<span class="sk">${l}</span>`).join('');
   const ct=document.getElementById('pm-ct');
-  ct.innerHTML=hrUser
+  ct.innerHTML=full
     ?'📍 '+d.location+(d.location.toLowerCase().includes('mumbai')?'':`, Mumbai`)
-    :'<span style="font-size:12px;color:var(--ink-4)">Express interest below to receive their contact details</span>';
-  document.getElementById('pm-res-btn').style.display=hrUser?'':'none';
+    :'<span style="font-size:12px;color:var(--ink-4)">Sign in as an approved employer, or express interest below, to see their exact location and contact details</span>';
+  document.getElementById('pm-res-btn').style.display=full?'':'none';
   document.getElementById('p-ov').classList.add('open');
 }
 function closeP(){document.getElementById('p-ov').classList.remove('open');}
@@ -843,10 +847,10 @@ function hrSignIn(){
       return db.collection('hr_accounts').doc(cred.user.uid).get().then(snap=>{
         const data=snap.exists?snap.data():JSON.parse(localStorage.getItem('typc_hr_user')||'null');
         if(data){
-          hrUser={name:data.name,phone:data.phone,email:data.email,company:data.company,industry:data.industry,city:data.city};
+          hrUser={name:data.name,phone:data.phone,email:data.email,company:data.company,industry:data.industry,city:data.city,approved:data.approved===true};
           localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
-          closeHRLogin();updateHRHeader();
-          toast('Welcome back, '+hrUser.name+'!');
+          closeHRLogin();updateHRHeader();render();
+          toast(hrUser.approved?'Welcome back, '+hrUser.name+'!':'Signed in — your account is still pending review, so candidate details stay masked for now.');
         } else {toast('Account not found. Please create one.');switchLoginTab('up');}
       });
     })
@@ -873,18 +877,43 @@ function hrSignUp(){
   auth.createUserWithEmailAndPassword(em,pw)
     .then(cred=>{
       cred.user.sendEmailVerification();
-      const hrData={uid:cred.user.uid,name:nm,phone:ph,email:em,company:co,industry:ind,city:city,role:'hr',createdAt:new Date().toISOString()};
+      // New HR accounts start unapproved -- candidate names/neighbourhoods
+      // stay masked for them until someone at Tiny Miracles verifies the
+      // account and flips this to true (in the Firebase console, e.g.
+      // after a quick call). See canSeeFull().
+      const hrData={uid:cred.user.uid,name:nm,phone:ph,email:em,company:co,industry:ind,city:city,role:'hr',approved:false,createdAt:new Date().toISOString()};
       db.collection('hr_accounts').doc(cred.user.uid).set(hrData).catch(()=>{});
       logSignup('hr',{name:nm,phone:ph,email:em,org:co,industry:ind,city:city});
-      hrUser={name:nm,phone:ph,email:em,company:co,industry:ind,city:city};
+      hrUser={name:nm,phone:ph,email:em,company:co,industry:ind,city:city,approved:false};
       localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
       closeHRLogin();updateHRHeader();
-      toast('Account created! Check your email ('+em+') to verify before signing in.');
+      toast('Account created! Verify your email, then our team will review before full access unlocks.');
+      // Tell the team a new HR account needs review -- otherwise "pending"
+      // just sits there with nobody knowing to look.
+      const t=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+      const reviewData={candidate_name:nm,candidate_sectors:ind,candidate_location:city,candidate_note:'New HR account awaiting approval — '+co+' ('+ph+', '+em+'). Approve in Firebase console: hr_accounts/'+cred.user.uid,viewed_at:t,message_type:'🔒 HR account needs approval — '+nm};
+      emailjs.send(EJ_SID,EJ_TID,{...reviewData,to_email:N_EMAIL}).catch(()=>{});
+      emailjs.send(EJ_SID,EJ_TID,{...reviewData,to_email:N_EMAIL2}).catch(()=>{});
     })
     .catch(e=>{
       if(e.code==='auth/email-already-in-use'){toast('Email already registered — please sign in.');switchLoginTab('in');}
       else{toast('Error: '+e.message);}
     });
+}
+
+// True only for a logged-in HR account that's been manually approved.
+// Everything that reveals a candidate's real name or exact neighbourhood
+// checks this instead of just "is someone logged in as HR" -- signing up
+// alone should never unlock that.
+function canSeeFull(){return !!(hrUser&&hrUser.approved===true);}
+
+// "Priya Sharma" -> "Priya S." -- enough to recognise a profile you've
+// already seen, not enough to identify someone from the public grid.
+function maskName(name){
+  if(!name)return'Candidate';
+  const parts=name.trim().split(/\s+/);
+  if(parts.length===1)return parts[0];
+  return parts[0]+' '+parts[parts.length-1].charAt(0).toUpperCase()+'.';
 }
 
 function updateHRHeader(){
@@ -893,7 +922,7 @@ function updateHRHeader(){
   if(!btn)return;
   if(hrUser){
     btn.className='hr-logged';
-    btn.textContent=hrUser.name+' · '+hrUser.company+' ▾';
+    btn.textContent=hrUser.name+' · '+hrUser.company+(hrUser.approved?'':' (pending review)')+' ▾';
     btn.onclick=()=>{if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}};
     if(addBtn){addBtn.style.display='none';}
   } else {
