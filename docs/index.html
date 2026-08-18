@@ -97,7 +97,7 @@
           <div class="fi-hero-stat"><div class="fi-hero-stat-n">Mumbai</div><div class="fi-hero-stat-l">Based</div></div>
         </div>
         <div class="fi-cta-row">
-          <button class="fi-cta" onclick="document.querySelector('.ss').scrollIntoView({behavior:'smooth'})">Browse profiles &rarr;</button>
+          <button class="fi-cta" onclick="scrollToCandidates()">Browse profiles &rarr;</button>
           <button class="fi-cta ghost" onclick="openAdd()">Naukri dhoond rahe ho? &rarr;</button>
         </div>
       </div>
@@ -318,7 +318,7 @@
       <div class="why-cta-card">
         <h4>For employers</h4>
         <p>Scroll through the profiles and give the candidates a call.</p>
-        <button class="btn-add" style="margin-top:14px;" onclick="showPage('home');setTimeout(()=>document.querySelector('.ss').scrollIntoView({behavior:'smooth'}),100)">Browse candidates →</button>
+        <button class="btn-add" style="margin-top:14px;" onclick="showPage('home');setTimeout(scrollToCandidates,100)">Browse candidates →</button>
       </div>
     </div>
   </div>
@@ -1101,12 +1101,12 @@
       <div class="ft-brand-name">Pehli <span>Kamai</span></div>
       <div class="ft-brand-sub">by tiny miracles</div>
       <div class="ft-brand-desc">Connecting Mumbai's youth with their first real opportunity. We work with young people from underserved communities to find dignified employment.</div>
-      <button class="ft-be-btn" onclick="showPage('home');setTimeout(()=>document.querySelector('.ss').scrollIntoView({behavior:'smooth'}),100)">Browse profiles <span>→</span></button>
+      <button class="ft-be-btn" onclick="showPage('home');setTimeout(scrollToCandidates,100)">Browse profiles <span>→</span></button>
     </div>
     <div class="ft-col">
       <div class="ft-col-label">Explore</div>
       <a onclick="showPage('home')">Home</a>
-      <a onclick="showPage('home');setTimeout(()=>document.querySelector('.ss').scrollIntoView({behavior:'smooth'}),100)">Candidates</a>
+      <a onclick="showPage('home');setTimeout(scrollToCandidates,100)">Candidates</a>
       <a onclick="showPage('about')">About Us</a>
       <a onclick="openSignIn()">HR Login</a>
     </div>
@@ -1156,7 +1156,7 @@
   // card and CTA buttons already use.
   document.addEventListener('resumeclick', () => {
     showPage('home');
-    setTimeout(() => { const ss = document.querySelector('.ss'); if (ss) ss.scrollIntoView({ behavior: 'smooth' }); }, 60);
+    setTimeout(scrollToCandidates, 60);
   });
 </script>
 </body>

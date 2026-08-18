@@ -121,6 +121,21 @@ let sl=new Set(), curSec='all', curId=null, pendingResume=null, editingEmail=nul
 function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();}
 
 // Page nav
+// .ss (the search/filter bar) is position:sticky, and calling
+// scrollIntoView() directly on a sticky element is unreliable across
+// browsers -- the browser can miscalculate whether it's "already in
+// view" since sticky elements reposition themselves during scroll. This
+// computes the real target position by hand and uses window.scrollTo
+// instead, which has no such ambiguity. Every "browse candidates" link
+// on the site should call this rather than scrollIntoView(.ss) directly.
+function scrollToCandidates(){
+  const ss=document.querySelector('.ss');
+  if(!ss)return;
+  const headerH=window.innerWidth<=700?56:64; // matches .ss{top:...} at each breakpoint
+  const y=ss.getBoundingClientRect().top+window.pageYOffset-headerH;
+  window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+}
+
 function showPage(p){
   const homeEl = document.getElementById('view-home');
   const leavingHome = homeEl && !homeEl.classList.contains('hidden') && p!=='home';
