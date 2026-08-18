@@ -124,16 +124,29 @@ function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase
 // .ss (the search/filter bar) is position:sticky, and calling
 // scrollIntoView() directly on a sticky element is unreliable across
 // browsers -- the browser can miscalculate whether it's "already in
-// view" since sticky elements reposition themselves during scroll. This
-// computes the real target position by hand and uses window.scrollTo
-// instead, which has no such ambiguity. Every "browse candidates" link
-// on the site should call this rather than scrollIntoView(.ss) directly.
+// view" since sticky elements reposition themselves during scroll.
+//
+// The real trap, found after goHomeThenScroll started calling this
+// while genuinely still scrolled down (instead of always measuring
+// right after a scrollTo(0,0) reset, which had been masking this by
+// accident): getBoundingClientRect() on a sticky element reports its
+// current STUCK position once you've scrolled past its natural spot --
+// basically always true for a "browse candidates" click coming from the
+// footer, About page, or the profile page. rect.top then reads ~64
+// (its pinned offset) instead of its real place in the document, so
+// the old math worked out to "scroll to roughly where you already
+// are" -- i.e. nothing visibly happens.
+// Fix: walk the offsetParent chain instead. offsetTop reflects an
+// element's normal-flow position and is unaffected by sticky's
+// scroll-driven visual offset, so this gives the same real answer
+// whether .ss is currently stuck or not.
 function scrollToCandidates(){
   const ss=document.querySelector('.ss');
   if(!ss)return;
   const headerH=window.innerWidth<=700?56:64; // matches .ss{top:...} at each breakpoint
-  const y=ss.getBoundingClientRect().top+window.pageYOffset-headerH;
-  window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  let docTop=0,el=ss;
+  while(el){docTop+=el.offsetTop||0;el=el.offsetParent;}
+  window.scrollTo({top:Math.max(0,docTop-headerH),behavior:'smooth'});
 }
 
 function scrollToHowItWorks(){
@@ -252,15 +265,27 @@ function render(){
     <div class="pc-area">📍 ${full?d.location+(d.location.toLowerCase().includes('mumbai')?'':', Mumbai'):'Mumbai'}</div>
     <div class="pc-avail"><span class="avail-dot"></span>Available</div>
   </div>`;
-  // Used to be a scrolling marquee here (rows auto-scrolling left/right).
-  // Looked lively as a passive teaser, but for the actual "browse and
-  // hire" job it fights the person using it -- any still moment (a
-  // screenshot, a glance while reading) catches cards mid-scroll and
-  // half-clipped at the row edge, which is exactly what reads as messy.
-  // A plain wrapping grid -- aligned, nothing moving, nothing cut off --
-  // is the right call for a page people are actually trying to read and
-  // click through, not just watch.
-  g.innerHTML=`<div class="track-grid-static">${f.map(card).join('')}</div>`;
+  // The scrolling-marquee rows below duplicate each row's cards
+  // (${cards}${cards}) so the loop animation has no visible seam -- that
+  // reads fine with the full ~53-candidate list (plenty of cards per row),
+  // but a narrow sector/location/search filter can leave a row with just
+  // one or two cards, and the same trick then just shows the same person
+  // twice, going nowhere. Below this threshold, render a plain static
+  // grid instead -- no animation, no duplication, nothing to look buggy.
+  const TICKER_MIN=16;
+  if(f.length<TICKER_MIN){
+    g.innerHTML=`<div class="track-grid-static">${f.map(card).join('')}</div>`;
+    return;
+  }
+  const ROWS=4;
+  g.innerHTML=Array.from({length:ROWS},(_,i)=>{
+    const row=f.filter((_,j)=>j%ROWS===i);
+    if(!row.length)return'';
+    const dir=i%2===0?'left':'right';
+    const spd=70+i*12;
+    const cards=row.map(card).join('');
+    return`<div class="track-row"><div class="track-inner ${dir}" style="--spd:${spd}s">${cards}${cards}</div></div>`;
+  }).join('');
 }
 
 

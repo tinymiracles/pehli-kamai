@@ -141,7 +141,14 @@ body{font-family:var(--sans);background:var(--ink);color:var(--text);min-height:
 
 /* ━━ TRACK ━━ */
 .track-section{padding:28px 0 60px;}
-.track-rows{display:flex;flex-direction:column;gap:14px;overflow:hidden;}
+/* Rows keep scrolling (that's the point), but a still glance -- a
+   screenshot, a moment spent actually reading a card -- used to catch
+   cards hard-clipped right at the row edge, which is what read as
+   "messy". Fading each row's edges instead means whatever's mid-scroll
+   there dissolves into the background rather than getting sliced. */
+.track-rows{display:flex;flex-direction:column;gap:14px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);}
 .track-row{overflow:hidden;width:100%;}
 .track-inner{display:flex;gap:12px;width:max-content;will-change:transform;}
 .track-inner.left{animation:scroll-left var(--spd,38s) linear infinite;}
