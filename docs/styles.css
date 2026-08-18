@@ -147,6 +147,8 @@ body{font-family:var(--sans);background:var(--ink);color:var(--text);min-height:
 .track-inner.left{animation:scroll-left var(--spd,38s) linear infinite;}
 .track-inner.right{animation:scroll-right var(--spd,38s) linear infinite;}
 .track-row:hover .track-inner{animation-play-state:paused;}
+.track-grid-static{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;}
+@media(max-width:600px){.track-grid-static{grid-template-columns:repeat(auto-fill,minmax(162px,1fr));}}
 @keyframes scroll-left{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 @keyframes scroll-right{0%{transform:translateX(-50%);}100%{transform:translateX(0);}}
 

@@ -209,6 +209,18 @@ function render(){
     <div class="pc-area">📍 ${full?d.location+(d.location.toLowerCase().includes('mumbai')?'':', Mumbai'):'Mumbai'}</div>
     <div class="pc-avail"><span class="avail-dot"></span>Available</div>
   </div>`;
+  // The scrolling-marquee rows below duplicate each row's cards
+  // (${cards}${cards}) so the loop animation has no visible seam -- that
+  // reads fine with the full ~53-candidate list (plenty of cards per row),
+  // but a narrow sector/location/search filter can leave a row with just
+  // one or two cards, and the same trick then just shows the same person
+  // twice, going nowhere. Below this threshold, render a plain static
+  // grid instead -- no animation, no duplication, nothing to look buggy.
+  const TICKER_MIN=16;
+  if(f.length<TICKER_MIN){
+    g.innerHTML=`<div class="track-grid-static">${f.map(card).join('')}</div>`;
+    return;
+  }
   const ROWS=4;
   g.innerHTML=Array.from({length:ROWS},(_,i)=>{
     const row=f.filter((_,j)=>j%ROWS===i);
