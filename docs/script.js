@@ -136,6 +136,32 @@ function scrollToCandidates(){
   window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
 }
 
+function scrollToHowItWorks(){
+  const el=document.querySelector('.fi-hiw');
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+
+// Every "browse candidates" / "how it works" link that lives outside
+// the home page (footer, About, the profile page's back link, a
+// resume click bubbling up) needs showPage('home') first. The bug: that
+// resets scroll straight to (0,0) unconditionally, then a hardcoded
+// setTimeout tried to smooth-scroll back down 100ms later -- a race
+// that a slower device/layout could lose, leaving you stuck at the
+// top with the "browse profiles" click looking like it did nothing.
+// This skips the reset+race entirely when we're already on Home (the
+// hero's own button does this too), and otherwise waits two animation
+// frames -- i.e. until the browser has actually painted the newly-
+// shown page -- instead of guessing a delay.
+function goHomeThenScroll(fn){
+  const homeEl=document.getElementById('view-home');
+  if(homeEl && homeEl.classList.contains('hidden')){
+    showPage('home');
+    requestAnimationFrame(()=>requestAnimationFrame(fn));
+  } else {
+    fn();
+  }
+}
+
 function showPage(p){
   const homeEl = document.getElementById('view-home');
   const leavingHome = homeEl && !homeEl.classList.contains('hidden') && p!=='home';

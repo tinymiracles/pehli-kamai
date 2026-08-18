@@ -45,8 +45,8 @@
   </button>
   <nav class="tabs">
     <button class="tab" id="nl-home" onclick="showPage('home')" aria-current="true">Hire a fresher</button>
-    <button class="tab" onclick="showPage('home');setTimeout(()=>document.querySelector('.fi-hiw').scrollIntoView({behavior:'smooth'}),100)">How it works</button>
-    <button class="tab" onclick="showPage('home');setTimeout(()=>document.querySelector('.track-section').scrollIntoView({behavior:'smooth'}),100)">Candidates</button>
+    <button class="tab" onclick="goHomeThenScroll(scrollToHowItWorks)">How it works</button>
+    <button class="tab" onclick="goHomeThenScroll(scrollToCandidates)">Candidates</button>
     <button class="tab" onclick="openAdd()">Kaam chahiye</button>
     <button class="tab" id="nl-about" onclick="showPage('about')">Our story</button>
   </nav>
@@ -279,7 +279,7 @@
      the grid already uses for non-approved HR visitors) -->
 <div class="hidden" id="view-profile">
   <div class="pf-wrap">
-    <button class="pf-back" onclick="showPage('home');setTimeout(scrollToCandidates,100)">&larr; Back to candidates</button>
+    <button class="pf-back" onclick="goHomeThenScroll(scrollToCandidates)">&larr; Back to candidates</button>
     <div class="pf-grid">
       <div class="pf-main">
         <div class="pf-header">
@@ -372,7 +372,7 @@
       <div class="why-cta-card">
         <h4>For employers</h4>
         <p>Scroll through the profiles and give the candidates a call.</p>
-        <button class="btn-add" style="margin-top:14px;" onclick="showPage('home');setTimeout(scrollToCandidates,100)">Browse candidates →</button>
+        <button class="btn-add" style="margin-top:14px;" onclick="goHomeThenScroll(scrollToCandidates)">Browse candidates →</button>
       </div>
     </div>
   </div>
@@ -1155,12 +1155,12 @@
       <div class="ft-brand-name">Pehli <span>Kamai</span></div>
       <div class="ft-brand-sub">by tiny miracles</div>
       <div class="ft-brand-desc">Connecting Mumbai's youth with their first real opportunity. We work with young people from underserved communities to find dignified employment.</div>
-      <button class="ft-be-btn" onclick="showPage('home');setTimeout(scrollToCandidates,100)">Browse profiles <span>→</span></button>
+      <button class="ft-be-btn" onclick="goHomeThenScroll(scrollToCandidates)">Browse profiles <span>→</span></button>
     </div>
     <div class="ft-col">
       <div class="ft-col-label">Explore</div>
       <a onclick="showPage('home')">Home</a>
-      <a onclick="showPage('home');setTimeout(scrollToCandidates,100)">Candidates</a>
+      <a onclick="goHomeThenScroll(scrollToCandidates)">Candidates</a>
       <a onclick="showPage('about')">About Us</a>
       <a onclick="openSignIn()">HR Login</a>
     </div>
@@ -1195,7 +1195,7 @@
 
 <script src="shutter.js"></script>
 <script src="resumes-data.js"></script>
-<script src="script.js?v=2"></script>
+<script src="script.js?v=3"></script>
 <!-- pk-hiw3d needs three.js's GLTFLoader, which only ships as an ES module —
      this is the one component on the site loaded this way. Everything else
      (shutter.js, script.js) stays a classic script using the UMD build above. -->
@@ -1213,8 +1213,7 @@
   // document — wire it to the same "browse candidates" action the door
   // card and CTA buttons already use.
   document.addEventListener('resumeclick', () => {
-    showPage('home');
-    setTimeout(scrollToCandidates, 60);
+    goHomeThenScroll(scrollToCandidates);
   });
 </script>
 </body>
