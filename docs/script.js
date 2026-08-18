@@ -489,13 +489,19 @@ function saveProfile(){
     const rk='new_'+Date.now();
     const html=buildResumeHTML(resumeD);
     RESUMES[rk]={t:'html',d:html};
-    const updated={...old,name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeKey:rk,resume:true,resumeHTML:html,...(npw?{password:npw}:{})};
+    // No password field here -- it never belongs in this cache. Changing
+    // your password now actually goes through Firebase Auth's own
+    // updatePassword() below, instead of just being written into
+    // localStorage and never really taking effect.
+    const updated={...old,name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeKey:rk,resume:true,resumeHTML:html};
+    delete updated.password;
     cachedAccts[editingEmail]=updated;
     localStorage.setItem('pk_yt_accts',JSON.stringify(cachedAccts));
     const fbUser=auth.currentUser;
     if(fbUser){
       db.collection('youth_accounts').doc(fbUser.uid).update({name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,institution:inst,passYear:yr,resumeHTML:html}).catch(()=>{});
       uploadPendingResume(fbUser.uid,editingEmail);
+      if(npw)fbUser.updatePassword(npw).then(()=>toast('Password updated.')).catch(()=>toast('Could not update password -- try signing in again first.'));
     }
     const idx=DATA.findIndex(x=>x.id===old.id);
     if(idx>=0)DATA[idx]={...DATA[idx],name:nm,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,track:trk,resume:true,resumeKey:rk};
@@ -533,19 +539,23 @@ function saveProfile(){
       db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,createdAt:new Date().toISOString()}).catch(()=>{});
       logSignup('youth',{name:nm,email,phone:ph,edu:ed,institution:inst,sector:sc,location:loc,skills:sk.join(', '),about:ab,resumeHtml:html});
       uploadPendingResume(uid,email);
+      // Cache the profile for the "Firestore doc missing" fallback in
+      // youthLogin() -- never the password. Firebase Auth is the one place
+      // that ever holds it, hashed and salted server-side.
       const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
-      accts[email]={...acct,password:pw};
+      accts[email]=acct;
       localStorage.setItem('pk_yt_accts',JSON.stringify(accts));
       openYtDash(acct,true);
     })
     .catch(e=>{
       if(e.code==='auth/email-already-in-use'){toast('Account already exists. Try logging in.');}
       else{
-        const acct={id,email,password:pw,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,resumeKey:key,resume:true,track:trk,resumeHTML:html};
-        const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
-        accts[email]=acct;
-        localStorage.setItem('pk_yt_accts',JSON.stringify(accts));
-        openYtDash(acct,true);
+        // Account creation itself failed (network issue, etc.) -- there
+        // used to be a local-only fallback here that created an unauthenticated
+        // "account" cached in localStorage with a plaintext password. Removed:
+        // it wasn't a real account (no other device could ever sign into it),
+        // and it stored the password in the clear. Ask them to retry instead.
+        toast('Could not create your account -- check your connection and try again.');
       }
     });
 
@@ -724,11 +734,12 @@ function youthLogin(){
       }
     })
     .catch(e=>{
-      // Fall back to localStorage for old accounts
-      const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
-      const acct=accts[email];
-      if(acct&&acct.password===pw){closeHRLogin();openYtDash(acct);}
-      else{toast('Email or password incorrect.');}
+      // Firebase Auth is the only real credential check -- there used to be
+      // a fallback here that compared against a plaintext password cached
+      // in localStorage. Removed: that password never should have been
+      // stored client-side in the first place, and a client-side compare
+      // isn't real authentication anyway (trivially bypassed via devtools).
+      toast('Email or password incorrect.');
     });
 }
 
@@ -840,10 +851,12 @@ function hrSignIn(){
       });
     })
     .catch(()=>{
-      // Fallback for old localStorage-only accounts
-      const saved=JSON.parse(localStorage.getItem('typc_hr_user')||'null');
-      if(saved&&saved.email===email){hrUser=saved;localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));closeHRLogin();updateHRHeader();toast('Welcome back, '+hrUser.name+'!');}
-      else{toast('Email or password incorrect.');}
+      // There used to be a fallback here that matched on email alone, with
+      // no password check at all -- on a shared device where this HR user
+      // had previously signed in once, ANY password would get you in as
+      // them, as long as you knew their email. Removed: Firebase Auth's
+      // rejection is the real answer here, not something to work around.
+      toast('Email or password incorrect.');
     });
 }
 
