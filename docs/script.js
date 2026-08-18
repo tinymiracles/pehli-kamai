@@ -1294,6 +1294,22 @@ function boot(){
   } else {
     sectorCards.forEach(c=>c.classList.add('in-view'));
   }
+
+  // Same fade+rise+blur treatment, generalised to any section carrying
+  // .reveal or .reveal-stagger (a group whose children stagger in one
+  // after another) -- used on the how-it-works steps and About page
+  // content, not just the sector cards above.
+  const revealEls=document.querySelectorAll('.reveal, .reveal-stagger');
+  if(revealEls.length && 'IntersectionObserver' in window){
+    const rio=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){e.target.classList.add('in-view');rio.unobserve(e.target);}
+      });
+    },{threshold:0.15});
+    revealEls.forEach(el=>rio.observe(el));
+  } else {
+    revealEls.forEach(el=>el.classList.add('in-view'));
+  }
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
 else boot();

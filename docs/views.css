@@ -326,7 +326,32 @@ pk-hiw3d.hot{cursor:pointer;}
 .fi-sectors-grid{max-width:1180px;margin:0 auto;padding:0 40px;display:grid;
   grid-template-columns:repeat(3,1fr);gap:22px;}
 .fi-sector-card{background:#fff;border-radius:14px;overflow:hidden;
-  box-shadow:0 4px 20px rgba(13,36,39,.06);}
+  box-shadow:0 4px 20px rgba(13,36,39,.06);
+  opacity:0;transform:translateY(28px);filter:blur(6px);
+  transition:opacity .7s ease,transform .7s ease,filter .7s ease;}
+.fi-sector-card.in-view{opacity:1;transform:translateY(0);filter:blur(0);}
+.fi-sector-card:nth-child(2){transition-delay:.1s;}
+.fi-sector-card:nth-child(3){transition-delay:.2s;}
+@media(prefers-reduced-motion:reduce){
+  .fi-sector-card{opacity:1;transform:none;filter:none;transition:none;}
+}
+
+/* Generic scroll-reveal -- fade + rise + soften into focus. Applied via
+   the .reveal class + the shared IntersectionObserver in boot() (see
+   script.js) to whatever section wants this treatment, not just sectors. */
+.reveal{opacity:0;transform:translateY(26px);filter:blur(5px);
+  transition:opacity .65s ease,transform .65s ease,filter .65s ease;}
+.reveal.in-view{opacity:1;transform:translateY(0);filter:blur(0);}
+.reveal-stagger>*{opacity:0;transform:translateY(26px);filter:blur(5px);
+  transition:opacity .65s ease,transform .65s ease,filter .65s ease;}
+.reveal-stagger.in-view>*{opacity:1;transform:translateY(0);filter:blur(0);}
+.reveal-stagger.in-view>*:nth-child(1){transition-delay:0s;}
+.reveal-stagger.in-view>*:nth-child(2){transition-delay:.08s;}
+.reveal-stagger.in-view>*:nth-child(3){transition-delay:.16s;}
+.reveal-stagger.in-view>*:nth-child(4){transition-delay:.24s;}
+@media(prefers-reduced-motion:reduce){
+  .reveal,.reveal-stagger>*{opacity:1;transform:none;filter:none;transition:none;}
+}
 .fi-sector-art{aspect-ratio:4/3;background:var(--bg-light);overflow:hidden;}
 .fi-sector-art img{width:100%;height:100%;object-fit:cover;display:block;}
 .fi-sector-art--split{display:flex;}

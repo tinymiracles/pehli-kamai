@@ -13,8 +13,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css?v=3">
-<link rel="stylesheet" href="styles.css?v=2">
-<link rel="stylesheet" href="views.css?v=2">
+<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="views.css?v=3">
 </head>
 <body>
 
@@ -115,7 +115,7 @@
       <p class="hiw-p">"How it works is simple. You browse profiles. You pick who you like. We make the introduction — and we stay in the loop until the candidate's first day, and after."</p>
     </div>
 
-    <div class="fi-steps">
+    <div class="fi-steps reveal-stagger">
       <!-- connecting "journey" rail — a dot animates step-to-step on a loop,
            matching the manager's v3.html reference (hidden below the 4-col
            breakpoint, where it wouldn't line up with the cards). -->
@@ -278,7 +278,7 @@
   <div class="about-wrap-new">
     <h1 class="page-h1">Our <em>story</em></h1>
   </div>
-  <div class="wrap about-grid">
+  <div class="wrap about-grid reveal">
     <div>
       <p class="lead"><strong>Pehli Kamai</strong> is an initiative by <strong>Tiny Miracles</strong>, a B-Corp certified social enterprise based in Mumbai and Amsterdam. For over a decade, Tiny Miracles has worked alongside communities across the city — on health, on education, on savings, on livelihoods — with one belief holding it all together: people don't lack ability, they lack access.</p>
       <p style="margin-top:20px">Somewhere along the way, a pattern became impossible to ignore. The children we'd watched learn to read had become young adults. They'd finished their 10th, their 12th, some their graduation — often as first-generation learners with no homework or study support, often while working part-time, often without a single person at home who could explain what a resume was or what "HR round" meant, but always with hopes, dreams, and ambition. They'd taught themselves computers on borrowed phones. They'd signed up for Tally courses, animation courses, spoken English classes — on their own, with their own saved money.</p>
@@ -290,7 +290,7 @@
     </div>
   </div>
 
-  <div class="wrap" style="padding-top:56px;">
+  <div class="wrap reveal" style="padding-top:56px;">
     <h2 class="h2">So we built the bridge ourselves</h2>
     <div class="stack" style="display:flex;flex-direction:column;gap:22px;max-width:700px;">
       <p style="font-size:17px;line-height:1.78;color:var(--ed-ink-2);margin:0;">What we have understood is that companies in this city need freshers. Thousands of capable young people need jobs. On paper, that's a simple match. In practice, it isn't — and it's nobody's fault in particular. Hiring is rushed, resumes all look the same, and shortcuts creep in without anyone choosing them.</p>
@@ -298,11 +298,11 @@
     </div>
   </div>
 
-  <div class="band">
+  <div class="band reveal">
     <p>We learnt that where you're from is not a qualification and not a warning sign. An accent is not a skill. A pin code is not a work ethic. Talent was never the shortage in this city — introductions were.</p>
   </div>
 
-  <div class="wrap" style="padding-top:56px;">
+  <div class="wrap reveal" style="padding-top:56px;">
     <h2 class="h2">Why this is a smarter hire for you</h2>
     <div class="stack" style="display:flex;flex-direction:column;gap:22px;max-width:700px;">
       <p style="font-size:17px;line-height:1.78;color:var(--ed-ink);margin:0;">When you set all that bias aside, here's what's left: young people who have solved real problems under real constraints, who understand India's actual mass-market customer better than most campus hires ever will, who are more resourceful and eager to get the job done. None of that fits on a résumé. It shows up on the job.</p>
@@ -1101,7 +1101,7 @@
       <div class="ft-brand-name">Pehli <span>Kamai</span></div>
       <div class="ft-brand-sub">by tiny miracles</div>
       <div class="ft-brand-desc">Connecting Mumbai's youth with their first real opportunity. We work with young people from underserved communities to find dignified employment.</div>
-      <button class="ft-be-btn" onclick="showPage('home');document.querySelector('.ss').scrollIntoView({behavior:'smooth'})">Browse profiles <span>→</span></button>
+      <button class="ft-be-btn" onclick="showPage('home');setTimeout(()=>document.querySelector('.ss').scrollIntoView({behavior:'smooth'}),100)">Browse profiles <span>→</span></button>
     </div>
     <div class="ft-col">
       <div class="ft-col-label">Explore</div>

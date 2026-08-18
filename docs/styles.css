@@ -337,11 +337,11 @@ footer{background:var(--bg-light-tint);color:var(--fi-ink);padding:0;position:re
 .ft-brand-name span{color:var(--teal);}
 .ft-brand-sub{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--fi-ink-2);margin-bottom:16px;}
 .ft-brand-desc{font-size:13px;color:var(--fi-ink-2);line-height:1.7;max-width:320px;margin-bottom:22px;}
-.ft-be-btn{display:inline-flex;align-items:center;gap:10px;background:var(--teal);border:none;color:#fff;
+.ft-be-btn{display:inline-flex;align-items:center;gap:10px;background:var(--lime);border:none;color:#0d2426;
   padding:13px 22px;border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:800;
   letter-spacing:.03em;text-transform:uppercase;cursor:pointer;transition:transform .15s,background .15s;}
-.ft-be-btn span{transition:transform .15s;color:var(--lime);}
-.ft-be-btn:hover{background:#0c6b64;}
+.ft-be-btn span{transition:transform .15s;color:#0d2426;}
+.ft-be-btn:hover{background:#bdd155;}
 .ft-be-btn:hover span{transform:translateX(3px);}
 .ft-col-label{font-family:var(--sans);font-size:15px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;
   color:var(--fi-ink);margin-bottom:16px;}
