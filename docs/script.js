@@ -252,27 +252,15 @@ function render(){
     <div class="pc-area">📍 ${full?d.location+(d.location.toLowerCase().includes('mumbai')?'':', Mumbai'):'Mumbai'}</div>
     <div class="pc-avail"><span class="avail-dot"></span>Available</div>
   </div>`;
-  // The scrolling-marquee rows below duplicate each row's cards
-  // (${cards}${cards}) so the loop animation has no visible seam -- that
-  // reads fine with the full ~53-candidate list (plenty of cards per row),
-  // but a narrow sector/location/search filter can leave a row with just
-  // one or two cards, and the same trick then just shows the same person
-  // twice, going nowhere. Below this threshold, render a plain static
-  // grid instead -- no animation, no duplication, nothing to look buggy.
-  const TICKER_MIN=16;
-  if(f.length<TICKER_MIN){
-    g.innerHTML=`<div class="track-grid-static">${f.map(card).join('')}</div>`;
-    return;
-  }
-  const ROWS=4;
-  g.innerHTML=Array.from({length:ROWS},(_,i)=>{
-    const row=f.filter((_,j)=>j%ROWS===i);
-    if(!row.length)return'';
-    const dir=i%2===0?'left':'right';
-    const spd=70+i*12;
-    const cards=row.map(card).join('');
-    return`<div class="track-row"><div class="track-inner ${dir}" style="--spd:${spd}s">${cards}${cards}</div></div>`;
-  }).join('');
+  // Used to be a scrolling marquee here (rows auto-scrolling left/right).
+  // Looked lively as a passive teaser, but for the actual "browse and
+  // hire" job it fights the person using it -- any still moment (a
+  // screenshot, a glance while reading) catches cards mid-scroll and
+  // half-clipped at the row edge, which is exactly what reads as messy.
+  // A plain wrapping grid -- aligned, nothing moving, nothing cut off --
+  // is the right call for a page people are actually trying to read and
+  // click through, not just watch.
+  g.innerHTML=`<div class="track-grid-static">${f.map(card).join('')}</div>`;
 }
 
 
