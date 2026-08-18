@@ -67,7 +67,7 @@ const allData = [
   {id:53,key:'vijay_c',name:'Vijay Shivaji Chavan',location:'Mumbai',sectors:['Admin','Data Entry','BPO'],note:'BA pursuing, 2yr data entry & record-keeping exp at LPRO Co',urgent:false,resume:true},
 ];
 const EJ_PK='iDYGDYpxhT7wKJ12d',EJ_SID='service_ob0zrq2',EJ_TID='template_1wuqmdr';
-const N_EMAIL='meghna@tinymiracles.com',N_EMAIL2='rishikesh@tinymiracles.com',N_WA='919326691744';
+const N_EMAIL='meghna@tinymiracles.com',N_EMAIL2='rishikesh@tinymiracles.com',N_EMAIL3='pehlikamaitm@gmail.com',N_WA='919326691744';
 emailjs.init(EJ_PK);
 
 // ── SHEET/DRIVE LOGGER ───────────────────────────────────────────────
@@ -326,9 +326,10 @@ function submitInterest(){
     message_type: '⭐ HR INTERESTED — '+name+' ('+phone+')'
   };
 
-  // Send to Meghna and Rishikesh
+  // Send to Meghna, Rishikesh, and the shared Pehli Kamai inbox
   emailjs.send(EJ_SID,EJ_TID,{...emailData,to_email:N_EMAIL}).catch(()=>{});
   emailjs.send(EJ_SID,EJ_TID,{...emailData,to_email:N_EMAIL2}).catch(()=>{});
+  emailjs.send(EJ_SID,EJ_TID,{...emailData,to_email:N_EMAIL3}).catch(()=>{});
 
   showThanks(d.name);
 }
@@ -516,6 +517,7 @@ function saveProfile(){
     buildChips();render();updateEnqBadge();updateAboutStats();closeA();
     emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc,candidate_location:loc,candidate_note:'Profile updated.',viewed_at:t,message_type:'Profile Updated — '+nm,to_email:N_EMAIL}).catch(()=>{});
     emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc,candidate_location:loc,candidate_note:'Profile updated.',viewed_at:t,message_type:'Profile Updated — '+nm,to_email:N_EMAIL2}).catch(()=>{});
+    emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc,candidate_location:loc,candidate_note:'Profile updated.',viewed_at:t,message_type:'Profile Updated — '+nm,to_email:N_EMAIL3}).catch(()=>{});
     openYtDash(updated);
     return;
   }
@@ -572,6 +574,7 @@ function saveProfile(){
   const noteMsg='New profile. Email: '+email+(ph?' | Phone: '+ph:'')+' | Resume auto-generated from form.';
   emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc+' ('+trk+')',candidate_location:loc,candidate_note:noteMsg,viewed_at:t,message_type:'New Profile — '+nm,to_email:N_EMAIL}).catch(()=>{});
   emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc+' ('+trk+')',candidate_location:loc,candidate_note:noteMsg,viewed_at:t,message_type:'New Profile — '+nm,to_email:N_EMAIL2}).catch(()=>{});
+  emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc+' ('+trk+')',candidate_location:loc,candidate_note:noteMsg,viewed_at:t,message_type:'New Profile — '+nm,to_email:N_EMAIL3}).catch(()=>{});
 }
 
 function closeA(){document.getElementById('a-ov').classList.remove('open');}
@@ -617,8 +620,9 @@ function submitContact(){
     candidate_note:msg,viewed_at:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),
     message_type:'📩 Contact Form — '+type
   };
-  // Notify both Meghna and Rishikesh, same as the other notification flows.
+  // Notify Meghna, Rishikesh, and the shared inbox, same as the other flows.
   emailjs.send(EJ_SID,EJ_TID,{...contactEmailData,to_email:N_EMAIL2}).catch(()=>{});
+  emailjs.send(EJ_SID,EJ_TID,{...contactEmailData,to_email:N_EMAIL3}).catch(()=>{});
   emailjs.send(EJ_SID,EJ_TID,{...contactEmailData,to_email:N_EMAIL}).then(()=>{
     document.getElementById('cf-form-body').style.display='none';
     document.getElementById('cf-thanks').style.display='block';
@@ -909,6 +913,7 @@ function hrSignUp(){
       const reviewData={candidate_name:nm,candidate_sectors:ind,candidate_location:city,candidate_note:'New HR account awaiting approval — '+co+' ('+ph+', '+em+'). Approve in Firebase console: hr_accounts/'+cred.user.uid,viewed_at:t,message_type:'🔒 HR account needs approval — '+nm};
       emailjs.send(EJ_SID,EJ_TID,{...reviewData,to_email:N_EMAIL}).catch(()=>{});
       emailjs.send(EJ_SID,EJ_TID,{...reviewData,to_email:N_EMAIL2}).catch(()=>{});
+      emailjs.send(EJ_SID,EJ_TID,{...reviewData,to_email:N_EMAIL3}).catch(()=>{});
     })
     .catch(e=>{
       if(e.code==='auth/email-already-in-use'){toast('Email already registered — please sign in.');switchLoginTab('in');}
