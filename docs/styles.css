@@ -377,6 +377,14 @@ footer{background:var(--bg-light-tint);color:var(--fi-ink);padding:0;position:re
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 @media(max-width:700px){
+  /* Every real form field on the site (search box, location filter,
+     login, add-profile, contact, "I'm interested") was sized well under
+     16px -- fine on desktop, but iOS Safari auto-zooms the whole page
+     in on focus for any input under 16px. Every beneficiary filling in
+     the youth signup form on a phone would hit that jolt on every
+     field. Bumping just the interactive form controls, not labels/
+     buttons, so the small-caps label look elsewhere is unaffected. */
+  input,select,textarea{font-size:16px!important;}
   .hdr-in{padding:0 16px;height:56px;}
   .hdr-mid{display:none;}
   .nav-cand{display:none;}
