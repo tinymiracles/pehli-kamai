@@ -140,6 +140,8 @@ function showPage(p){
       stage.insertBefore(window.__pkHiw3d||document.createElement('pk-hiw3d'), hint||null);
     }
   }
+  if(p==='report')resetGrievanceForm();
+  if(p==='admin')loadAdminDashboard();
   window.scrollTo(0,0);
 }
 
@@ -651,12 +653,16 @@ function submitContact(){
 // for a Firestore document field.
 let pendingGrievanceFile=null;
 
-function openGrievance(){
-  document.getElementById('gr-ov').classList.add('open');
+// Was a modal (openGrievance/closeGrievance); now a real page reachable
+// at showPage('report'), same as Privacy/Terms/Grievance Redressal --
+// this just resets the form each time that page is shown, hooked into
+// showPage() itself instead of an explicit open call.
+function resetGrievanceForm(){
   document.getElementById('gr-thanks').style.display='none';
   document.getElementById('gr-form-body').style.display='block';
-  ['gr-name','gr-email','gr-desc'].forEach(i=>{document.getElementById(i).value='';});
+  ['gr-name','gr-email','gr-desc','gr-related'].forEach(i=>{document.getElementById(i).value='';});
   document.getElementById('gr-category').selectedIndex=0;
+  document.getElementById('gr-urgency').selectedIndex=0;
   document.getElementById('gr-consent').checked=false;
   pendingGrievanceFile=null;
   document.getElementById('gr-drop-lbl').textContent='Drop a screenshot here, or click to browse (max 5MB)';
@@ -667,7 +673,6 @@ function openGrievance(){
   if(hrUser){document.getElementById('gr-name').value=hrUser.name||'';document.getElementById('gr-email').value=hrUser.email||'';}
   else if(currentYtAcct){document.getElementById('gr-name').value=currentYtAcct.name||'';document.getElementById('gr-email').value=currentYtAcct.email||'';}
 }
-function closeGrievance(){document.getElementById('gr-ov').classList.remove('open');}
 
 function handleGrievanceFile(input){
   const file=input.files[0];if(!file)return;
@@ -693,6 +698,8 @@ function submitGrievance(){
   const name=document.getElementById('gr-name').value.trim();
   const email=document.getElementById('gr-email').value.trim();
   const category=document.getElementById('gr-category').value;
+  const related=document.getElementById('gr-related').value.trim();
+  const urgency=document.getElementById('gr-urgency').value;
   const desc=document.getElementById('gr-desc').value.trim();
   if(!name||!email||!desc){toast('Please fill your name, email, and what happened.');return;}
   if(!document.getElementById('gr-consent').checked){toast('Please agree to the Privacy Policy to send this.');return;}
@@ -700,9 +707,10 @@ function submitGrievance(){
   const refNo=genRefNo();
   const t=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
   const finish=(screenshotURL,screenshotNote)=>{
-    db.collection('grievances').add({refNo,name,email,category,description:desc,screenshotURL:screenshotURL||'',status:'open',createdAt:new Date().toISOString()}).catch(()=>{});
-    logSignup('grievance',{refNo,name,email,category,description:desc});
-    const grData={candidate_name:name,candidate_sectors:category,candidate_location:screenshotNote||'No screenshot attached',candidate_note:desc,viewed_at:t,message_type:'🚩 Grievance '+refNo+' — '+category};
+    db.collection('grievances').add({refNo,name,email,category,relatedTo:related,urgency,description:desc,screenshotURL:screenshotURL||'',status:'open',createdAt:new Date().toISOString()}).catch(()=>{});
+    logSignup('grievance',{refNo,name,email,category,relatedTo:related,urgency,description:desc});
+    const urgencyFlag=urgency==='Very urgent'?'🔴':urgency==='Somewhat urgent'?'🟠':'🚩';
+    const grData={candidate_name:name,candidate_sectors:category,candidate_location:(related?'Re: '+related+' — ':'')+(screenshotNote||'No screenshot attached'),candidate_note:desc,viewed_at:t,message_type:urgencyFlag+' Grievance '+refNo+' ('+urgency+') — '+category};
     emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL}).catch(()=>{});
     emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL2}).catch(()=>{});
     emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL3}).catch(()=>{});
@@ -720,6 +728,62 @@ function submitGrievance(){
   } else {
     finish('',null);
   }
+}
+
+function loadAdminDashboard(){
+  const gate=document.getElementById('admin-gate');
+  const body=document.getElementById('admin-body');
+  if(!canAccessAdmin()){
+    gate.style.display='block';
+    body.style.display='none';
+    return;
+  }
+  gate.style.display='none';
+  body.style.display='block';
+  document.getElementById('admin-rows').innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--fi-ink-2)">Loading…</td></tr>';
+  db.collection('grievances').orderBy('createdAt','desc').get().then(snap=>{
+    const rows=[];
+    snap.forEach(doc=>rows.push({id:doc.id,...doc.data()}));
+    renderAdminRows(rows);
+  }).catch(()=>{
+    document.getElementById('admin-rows').innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--fi-ink-2)">Could not load grievances. Check the Firestore rules note in script.js.</td></tr>';
+  });
+}
+
+function renderAdminRows(rows){
+  const statsEl=document.getElementById('admin-stats');
+  const open=rows.filter(r=>r.status!=='resolved').length;
+  const urgent=rows.filter(r=>r.urgency==='Very urgent'&&r.status!=='resolved').length;
+  const stat=(n,label)=>`<div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 18px;min-width:110px">
+    <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--teal)">${n}</div>
+    <div style="font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3)">${label}</div></div>`;
+  statsEl.innerHTML=stat(rows.length,'Total')+stat(open,'Open or acknowledged')+stat(urgent,'Very urgent, unresolved');
+
+  const rowsEl=document.getElementById('admin-rows');
+  if(!rows.length){rowsEl.innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--fi-ink-2)">No grievances yet.</td></tr>';return;}
+  rowsEl.innerHTML=rows.map(r=>{
+    const when=r.createdAt?new Date(r.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}):'';
+    const urgencyBadge=r.urgency==='Very urgent'?'🔴':r.urgency==='Somewhat urgent'?'🟠':'⚪';
+    const shot=r.screenshotURL?`<a href="${r.screenshotURL}" target="_blank" style="color:var(--teal);font-weight:700">View</a>`:'—';
+    const statusOpts=['open','acknowledged','resolved'].map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('');
+    return `<tr>
+      <td><strong>${r.refNo||''}</strong></td>
+      <td>${when}</td>
+      <td>${r.name||''}<br><span style="font-size:11px;color:var(--ink-3)">${r.email||''}</span></td>
+      <td>${r.category||''}</td>
+      <td>${urgencyBadge} ${r.urgency||''}</td>
+      <td>${r.relatedTo||'—'}</td>
+      <td style="max-width:260px;white-space:pre-wrap">${(r.description||'').slice(0,220)}${(r.description||'').length>220?'…':''}</td>
+      <td>${shot}</td>
+      <td><select onchange="setGrievanceStatus('${r.id}',this.value)">${statusOpts}</select></td>
+    </tr>`;
+  }).join('');
+}
+
+function setGrievanceStatus(docId,status){
+  db.collection('grievances').doc(docId).update({status,statusUpdatedAt:new Date().toISOString()})
+    .then(()=>toast('Status updated.'))
+    .catch(()=>toast('Could not update status — try again.'));
 }
 
 // ── ENQUIRIES ────────────────────────────────────
@@ -1028,9 +1092,27 @@ function maskName(name){
   return parts[0]+' '+parts[parts.length-1].charAt(0).toUpperCase()+'.';
 }
 
+// Client-side gate only -- hides the dashboard link/page from anyone not
+// signed in as one of these accounts, but does NOT by itself protect the
+// grievances collection from someone querying Firestore directly via
+// devtools. That protection has to be a real Firestore security rule,
+// e.g.:
+//   match /grievances/{id} {
+//     allow read, write: if request.auth != null
+//       && request.auth.token.email in
+//          ['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com'];
+//   }
+// Paste that (adjusted to your actual rules structure) into Firebase
+// Console -> Firestore Database -> Rules. Without it, this list is a UI
+// convenience, not security.
+const ADMIN_EMAILS=['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com'];
+function canAccessAdmin(){return !!(hrUser&&hrUser.email&&ADMIN_EMAILS.includes(hrUser.email.toLowerCase()));}
+
 function updateHRHeader(){
   const btn=document.getElementById('btn-hr-login');
   const addBtn=document.getElementById('btn-add-profile');
+  const adminLink=document.getElementById('hdr-admin-link');
+  if(adminLink)adminLink.style.display=canAccessAdmin()?'':'none';
   if(!btn)return;
   if(hrUser){
     btn.className='hr-logged';

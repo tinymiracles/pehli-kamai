@@ -388,3 +388,11 @@ pk-hiw3d.hot{cursor:pointer;}
   .legal-wrap{padding:0 20px 70px;}
   .legal-track{grid-template-columns:1fr;}
 }
+
+/* ── grievance dashboard (team only) ── */
+.admin-table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:12.5px;min-width:880px;}
+.admin-table th{text-align:left;padding:10px 12px;background:var(--bg-light-tint);color:var(--fi-ink);
+  font-size:11px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;border-bottom:2px solid var(--line);}
+.admin-table td{padding:12px;border-bottom:1px solid var(--line);color:var(--fi-ink-2);vertical-align:top;}
+.admin-table tr:last-child td{border-bottom:none;}
+.admin-table select{font-family:var(--sans);font-size:12px;padding:5px 8px;border-radius:6px;border:1px solid var(--line-d);background:#fff;}

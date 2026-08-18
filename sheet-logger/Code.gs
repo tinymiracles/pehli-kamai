@@ -118,13 +118,15 @@ function logContact_(data) {
 }
 
 function logGrievance_(data) {
-  const sheet = getSheet_('Grievances', ['Timestamp', 'Reference', 'Name', 'Email', 'Category', 'What happened', 'Status']);
+  const sheet = getSheet_('Grievances', ['Timestamp', 'Reference', 'Name', 'Email', 'Category', 'Who this is about', 'Urgency', 'What happened', 'Status']);
   sheet.appendRow([
     new Date(),
     data.refNo || '',
     data.name || '',
     data.email || '',
     data.category || '',
+    data.relatedTo || '',
+    data.urgency || '',
     data.description || '',
     'Open'
   ]);
