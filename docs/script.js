@@ -1363,33 +1363,30 @@ function boot(){
   const heroVid=document.querySelector('.fi-hero-video');
   if(heroVid) heroVid.playbackRate=0.6;
 
-  // Sector cards animate in as they scroll into view instead of just
-  // appearing — fires once per card, then leaves it alone.
+  // Sector cards + every .reveal / .reveal-stagger section replay their
+  // fade+rise+blur animation EVERY time they cross into view -- scrolling
+  // down past a section and then back up over it plays it again both
+  // ways, instead of the old fire-once-then-forget behaviour. Skips
+  // prefers-reduced-motion via the CSS guard (that just shows everything
+  // in its final state, no class-toggling needed there).
   const sectorCards=document.querySelectorAll('.fi-sector-card');
-  if(sectorCards.length && 'IntersectionObserver' in window){
-    const io=new IntersectionObserver((entries)=>{
+  const revealEls=document.querySelectorAll('.reveal, .reveal-stagger');
+  if('IntersectionObserver' in window){
+    const replay=(entries)=>{
       entries.forEach(e=>{
-        if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}
+        e.target.classList.toggle('in-view', e.isIntersecting);
       });
-    },{threshold:0.2});
-    sectorCards.forEach(c=>io.observe(c));
+    };
+    if(sectorCards.length){
+      const io=new IntersectionObserver(replay,{threshold:0.2});
+      sectorCards.forEach(c=>io.observe(c));
+    }
+    if(revealEls.length){
+      const rio=new IntersectionObserver(replay,{threshold:0.15});
+      revealEls.forEach(el=>rio.observe(el));
+    }
   } else {
     sectorCards.forEach(c=>c.classList.add('in-view'));
-  }
-
-  // Same fade+rise+blur treatment, generalised to any section carrying
-  // .reveal or .reveal-stagger (a group whose children stagger in one
-  // after another) -- used on the how-it-works steps and About page
-  // content, not just the sector cards above.
-  const revealEls=document.querySelectorAll('.reveal, .reveal-stagger');
-  if(revealEls.length && 'IntersectionObserver' in window){
-    const rio=new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){e.target.classList.add('in-view');rio.unobserve(e.target);}
-      });
-    },{threshold:0.15});
-    revealEls.forEach(el=>rio.observe(el));
-  } else {
     revealEls.forEach(el=>el.classList.add('in-view'));
   }
 }

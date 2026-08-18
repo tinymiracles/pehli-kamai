@@ -216,7 +216,7 @@
     </div>
   </div>
 
-  <div class="track-section">
+  <div class="track-section reveal">
     <div class="track-rows" id="grid"></div>
   </div>
 
@@ -291,24 +291,24 @@
         </div>
         <div class="pf-tags" id="pf-tags"></div>
 
-        <div class="pf-card">
+        <div class="pf-card reveal">
           <div class="pf-card-label">In their own summary</div>
           <div class="pf-summary" id="pf-summary"></div>
         </div>
 
-        <div class="pf-card pf-training">
+        <div class="pf-card pf-training reveal">
           <div class="pf-training-head">✓ Career-readiness trained</div>
           <ul id="pf-training-list"></ul>
         </div>
 
-        <div class="pf-similar" id="pf-similar-wrap">
+        <div class="pf-similar reveal" id="pf-similar-wrap">
           <div class="pf-similar-label">Others in <span id="pf-similar-sector"></span></div>
           <div class="pf-similar-grid" id="pf-similar-grid"></div>
         </div>
       </div>
 
       <div class="pf-sidebar">
-        <div class="pf-side-card" id="pf-side-card">
+        <div class="pf-side-card reveal" id="pf-side-card">
           <h3>Interested?</h3>
           <p id="pf-side-desc"></p>
           <button class="btn-interested" style="width:100%;height:40px;border-radius:8px;font-size:13px;letter-spacing:.3px;margin-bottom:10px" onclick="openHI()">I'm Interested in this Candidate</button>
@@ -1150,7 +1150,7 @@
 </div>
 
 <footer>
-  <div class="ft-inner">
+  <div class="ft-inner reveal-stagger">
     <div class="ft-brand-block">
       <div class="ft-brand-name">Pehli <span>Kamai</span></div>
       <div class="ft-brand-sub">by tiny miracles</div>
@@ -1195,7 +1195,7 @@
 
 <script src="shutter.js"></script>
 <script src="resumes-data.js"></script>
-<script src="script.js"></script>
+<script src="script.js?v=2"></script>
 <!-- pk-hiw3d needs three.js's GLTFLoader, which only ships as an ES module —
      this is the one component on the site loaded this way. Everything else
      (shutter.js, script.js) stays a classic script using the UMD build above. -->
