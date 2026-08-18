@@ -273,6 +273,60 @@
 
 </div><!-- /home -->
 
+<!-- ━━ CANDIDATE PROFILE PAGE ━━ (was a modal; now a real page, matching
+     the reference build's design — shortlist, training checklist,
+     related candidates, all respecting the same canSeeFull() masking
+     the grid already uses for non-approved HR visitors) -->
+<div class="hidden" id="view-profile">
+  <div class="pf-wrap">
+    <button class="pf-back" onclick="showPage('home');setTimeout(scrollToCandidates,100)">&larr; Back to candidates</button>
+    <div class="pf-grid">
+      <div class="pf-main">
+        <div class="pf-header">
+          <div class="pf-avatar" id="pf-av"></div>
+          <div>
+            <h1 class="pf-name" id="pf-name"></h1>
+            <div class="pf-location" id="pf-location"></div>
+          </div>
+        </div>
+        <div class="pf-tags" id="pf-tags"></div>
+
+        <div class="pf-card">
+          <div class="pf-card-label">In their own summary</div>
+          <div class="pf-summary" id="pf-summary"></div>
+        </div>
+
+        <div class="pf-card pf-training">
+          <div class="pf-training-head">✓ Career-readiness trained</div>
+          <ul id="pf-training-list"></ul>
+        </div>
+
+        <div class="pf-similar" id="pf-similar-wrap">
+          <div class="pf-similar-label">Others in <span id="pf-similar-sector"></span></div>
+          <div class="pf-similar-grid" id="pf-similar-grid"></div>
+        </div>
+      </div>
+
+      <div class="pf-sidebar">
+        <div class="pf-side-card" id="pf-side-card">
+          <h3>Interested?</h3>
+          <p id="pf-side-desc"></p>
+          <button class="btn-interested" style="width:100%;height:40px;border-radius:8px;font-size:13px;letter-spacing:.3px;margin-bottom:10px" onclick="openHI()">I'm Interested in this Candidate</button>
+          <button class="pf-shortlist-btn" id="pf-shortlist-btn" onclick="toggleShortlistCurrent()"></button>
+          <button class="pf-outline-btn" id="pf-resume-btn" onclick="toRes()">View resume</button>
+          <button class="pf-ghost-btn" onclick="downloadShortlist()">Download shortlist (<span id="pf-shortlist-count">0</span>)</button>
+          <div class="pf-info-list">
+            <div><span>Location</span><span id="pf-info-location"></span></div>
+            <div><span>Sectors</span><span id="pf-info-sectors"></span></div>
+            <div><span>Resume</span><span id="pf-info-resume"></span></div>
+            <div><span>Training</span><span style="color:var(--teal);font-weight:700">Completed</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ━━ ABOUT PAGE ━━ -->
 <div class="hidden" id="view-about">
   <div class="about-wrap-new">
@@ -1134,6 +1188,10 @@
 </footer>
 
 <div class="toast" id="toast"><span id="t-m"></span></div>
+
+<!-- Only visible when printing (Download shortlist -> window.print()) --
+     see the print media query in views.css that hides everything else. -->
+<div class="shortlist-print" id="shortlist-print"></div>
 
 <script src="shutter.js"></script>
 <script src="resumes-data.js"></script>

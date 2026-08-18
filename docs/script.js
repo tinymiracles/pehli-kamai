@@ -220,7 +220,7 @@ function render(){
   const g=document.getElementById('grid');
   if(!f.length){g.innerHTML=`<div class="empty" style="padding:60px 40px"><div style="font-size:28px;color:var(--teal-mid)">✦</div><div class="empty-h">No candidates found.</div></div>`;return;}
   const full=canSeeFull();
-  const card=d=>`<div class="pcard" onclick="openP(${d.id})">
+  const card=d=>`<div class="pcard" onclick="showProfile(${d.id})">
     <div class="pc-name">${full?d.name:maskName(d.name)}</div>
     <div class="pc-sector">${d.sector}</div>
     <div class="pc-area">📍 ${full?d.location+(d.location.toLowerCase().includes('mumbai')?'':', Mumbai'):'Mumbai'}</div>
@@ -277,32 +277,99 @@ function openR(id){
   document.getElementById('r-ov').classList.add('open');
 }
 function closeR(){document.getElementById('r-ov').classList.remove('open');}
-function toPf(){closeR();openP(curId);}
+function toPf(){closeR();showProfile(curId);}
 
-function openP(id){
+// ── SHORTLIST ──────────────────────────────────────
+// A lighter, personal bookmarking tool for HR browsing multiple
+// candidates before deciding who to actually contact -- separate from
+// (and in addition to) "I'm Interested", which is still the real
+// notify-the-team action. Persisted per-browser so it survives reloads.
+let shortlist=JSON.parse(localStorage.getItem('pk_shortlist')||'[]');
+function saveShortlist(){localStorage.setItem('pk_shortlist',JSON.stringify(shortlist));}
+function isShortlisted(id){return shortlist.includes(id);}
+function toggleShortlist(id){
+  const i=shortlist.indexOf(id);
+  if(i>=0)shortlist.splice(i,1);else shortlist.push(id);
+  saveShortlist();
+}
+function toggleShortlistCurrent(){
+  if(curId==null)return;
+  toggleShortlist(curId);
+  updateShortlistUI();
+}
+function updateShortlistUI(){
+  const btn=document.getElementById('pf-shortlist-btn');
+  const countEl=document.getElementById('pf-shortlist-count');
+  if(countEl)countEl.textContent=shortlist.length;
+  if(!btn||curId==null)return;
+  const on=isShortlisted(curId);
+  btn.textContent=on?'✓ Shortlisted':'Add to shortlist';
+  btn.classList.toggle('on',on);
+}
+
+const TRAINING=[
+  'Reading a job description — kya maang rahe hain samajhna',
+  'Building an honest resume — jhooth ke bina',
+  'Interviewing — HR round mein kya poochte hain',
+  "Knowing what day one at a workplace actually looks like"
+];
+
+function showProfile(id){
   const d=DATA.find(x=>x.id===id);if(!d)return;curId=id;
   const full=canSeeFull();
   const shownName=full?d.name:maskName(d.name);
-  const av=document.getElementById('pm-av');
-  av.textContent=ini(shownName);
-  av.style.background='var(--teal)';
-  const nm=document.getElementById('pm-nm');
-  nm.textContent=shownName;nm.style.fontSize='';
-  document.getElementById('pm-rl').textContent=d.sector;
-  document.getElementById('pm-ab').textContent=d.about;
-  document.getElementById('pm-tgs').innerHTML=`<span class="tag t-edu">${d.edu}</span><span class="tag t-sec">${d.sector}</span><span class="tag t-loc">📍 ${full?d.location:'Mumbai'}</span>${d.resume?'<span class="tag t-res">Resume</span>':''}`;
-  document.getElementById('pm-exs').style.display='none';
-  document.getElementById('pm-sk').innerHTML=d.skills.map(s=>`<span class="sk">${s}</span>`).join('');
-  document.getElementById('pm-lg').innerHTML=d.langs.map(l=>`<span class="sk">${l}</span>`).join('');
-  const ct=document.getElementById('pm-ct');
-  ct.innerHTML=full
-    ?'📍 '+d.location+(d.location.toLowerCase().includes('mumbai')?'':`, Mumbai`)
-    :'<span style="font-size:12px;color:var(--ink-4)">Sign in as an approved employer, or express interest below, to see their exact location and contact details</span>';
-  document.getElementById('pm-res-btn').style.display=full?'':'none';
-  document.getElementById('p-ov').classList.add('open');
+  const shownLoc=full?d.location+(d.location.toLowerCase().includes('mumbai')?'':', Mumbai'):'Mumbai';
+
+  document.getElementById('pf-av').textContent=shownName.charAt(0).toUpperCase();
+  document.getElementById('pf-name').textContent=shownName;
+  document.getElementById('pf-location').textContent='📍 '+shownLoc;
+  document.getElementById('pf-tags').innerHTML=
+    `<span>${d.edu}</span><span>${d.sector}</span>`+
+    (d.resume?'<span>Resume ready</span>':'<span>Resume not uploaded yet</span>');
+  document.getElementById('pf-summary').textContent=d.about||'No summary provided yet.';
+  document.getElementById('pf-training-list').innerHTML=TRAINING.map(t=>`<li>${t}</li>`).join('');
+
+  // "Others in [sector]" -- same sector (via track, matching the sector
+  // filter chips), excluding this candidate, first 3.
+  const similar=DATA.filter(x=>x.id!==d.id&&x.track===d.track).slice(0,3);
+  const simWrap=document.getElementById('pf-similar-wrap');
+  if(similar.length){
+    simWrap.style.display='';
+    document.getElementById('pf-similar-sector').textContent=d.sector;
+    document.getElementById('pf-similar-grid').innerHTML=similar.map(s=>{
+      const sName=full?s.name:maskName(s.name);
+      const sLoc=full?s.location:'Mumbai';
+      return `<button onclick="showProfile(${s.id})"><div class="sm-name">${sName}</div><div class="sm-sector">${s.sector}</div><div class="sm-loc">📍 ${sLoc}</div></button>`;
+    }).join('');
+  } else {
+    simWrap.style.display='none';
+  }
+
+  document.getElementById('pf-side-desc').textContent=full
+    ?`Shortlist ${shownName.split(' ')[0]} and we'll make the introduction — and stay in the loop until the first day.`
+    :'Sign in as an approved employer, or express interest below, to see their exact location and contact details.';
+  document.getElementById('pf-resume-btn').style.display=full?'':'none';
+  document.getElementById('pf-info-location').textContent=shownLoc;
+  document.getElementById('pf-info-sectors').textContent='1';
+  document.getElementById('pf-info-resume').textContent=d.resume?'Ready':'Not uploaded yet';
+  updateShortlistUI();
+
+  showPage('profile');
 }
-function closeP(){document.getElementById('p-ov').classList.remove('open');}
-function toRes(){closeP();openR(curId);}
+function toRes(){openR(curId);}
+
+function downloadShortlist(){
+  if(!shortlist.length){toast('Shortlist is empty — pick a few candidates first.');return;}
+  const rows=shortlist.map(id=>DATA.find(d=>d.id===id)).filter(Boolean);
+  const full=canSeeFull();
+  const html=`<h1>Pehli Kamai — Shortlist</h1>
+    <div class="sp-sub">${rows.length} candidate${rows.length===1?'':'s'} · ${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div>
+    <table><thead><tr><th>Name</th><th>Sector</th><th>Location</th></tr></thead><tbody>
+    ${rows.map(d=>`<tr><td>${full?d.name:maskName(d.name)}</td><td>${d.sector}</td><td>${full?d.location:'Mumbai'}</td></tr>`).join('')}
+    </tbody></table>`;
+  document.getElementById('shortlist-print').innerHTML=html;
+  window.print();
+}
 
 // ── HR INTEREST FLOW ──────────────────────────────
 function openHI(){
