@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Grievance dashboard — Pehli Kamai</title>
+<style>
+  :root{
+    --teal:#0e7a72; --teal-light:#0f8a80; --lime:#c9dd6a;
+    --ink:#0c3b33; --ink-2:#4f6663; --ink-3:#7fa5a8;
+    --bg:#f4f1ea; --card:#ffffff; --line:rgba(12,59,51,.12);
+    --red:#c94b3f; --orange:#d99a3a;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Manrope',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 24px 60px;}
+
+  /* — password gate — */
+  .gate{max-width:380px;margin:12vh auto 0;padding:0 20px;text-align:left;}
+  .gate h1{font-size:30px;margin:0 0 6px;}
+  .gate p{color:var(--ink-2);font-size:14.5px;line-height:1.6;margin:0 0 22px;}
+  .gate input{width:100%;height:46px;padding:0 14px;border:1.5px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;outline:none;margin-bottom:12px;}
+  .gate input:focus{border-color:var(--teal);}
+  .gate button{width:100%;height:46px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .gate button:hover{background:var(--teal-light);}
+  .gate-error{color:var(--red);font-size:13px;margin-top:10px;min-height:18px;}
+
+  /* — header — */
+  .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+  .hdr h1{font-size:24px;margin:0;}
+  .hdr h1 em{font-style:normal;color:var(--teal);}
+  .signout{background:none;border:1.5px solid var(--line);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;font-family:inherit;}
+  .signout:hover{border-color:var(--ink-2);}
+
+  /* — stat tiles — */
+  .stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:26px;}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 22px;min-width:150px;flex:1;}
+  .stat b{display:block;font-size:28px;font-weight:800;color:var(--teal);}
+  .stat span{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);}
+  .stat.urgent b{color:var(--red);}
+
+  /* — table — */
+  .table-wrap{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:820px;}
+  th{text-align:left;padding:12px 14px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);border-bottom:1.5px solid var(--line);white-space:nowrap;}
+  td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  .muted{color:var(--ink-3);font-size:11.5px;}
+  .badge{font-size:12px;}
+  select.status{font-family:inherit;font-size:12.5px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink);}
+  .loading,.empty{text-align:center;padding:50px 20px;color:var(--ink-3);font-size:14px;}
+  a.shot{color:var(--teal);font-weight:700;text-decoration:none;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;}
+  .toast.show{opacity:1;}
+  .hidden{display:none!important;}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <h1>Admin</h1>
+  <p>Enter the shared staff password to continue.</p>
+  <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
+  <button id="pw-submit">Open admin</button>
+  <div class="gate-error" id="gate-error"></div>
+</div>
+
+<div class="wrap hidden" id="dash">
+  <div class="hdr">
+    <h1>Grievance <em>dashboard</em></h1>
+    <button class="signout" id="signout">Sign out</button>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Ref</th><th>Received</th><th>Name</th><th>Category</th><th>Urgency</th>
+        <th>About</th><th>What happened</th><th>Screenshot</th><th>Status</th>
+      </tr></thead>
+      <tbody id="rows"><tr><td colspan="9" class="loading">Loading…</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SESSION_KEY = 'pk_admin_session';
+
+function getSession(){
+  try{
+    const s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    if(s && s.token && s.exp > Date.now()) return s;
+  }catch(e){}
+  return null;
+}
+function setSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function showGate(){
+  document.getElementById('gate').classList.remove('hidden');
+  document.getElementById('dash').classList.add('hidden');
+  document.getElementById('pw').focus();
+}
+function showDash(){
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('dash').classList.remove('hidden');
+  loadGrievances();
+}
+
+async function login(){
+  const pw = document.getElementById('pw').value;
+  const errEl = document.getElementById('gate-error');
+  errEl.textContent = '';
+  if(!pw){ errEl.textContent = 'Enter the password.'; return; }
+  try{
+    const res = await fetch('/api/admin-login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: pw })
+    });
+    const data = await res.json();
+    if(!res.ok){ errEl.textContent = data.error || 'Wrong password.'; return; }
+    setSession({ token: data.token, exp: data.exp });
+    document.getElementById('pw').value = '';
+    showDash();
+  }catch(e){
+    errEl.textContent = 'Could not reach the server -- try again.';
+  }
+}
+
+function signOut(){
+  clearSession();
+  showGate();
+}
+
+async function loadGrievances(){
+  const session = getSession();
+  if(!session){ showGate(); return; }
+  const rowsEl = document.getElementById('rows');
+  rowsEl.innerHTML = '<tr><td colspan="9" class="loading">Loading…</td></tr>';
+  try{
+    const res = await fetch('/api/grievances', {
+      headers:{ 'Authorization': 'Bearer ' + session.token }
+    });
+    if(res.status === 401){ clearSession(); showGate(); return; }
+    const data = await res.json();
+    if(!res.ok){ rowsEl.innerHTML = `<tr><td colspan="9" class="empty">${data.error||'Could not load grievances.'}</td></tr>`; return; }
+    render(data.rows || []);
+  }catch(e){
+    rowsEl.innerHTML = '<tr><td colspan="9" class="empty">Could not reach the server. Try reloading.</td></tr>';
+  }
+}
+
+function render(rows){
+  const statsEl = document.getElementById('stats');
+  const open = rows.filter(r=>r.status!=='resolved').length;
+  const urgent = rows.filter(r=>r.urgency==='Very urgent' && r.status!=='resolved').length;
+  const stat = (n,label,cls) => `<div class="stat ${cls||''}"><b>${n}</b><span>${label}</span></div>`;
+  statsEl.innerHTML = stat(rows.length,'Total') + stat(open,'Open or acknowledged') + stat(urgent,'Very urgent, unresolved','urgent');
+
+  const rowsEl = document.getElementById('rows');
+  if(!rows.length){ rowsEl.innerHTML = '<tr><td colspan="9" class="empty">No grievances yet.</td></tr>'; return; }
+
+  rowsEl.innerHTML = rows.map(r=>{
+    const when = r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}) : '';
+    const urgencyDot = r.urgency==='Very urgent' ? '🔴' : r.urgency==='Somewhat urgent' ? '🟠' : '⚪';
+    const shot = r.screenshotURL ? `<a class="shot" href="${esc(r.screenshotURL)}" target="_blank" rel="noopener">View</a>` : '—';
+    const opts = ['open','acknowledged','resolved'].map(s=>
+      `<option value="${s}" ${r.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+    ).join('');
+    const desc = esc((r.description||'').slice(0,220)) + ((r.description||'').length>220?'…':'');
+    return `<tr>
+      <td><strong>${esc(r.refNo||'')}</strong></td>
+      <td>${when}</td>
+      <td>${esc(r.name||'')}<br><span class="muted">${esc(r.email||'')}</span></td>
+      <td>${esc(r.category||'')}</td>
+      <td><span class="badge">${urgencyDot}</span> ${esc(r.urgency||'')}</td>
+      <td>${esc(r.relatedTo||'—')}</td>
+      <td style="max-width:260px;white-space:pre-wrap">${desc}</td>
+      <td>${shot}</td>
+      <td><select class="status" data-id="${esc(r.id)}">${opts}</select></td>
+    </tr>`;
+  }).join('');
+
+  rowsEl.querySelectorAll('select.status').forEach(sel=>{
+    sel.addEventListener('change', () => setStatus(sel.dataset.id, sel.value));
+  });
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function setStatus(id, status){
+  const session = getSession();
+  if(!session){ showGate(); return; }
+  try{
+    const res = await fetch('/api/grievances', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + session.token },
+      body: JSON.stringify({ id, status })
+    });
+    if(res.status === 401){ clearSession(); showGate(); return; }
+    const data = await res.json();
+    if(!res.ok){ toast(data.error || 'Could not update status.'); return; }
+    toast('Status updated.');
+  }catch(e){
+    toast('Could not reach the server -- try again.');
+  }
+}
+
+document.getElementById('pw-submit').addEventListener('click', login);
+document.getElementById('pw').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
+document.getElementById('signout').addEventListener('click', signOut);
+
+getSession() ? showDash() : showGate();
+</script>
+</body>
+</html>
