@@ -158,19 +158,36 @@ function showDash(){
   loadPipelineStatus();
 }
 
-async function loadPipelineStatus(){
+function loadPipelineStatus(){
   const el = document.getElementById('pipe-body');
   el.innerHTML = '<div class="loading">Checking…</div>';
-  try{
-    const res = await fetch(SHEET_STATUS_URL + '?action=status');
-    const text = await res.text();
-    let data;
-    try{ data = JSON.parse(text); }
-    catch{ el.innerHTML = `<div class="pipe-error">Got an unexpected reply instead of status data -- likely the wrong deployment URL. Raw reply: ${esc(text.slice(0,200))}</div>`; return; }
-    render_(data);
-  }catch(e){
-    el.innerHTML = `<div class="pipe-error">Could not reach the Sheet logger at all (${esc(e.message)}). If this keeps happening even after the URL is fixed, it may be a cross-origin (CORS) block from Apps Script -- tell Claude.</div>`;
+
+  // JSONP, not fetch() -- Apps Script's ContentService has no way to set
+  // the Access-Control-Allow-Origin header a cross-site fetch() needs to
+  // read a response back, so fetch() fails with an opaque "Failed to
+  // fetch" no matter how correct the URL is. Loading the reply as a
+  // <script> tag (which calls back into a global function we define)
+  // sidesteps CORS entirely -- scripts, unlike fetch/XHR, aren't subject
+  // to it.
+  const cbName = '__pkStatusCb_' + Math.random().toString(36).slice(2);
+  const script = document.createElement('script');
+  let timeoutId;
+  function cleanup(){
+    clearTimeout(timeoutId);
+    delete window[cbName];
+    if(script.parentNode) script.parentNode.removeChild(script);
   }
+  window[cbName] = function(data){ cleanup(); render_(data); };
+  script.onerror = function(){
+    cleanup();
+    el.innerHTML = '<div class="pipe-error">Could not reach the Sheet logger at all -- check the deployment URL in SHEET_STATUS_URL is correct and actually deployed.</div>';
+  };
+  timeoutId = setTimeout(function(){
+    cleanup();
+    el.innerHTML = "<div class=\"pipe-error\">Sheet logger didn't respond in time.</div>";
+  }, 15000);
+  script.src = SHEET_STATUS_URL + '?action=status&callback=' + cbName;
+  document.body.appendChild(script);
 
   function render_(data){
     if(!data || !data.ok){
