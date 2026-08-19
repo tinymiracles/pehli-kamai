@@ -1082,11 +1082,57 @@ function renderYtDash(acct,isNew,n){
       Pehli Kamai will personally call you when an HR is interested.<br>Questions? <strong>+91 9326691744</strong> or <strong>+91 99204 45917</strong>
     </div>
     <button class="btn-lf-submit" onclick="closeYtDash();youthEditProfile()" style="margin-bottom:10px">Edit my profile</button>
-    <button onclick="closeYtDash()" style="width:100%;padding:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Close</button>
+    <button onclick="closeYtDash()" style="width:100%;padding:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer;margin-bottom:10px">Close</button>
+    <button onclick="confirmDeleteYouthAccount()" style="width:100%;padding:10px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:13px;color:#c62828;cursor:pointer">Delete my account</button>
   `;
 }
 
 function closeYtDash(){document.getElementById('yt-ov').classList.remove('open');}
+
+function confirmDeleteYouthAccount(){
+  if(!confirm('Delete your account and remove your profile from Pehli Kamai? This cannot be undone.'))return;
+  deleteYouthAccount();
+}
+function deleteYouthAccount(){
+  const user=auth.currentUser;
+  if(!user){toast('Please sign in again.');return;}
+  const uid=user.uid;
+  const acct=currentYtAcct;
+  // Same order as the HR version: delete the Auth login first. If that
+  // fails (e.g. needs a fresh re-login), nothing else is touched.
+  user.delete()
+    .then(()=>{
+      const jobs=[db.collection('youth_accounts').doc(uid).delete().catch(()=>{})];
+      if(acct&&acct.email){
+        jobs.push(db.collection('candidates').where('email','==',acct.email).get().then(snap=>{
+          const batch=db.batch();
+          snap.forEach(d=>batch.delete(d.ref));
+          return batch.commit();
+        }).catch(()=>{}));
+      }
+      return Promise.all(jobs);
+    })
+    .then(()=>{
+      if(acct){const idx=DATA.findIndex(d=>d.id===acct.id);if(idx>-1)DATA.splice(idx,1);}
+      currentYtAcct=null;
+      closeYtDash();
+      render();
+      toast('Your account and profile have been deleted.');
+    })
+    .catch(e=>{
+      if(e.code==='auth/requires-recent-login'){promptReauthAndDeleteYt_();}
+      else{toast('Could not delete account: '+(e.message||'try again'));}
+    });
+}
+function promptReauthAndDeleteYt_(){
+  const pw=prompt('For security, please re-enter your password to confirm deletion:');
+  if(!pw)return;
+  const user=auth.currentUser;
+  const cred=firebase.auth.EmailAuthProvider.credential(user.email,pw);
+  user.reauthenticateWithCredential(cred)
+    .then(()=>deleteYouthAccount())
+    .catch(()=>toast('Incorrect password — account not deleted.'));
+}
 
 function youthEditProfile(){
   const acct=currentYtAcct;
@@ -1198,6 +1244,125 @@ function hrSignUp(){
     });
 }
 
+// ── HR ACCOUNT (view / edit / delete) ────────────────────────────
+const HR_INDUSTRIES=['Retail & FMCG','Banking & Finance','IT & Technology','Healthcare','Hospitality & Food','Manufacturing','Education & NGO','Media & Marketing','Logistics & Supply Chain','Real Estate','Other'];
+
+function openHRAccount(){
+  if(!hrUser){toast('Please sign in first.');return;}
+  document.getElementById('hr-acct-ov').classList.add('open');
+  renderHRAccountView();
+}
+function closeHRAccount(){document.getElementById('hr-acct-ov').classList.remove('open');}
+
+function renderHRAccountView(){
+  const u=hrUser;
+  document.getElementById('hr-acct-body').innerHTML=`
+    <div style="display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px">
+      <div style="width:50px;height:50px;border-radius:50%;background:var(--teal);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px">${ini(u.name)}</div>
+      <div>
+        <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink)">${u.name}</div>
+        <div style="font-size:12px;color:var(--ink-3);margin-top:2px">${u.company}</div>
+        <div style="font-size:11px;color:var(--ink-4);margin-top:2px">${u.email}</div>
+      </div>
+    </div>
+    <div style="background:${u.approved?'#e8f5e9':'#fff8e1'};border:1.5px solid ${u.approved?'#a5d6a7':'#ffe082'};border-radius:10px;padding:12px 14px;margin-bottom:4px;font-size:12.5px;color:${u.approved?'#2e7d32':'#8a6d00'}">
+      ${u.approved?'✅ Approved — you can see full candidate details.':'⏳ Pending review — candidate names stay masked until our team approves your account.'}
+    </div>
+    <div class="pf-info-list">
+      <div><span>Phone</span><span>${u.phone||'—'}</span></div>
+      <div><span>Industry</span><span>${u.industry||'—'}</span></div>
+      <div><span>City</span><span>${u.city||'—'}</span></div>
+    </div>
+    <button class="btn-lf-submit" style="margin-top:18px" onclick="renderHRAccountEdit()">Edit my details</button>
+    <button onclick="closeHRAccount();if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}" style="width:100%;padding:10px;margin-top:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Sign out</button>
+    <button onclick="confirmDeleteHRAccount()" style="width:100%;padding:10px;margin-top:10px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:13px;color:#c62828;cursor:pointer">Delete my account</button>
+  `;
+}
+
+function renderHRAccountEdit(){
+  const u=hrUser;
+  document.getElementById('hr-acct-body').innerHTML=`
+    <div class="lf">
+      <div class="lf-row-2">
+        <div><label>Your name *</label><input type="text" id="hra-nm"/></div>
+        <div><label>Phone *</label><input type="tel" id="hra-ph"/></div>
+      </div>
+      <div><label>Company *</label><input type="text" id="hra-co"/></div>
+      <div class="lf-row-2">
+        <div><label>Industry *</label><select id="hra-ind">${HR_INDUSTRIES.map(x=>`<option>${x}</option>`).join('')}</select></div>
+        <div><label>City *</label><input type="text" id="hra-city"/></div>
+      </div>
+      <button class="btn-lf-submit" onclick="saveHRAccountEdit()">Save changes</button>
+      <button onclick="renderHRAccountView()" style="width:100%;padding:10px;margin-top:8px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Cancel</button>
+    </div>
+  `;
+  // Set via .value, not interpolated into the HTML above -- avoids a
+  // stray quote/ampersand in a name or company ever breaking the markup.
+  document.getElementById('hra-nm').value=u.name||'';
+  document.getElementById('hra-ph').value=u.phone||'';
+  document.getElementById('hra-co').value=u.company||'';
+  document.getElementById('hra-city').value=u.city||'';
+  const sel=document.getElementById('hra-ind');
+  for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===u.industry){sel.selectedIndex=i;break;}}
+}
+
+function saveHRAccountEdit(){
+  const nm=document.getElementById('hra-nm').value.trim();
+  const ph=document.getElementById('hra-ph').value.trim();
+  const co=document.getElementById('hra-co').value.trim();
+  const ind=document.getElementById('hra-ind').value;
+  const city=document.getElementById('hra-city').value.trim();
+  if(!nm||!ph||!co||!ind||!city){toast('Please fill all fields.');return;}
+  const user=auth.currentUser;
+  if(!user){toast('Please sign in again.');return;}
+  db.collection('hr_accounts').doc(user.uid).update({name:nm,phone:ph,company:co,industry:ind,city:city})
+    .then(()=>{
+      hrUser={...hrUser,name:nm,phone:ph,company:co,industry:ind,city:city};
+      localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
+      updateHRHeader();
+      toast('Account updated.');
+      renderHRAccountView();
+    })
+    .catch(()=>toast('Could not save changes — try again.'));
+}
+
+function confirmDeleteHRAccount(){
+  if(!confirm('Delete your account? This removes your HR profile permanently and cannot be undone.'))return;
+  deleteHRAccount();
+}
+function deleteHRAccount(){
+  const user=auth.currentUser;
+  if(!user){toast('Please sign in again.');return;}
+  const uid=user.uid;
+  // Delete the Auth login FIRST, the Firestore profile after -- if
+  // deleting the login fails (e.g. requires-recent-login below), the
+  // profile is untouched and nothing is left half-deleted. The reverse
+  // order could leave a live login with no profile behind it.
+  user.delete()
+    .then(()=>db.collection('hr_accounts').doc(uid).delete().catch(()=>{}))
+    .then(()=>{
+      hrUser=null;
+      localStorage.removeItem('typc_hr_user');
+      closeHRAccount();
+      updateHRHeader();
+      render();
+      toast('Your account has been deleted.');
+    })
+    .catch(e=>{
+      if(e.code==='auth/requires-recent-login'){promptReauthAndDeleteHR_();}
+      else{toast('Could not delete account: '+(e.message||'try again'));}
+    });
+}
+function promptReauthAndDeleteHR_(){
+  const pw=prompt('For security, please re-enter your password to confirm deletion:');
+  if(!pw)return;
+  const user=auth.currentUser;
+  const cred=firebase.auth.EmailAuthProvider.credential(user.email,pw);
+  user.reauthenticateWithCredential(cred)
+    .then(()=>deleteHRAccount())
+    .catch(()=>toast('Incorrect password — account not deleted.'));
+}
+
 // True only for a logged-in HR account that's been manually approved.
 // Everything that reveals a candidate's real name or exact neighbourhood
 // checks this instead of just "is someone logged in as HR" -- signing up
@@ -1243,7 +1408,7 @@ function updateHRHeader(){
   if(hrUser){
     btn.className='hr-logged';
     btn.textContent=hrUser.name+' · '+hrUser.company+(hrUser.approved?'':' (pending review)')+' ▾';
-    btn.onclick=()=>{if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}};
+    btn.onclick=()=>openHRAccount();
     if(addBtn){addBtn.style.display='none';}
   } else {
     btn.className='btn-ghost';

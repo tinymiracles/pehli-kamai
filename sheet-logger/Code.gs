@@ -44,13 +44,30 @@ function doPost(e) {
 }
 
 // Powers the admin dashboard's "is the Sheet/Drive pipeline actually
-// working" panel -- a plain GET to this same deployed URL with
-// ?action=status. Only returns counts and last-updated times, never
-// actual names/emails/content, so it's left open rather than gated
-// behind anything -- there's nothing in this response worth protecting.
+// working" panel -- a GET to this same deployed URL with
+// ?action=status&callback=NAME. Only returns counts and last-updated
+// times, never actual names/emails/content, so it's left open rather
+// than gated behind anything -- there's nothing in this response worth
+// protecting.
+//
+// This has to be JSONP (wrapping the JSON in NAME(...) and served as
+// JavaScript), not a plain JSON response read via fetch() -- Apps
+// Script's ContentService has no way to add the CORS header
+// (Access-Control-Allow-Origin) browsers require before letting a
+// cross-site fetch() read a response back, so a plain fetch() call
+// from the admin page fails with an opaque "Failed to fetch" no matter
+// how correct the URL and response are. Loading it as a <script> tag
+// instead sidesteps CORS entirely, which is what the callback param is
+// for.
 function doGet(e) {
   if (e && e.parameter && e.parameter.action === 'status') {
-    return ContentService.createTextOutput(JSON.stringify(getStatus_()))
+    const body = JSON.stringify(getStatus_());
+    const callback = e.parameter.callback;
+    if (callback && /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(callback)) {
+      return ContentService.createTextOutput(callback + '(' + body + ');')
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    return ContentService.createTextOutput(body)
       .setMimeType(ContentService.MimeType.JSON);
   }
   return ContentService.createTextOutput('Pehli Kamai signup logger is running.');
