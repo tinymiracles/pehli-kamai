@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Grievance dashboard — Pehli Kamai</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
   :root{
     --teal:#0e7a72; --teal-light:#0f8a80; --lime:#c9dd6a;
@@ -16,7 +19,7 @@
   body{margin:0;font-family:'Manrope',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
   .wrap{max-width:1180px;margin:0 auto;padding:28px 24px 60px;}
 
-  /* — password gate — */
+  /* — login gate — */
   .gate{max-width:380px;margin:12vh auto 0;padding:0 20px;text-align:left;}
   .gate h1{font-size:30px;margin:0 0 6px;}
   .gate p{color:var(--ink-2);font-size:14.5px;line-height:1.6;margin:0 0 22px;}
@@ -30,6 +33,7 @@
   .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
   .hdr h1{font-size:24px;margin:0;}
   .hdr h1 em{font-style:normal;color:var(--teal);}
+  .hdr .who{font-size:12.5px;color:var(--ink-3);}
   .signout{background:none;border:1.5px solid var(--line);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;font-family:inherit;}
   .signout:hover{border-color:var(--ink-2);}
 
@@ -47,7 +51,6 @@
   td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
   tr:last-child td{border-bottom:none;}
   .muted{color:var(--ink-3);font-size:11.5px;}
-  .badge{font-size:12px;}
   select.status{font-family:inherit;font-size:12.5px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink);}
   .loading,.empty{text-align:center;padding:50px 20px;color:var(--ink-3);font-size:14px;}
   a.shot{color:var(--teal);font-weight:700;text-decoration:none;}
@@ -60,15 +63,19 @@
 
 <div class="gate" id="gate">
   <h1>Admin</h1>
-  <p>Enter the shared staff password to continue.</p>
+  <p>Sign in with your Pehli Kamai team HR account to continue.</p>
+  <input type="email" id="email" placeholder="Email" autocomplete="username">
   <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
-  <button id="pw-submit">Open admin</button>
+  <button id="pw-submit">Sign in</button>
   <div class="gate-error" id="gate-error"></div>
 </div>
 
 <div class="wrap hidden" id="dash">
   <div class="hdr">
-    <h1>Grievance <em>dashboard</em></h1>
+    <div>
+      <h1>Grievance <em>dashboard</em></h1>
+      <div class="who" id="who"></div>
+    </div>
     <button class="signout" id="signout">Sign out</button>
   </div>
   <div class="stats" id="stats"></div>
@@ -86,17 +93,21 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SESSION_KEY = 'pk_admin_session';
+firebase.initializeApp({
+  apiKey:"AIzaSyD4hBZPFrbB_JRskYLHda-htoyY2EYUSzA",
+  authDomain:"pehli-kamai.firebaseapp.com",
+  projectId:"pehli-kamai",
+  storageBucket:"pehli-kamai.firebasestorage.app",
+  messagingSenderId:"461944204483",
+  appId:"1:461944204483:web:6c677fc8534f81f6764676"
+});
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-function getSession(){
-  try{
-    const s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
-    if(s && s.token && s.exp > Date.now()) return s;
-  }catch(e){}
-  return null;
-}
-function setSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
-function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+// Client-side convenience only -- what actually protects the data is the
+// Firestore security rule on the grievances collection (see script.js),
+// which checks this same list server-side. Keep the two in sync.
+const ADMIN_EMAILS = ['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com'];
 
 function toast(msg){
   const t = document.getElementById('toast');
@@ -105,57 +116,50 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('show'), 2200);
 }
 
-function showGate(){
+function showGate(msg){
   document.getElementById('gate').classList.remove('hidden');
   document.getElementById('dash').classList.add('hidden');
-  document.getElementById('pw').focus();
+  document.getElementById('gate-error').textContent = msg || '';
 }
-function showDash(){
+function showDash(user){
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('dash').classList.remove('hidden');
+  document.getElementById('who').textContent = 'Signed in as ' + user.email;
   loadGrievances();
 }
 
 async function login(){
+  const email = document.getElementById('email').value.trim().toLowerCase();
   const pw = document.getElementById('pw').value;
   const errEl = document.getElementById('gate-error');
   errEl.textContent = '';
-  if(!pw){ errEl.textContent = 'Enter the password.'; return; }
+  if(!email || !pw){ errEl.textContent = 'Enter your email and password.'; return; }
   try{
-    const res = await fetch('/api/admin-login', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ password: pw })
-    });
-    const data = await res.json();
-    if(!res.ok){ errEl.textContent = data.error || 'Wrong password.'; return; }
-    setSession({ token: data.token, exp: data.exp });
+    const cred = await auth.signInWithEmailAndPassword(email, pw);
+    if(!ADMIN_EMAILS.includes(cred.user.email.toLowerCase())){
+      await auth.signOut();
+      errEl.textContent = "That account doesn't have admin access.";
+      return;
+    }
     document.getElementById('pw').value = '';
-    showDash();
   }catch(e){
-    errEl.textContent = 'Could not reach the server -- try again.';
+    errEl.textContent = e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found'
+      ? 'Wrong email or password.' : (e.message || 'Could not sign in.');
   }
 }
 
 function signOut(){
-  clearSession();
-  showGate();
+  auth.signOut();
 }
 
 async function loadGrievances(){
-  const session = getSession();
-  if(!session){ showGate(); return; }
   const rowsEl = document.getElementById('rows');
   rowsEl.innerHTML = '<tr><td colspan="9" class="loading">Loading…</td></tr>';
   try{
-    const res = await fetch('/api/grievances', {
-      headers:{ 'Authorization': 'Bearer ' + session.token }
-    });
-    if(res.status === 401){ clearSession(); showGate(); return; }
-    const data = await res.json();
-    if(!res.ok){ rowsEl.innerHTML = `<tr><td colspan="9" class="empty">${data.error||'Could not load grievances.'}</td></tr>`; return; }
-    render(data.rows || []);
+    const snap = await db.collection('grievances').orderBy('createdAt','desc').get();
+    render(snap.docs.map(d => ({ id: d.id, ...d.data() })));
   }catch(e){
-    rowsEl.innerHTML = '<tr><td colspan="9" class="empty">Could not reach the server. Try reloading.</td></tr>';
+    rowsEl.innerHTML = `<tr><td colspan="9" class="empty">Could not load grievances (${esc(e.message||'permission error')}).</td></tr>`;
   }
 }
 
@@ -182,7 +186,7 @@ function render(rows){
       <td>${when}</td>
       <td>${esc(r.name||'')}<br><span class="muted">${esc(r.email||'')}</span></td>
       <td>${esc(r.category||'')}</td>
-      <td><span class="badge">${urgencyDot}</span> ${esc(r.urgency||'')}</td>
+      <td>${urgencyDot} ${esc(r.urgency||'')}</td>
       <td>${esc(r.relatedTo||'—')}</td>
       <td style="max-width:260px;white-space:pre-wrap">${desc}</td>
       <td>${shot}</td>
@@ -200,28 +204,27 @@ function esc(s){
 }
 
 async function setStatus(id, status){
-  const session = getSession();
-  if(!session){ showGate(); return; }
   try{
-    const res = await fetch('/api/grievances', {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + session.token },
-      body: JSON.stringify({ id, status })
-    });
-    if(res.status === 401){ clearSession(); showGate(); return; }
-    const data = await res.json();
-    if(!res.ok){ toast(data.error || 'Could not update status.'); return; }
+    await db.collection('grievances').doc(id).update({ status, statusUpdatedAt: new Date().toISOString() });
     toast('Status updated.');
   }catch(e){
-    toast('Could not reach the server -- try again.');
+    toast('Could not update status — try again.');
   }
 }
 
 document.getElementById('pw-submit').addEventListener('click', login);
 document.getElementById('pw').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
+document.getElementById('email').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
 document.getElementById('signout').addEventListener('click', signOut);
 
-getSession() ? showDash() : showGate();
+auth.onAuthStateChanged(user => {
+  if(user && ADMIN_EMAILS.includes((user.email||'').toLowerCase())){
+    showDash(user);
+  } else {
+    if(user) auth.signOut(); // signed in, but not an admin account
+    showGate();
+  }
+});
 </script>
 </body>
 </html>
