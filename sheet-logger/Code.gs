@@ -43,6 +43,57 @@ function doPost(e) {
   return ContentService.createTextOutput('ok');
 }
 
+// Powers the admin dashboard's "is the Sheet/Drive pipeline actually
+// working" panel -- a plain GET to this same deployed URL with
+// ?action=status. Only returns counts and last-updated times, never
+// actual names/emails/content, so it's left open rather than gated
+// behind anything -- there's nothing in this response worth protecting.
+function doGet(e) {
+  if (e && e.parameter && e.parameter.action === 'status') {
+    return ContentService.createTextOutput(JSON.stringify(getStatus_()))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  return ContentService.createTextOutput('Pehli Kamai signup logger is running.');
+}
+
+function getStatus_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const tabNames = ['HR Signups', 'Youth Signups', 'Contact Enquiries', 'Grievances', 'Errors'];
+  const sheets = {};
+  tabNames.forEach(name => {
+    const sheet = ss.getSheetByName(name);
+    if (!sheet) { sheets[name] = { exists: false, rows: 0, lastEntry: null }; return; }
+    const lastRow = sheet.getLastRow();
+    const rows = Math.max(0, lastRow - 1); // minus the header row
+    let lastEntry = null;
+    if (rows > 0) {
+      const val = sheet.getRange(lastRow, 1).getValue(); // column A is always Timestamp
+      lastEntry = val instanceof Date ? val.toISOString() : String(val);
+    }
+    sheets[name] = { exists: true, rows: rows, lastEntry: lastEntry };
+  });
+
+  let drive;
+  try {
+    const folder = getFolder_();
+    const files = folder.getFiles();
+    let count = 0, latest = null, latestName = null;
+    while (files.hasNext()) {
+      const f = files.next();
+      count++;
+      const updated = f.getLastUpdated();
+      if (!latest || updated > latest) { latest = updated; latestName = f.getName(); }
+    }
+    drive = { ok: true, fileCount: count, lastFileName: latestName, lastFileTime: latest ? latest.toISOString() : null };
+  } catch (err) {
+    // Usually means RESUME_FOLDER_ID is wrong or this account lost
+    // access to that folder.
+    drive = { ok: false, error: String(err) };
+  }
+
+  return { ok: true, checkedAt: new Date().toISOString(), sheets: sheets, drive: drive };
+}
+
 // Lock only around the check-and-create step, not the whole request --
 // under a burst of simultaneous signups, two requests could both see a tab
 // (e.g. "Youth Signups") doesn't exist yet and both try to create it at

@@ -52,6 +52,18 @@
   .muted{color:var(--ink-3);font-size:11.5px;}
   select.status{font-family:inherit;font-size:12.5px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink);}
   .loading,.empty{text-align:center;padding:50px 20px;color:var(--ink-3);font-size:14px;}
+
+  /* — pipeline status — */
+  .pipe-hdr{display:flex;align-items:center;justify-content:space-between;margin:36px 0 14px;}
+  .pipe-hdr h2{font-size:17px;margin:0;}
+  .pipe-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;}
+  .pipe-body .loading{grid-column:1/-1;}
+  .pipe-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .pipe-card .pc-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;}
+  .pipe-card .pc-n{font-family:inherit;font-size:22px;font-weight:800;color:var(--teal);}
+  .pipe-card .pc-n.bad{color:var(--red);}
+  .pipe-card .pc-sub{font-size:11.5px;color:var(--ink-3);margin-top:4px;}
+  .pipe-error{grid-column:1/-1;background:#fbeceb;border:1px solid rgba(201,75,63,.3);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--red);}
   a.shot{color:var(--teal);font-weight:700;text-decoration:none;}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;}
   .toast.show{opacity:1;}
@@ -83,6 +95,14 @@
       <tbody id="rows"><tr><td colspan="9" class="loading">Loading…</td></tr></tbody>
     </table>
   </div>
+
+  <div class="pipe-hdr">
+    <h2>Sheet &amp; Drive pipeline</h2>
+    <button class="signout" id="pipe-refresh">Refresh</button>
+  </div>
+  <div id="pipe-body" class="pipe-body">
+    <div class="loading">Checking…</div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -98,6 +118,13 @@ firebase.initializeApp({
 });
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// Same deployed Apps Script URL as SHEET_LOG_URL in script.js -- keep
+// the two in sync. NOTE: as of today this URL is the one confirmed
+// broken ("Script function not found: doPost") -- fixing that (getting
+// the real URL from Deploy -> Manage deployments on the Code.gs project
+// bound to the actual data sheet) will also make this status panel work.
+const SHEET_STATUS_URL = 'https://script.google.com/macros/s/AKfycbygblsCHsQEFIqlqIfTgCt9OdN0uvngk7eKnPs9BAB2t31pk857-kAv82p8ZBYUwyoY/exec';
 
 // Client-side convenience only -- what actually protects the data is the
 // Firestore security rule on the grievances collection (see script.js),
@@ -128,6 +155,52 @@ function showDash(){
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('dash').classList.remove('hidden');
   loadGrievances();
+  loadPipelineStatus();
+}
+
+async function loadPipelineStatus(){
+  const el = document.getElementById('pipe-body');
+  el.innerHTML = '<div class="loading">Checking…</div>';
+  try{
+    const res = await fetch(SHEET_STATUS_URL + '?action=status');
+    const text = await res.text();
+    let data;
+    try{ data = JSON.parse(text); }
+    catch{ el.innerHTML = `<div class="pipe-error">Got an unexpected reply instead of status data -- likely the wrong deployment URL. Raw reply: ${esc(text.slice(0,200))}</div>`; return; }
+    render_(data);
+  }catch(e){
+    el.innerHTML = `<div class="pipe-error">Could not reach the Sheet logger at all (${esc(e.message)}). If this keeps happening even after the URL is fixed, it may be a cross-origin (CORS) block from Apps Script -- tell Claude.</div>`;
+  }
+
+  function render_(data){
+    if(!data || !data.ok){
+      el.innerHTML = `<div class="pipe-error">Sheet logger responded, but reported a problem: ${esc(JSON.stringify(data))}</div>`;
+      return;
+    }
+    const cards = [];
+    const sheetOrder = ['Youth Signups','HR Signups','Contact Enquiries','Grievances','Errors'];
+    sheetOrder.forEach(name=>{
+      const s = (data.sheets||{})[name];
+      if(!s) return;
+      const bad = name==='Errors' && s.rows>0;
+      cards.push(`<div class="pipe-card">
+        <div class="pc-label">${esc(name)}</div>
+        <div class="pc-n ${bad?'bad':''}">${s.exists ? s.rows : '—'}</div>
+        <div class="pc-sub">${s.exists ? (s.lastEntry ? 'Last: '+esc(fmtWhen(s.lastEntry)) : 'No rows yet') : 'Tab not created yet'}</div>
+      </div>`);
+    });
+    const d = data.drive || {};
+    cards.push(`<div class="pipe-card">
+      <div class="pc-label">Resumes in Drive</div>
+      <div class="pc-n ${d.ok?'':'bad'}">${d.ok ? d.fileCount : '—'}</div>
+      <div class="pc-sub">${d.ok ? (d.lastFileTime ? 'Last: '+esc(fmtWhen(d.lastFileTime)) : 'No files yet') : 'Could not check: '+esc(d.error||'unknown error')}</div>
+    </div>`);
+    el.innerHTML = cards.join('') + `<div class="pipe-card" style="grid-column:1/-1"><span class="pc-sub">Checked ${esc(fmtWhen(data.checkedAt))}</span></div>`;
+  }
+  function fmtWhen(iso){
+    try{ return new Date(iso).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
+    catch{ return iso; }
+  }
 }
 
 async function login(){
@@ -211,6 +284,7 @@ async function setStatus(id, status){
 document.getElementById('pw-submit').addEventListener('click', login);
 document.getElementById('pw').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
 document.getElementById('signout').addEventListener('click', signOut);
+document.getElementById('pipe-refresh').addEventListener('click', loadPipelineStatus);
 
 auth.onAuthStateChanged(user => {
   if(user && ADMIN_EMAILS.includes((user.email||'').toLowerCase())){

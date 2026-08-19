@@ -73,3 +73,11 @@ permission screens on your behalf.
   (same as the existing email notifications) so a hiccup in the Sheet never
   blocks someone from actually signing up. Check the "Errors" tab in the
   Sheet (created automatically) if something seems to be missing.
+- The admin dashboard (`/admin` on the live site) has a "Sheet & Drive
+  pipeline" panel that checks this is actually working -- row counts per
+  tab, last-entry time, and how many resumes are in the Drive folder. It
+  calls this same deployed URL with `?action=status` (a plain GET, no
+  password needed since it only returns counts/timestamps, never actual
+  names or content). If you ever redeploy and get a new Web app URL,
+  update it in both `docs/script.js` (`SHEET_LOG_URL`) and
+  `docs/admin/index.html` (`SHEET_STATUS_URL`) -- they have to match.
