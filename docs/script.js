@@ -1221,12 +1221,18 @@ function maskName(name){
 //   match /grievances/{id} {
 //     allow read, write: if request.auth != null
 //       && request.auth.token.email in
-//          ['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com'];
+//          ['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com','grievance-team@pehli-kamai.internal'];
 //   }
 // Paste that (adjusted to your actual rules structure) into Firebase
 // Console -> Firestore Database -> Rules. Without it, this list is a UI
 // convenience, not security.
-const ADMIN_EMAILS=['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com'];
+//
+// grievance-team@pehli-kamai.internal is not a real inbox -- it's a
+// single shared Firebase Auth account (see docs/admin/index.html) that
+// lets /admin work as "type one shared password" without a backend
+// service-account key, which Tiny Miracles' Google Cloud org policy
+// blocks creating.
+const ADMIN_EMAILS=['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com','grievance-team@pehli-kamai.internal'];
 function canAccessAdmin(){return !!(hrUser&&hrUser.email&&ADMIN_EMAILS.includes(hrUser.email.toLowerCase()));}
 
 function updateHRHeader(){

@@ -33,7 +33,6 @@
   .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
   .hdr h1{font-size:24px;margin:0;}
   .hdr h1 em{font-style:normal;color:var(--teal);}
-  .hdr .who{font-size:12.5px;color:var(--ink-3);}
   .signout{background:none;border:1.5px solid var(--line);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;font-family:inherit;}
   .signout:hover{border-color:var(--ink-2);}
 
@@ -63,19 +62,15 @@
 
 <div class="gate" id="gate">
   <h1>Admin</h1>
-  <p>Sign in with your Pehli Kamai team HR account to continue.</p>
-  <input type="email" id="email" placeholder="Email" autocomplete="username">
+  <p>Enter the shared staff password to continue.</p>
   <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
-  <button id="pw-submit">Sign in</button>
+  <button id="pw-submit">Open admin</button>
   <div class="gate-error" id="gate-error"></div>
 </div>
 
 <div class="wrap hidden" id="dash">
   <div class="hdr">
-    <div>
-      <h1>Grievance <em>dashboard</em></h1>
-      <div class="who" id="who"></div>
-    </div>
+    <h1>Grievance <em>dashboard</em></h1>
     <button class="signout" id="signout">Sign out</button>
   </div>
   <div class="stats" id="stats"></div>
@@ -107,7 +102,15 @@ const db = firebase.firestore();
 // Client-side convenience only -- what actually protects the data is the
 // Firestore security rule on the grievances collection (see script.js),
 // which checks this same list server-side. Keep the two in sync.
-const ADMIN_EMAILS = ['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com'];
+const ADMIN_EMAILS = ['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com','grievance-team@pehli-kamai.internal'];
+
+// The "shared staff password" gate signs in behind the scenes as this one
+// fixed Firebase Auth account -- not a real inbox, just a login that all
+// staff use with the one shared password, entered by whoever creates the
+// account (Firebase Console -> Authentication -> Add user). No backend,
+// no service account key -- this is exactly the same client Firestore
+// SDK + rule every other sign-in on the site already uses.
+const SHARED_ADMIN_EMAIL = 'grievance-team@pehli-kamai.internal';
 
 function toast(msg){
   const t = document.getElementById('toast');
@@ -121,30 +124,23 @@ function showGate(msg){
   document.getElementById('dash').classList.add('hidden');
   document.getElementById('gate-error').textContent = msg || '';
 }
-function showDash(user){
+function showDash(){
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('dash').classList.remove('hidden');
-  document.getElementById('who').textContent = 'Signed in as ' + user.email;
   loadGrievances();
 }
 
 async function login(){
-  const email = document.getElementById('email').value.trim().toLowerCase();
   const pw = document.getElementById('pw').value;
   const errEl = document.getElementById('gate-error');
   errEl.textContent = '';
-  if(!email || !pw){ errEl.textContent = 'Enter your email and password.'; return; }
+  if(!pw){ errEl.textContent = 'Enter the password.'; return; }
   try{
-    const cred = await auth.signInWithEmailAndPassword(email, pw);
-    if(!ADMIN_EMAILS.includes(cred.user.email.toLowerCase())){
-      await auth.signOut();
-      errEl.textContent = "That account doesn't have admin access.";
-      return;
-    }
+    await auth.signInWithEmailAndPassword(SHARED_ADMIN_EMAIL, pw);
     document.getElementById('pw').value = '';
   }catch(e){
     errEl.textContent = e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found'
-      ? 'Wrong email or password.' : (e.message || 'Could not sign in.');
+      ? 'Wrong password.' : (e.message || 'Could not sign in.');
   }
 }
 
@@ -214,12 +210,11 @@ async function setStatus(id, status){
 
 document.getElementById('pw-submit').addEventListener('click', login);
 document.getElementById('pw').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
-document.getElementById('email').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
 document.getElementById('signout').addEventListener('click', signOut);
 
 auth.onAuthStateChanged(user => {
   if(user && ADMIN_EMAILS.includes((user.email||'').toLowerCase())){
-    showDash(user);
+    showDash();
   } else {
     if(user) auth.signOut(); // signed in, but not an admin account
     showGate();
