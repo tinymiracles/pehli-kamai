@@ -102,15 +102,15 @@ const db = firebase.firestore();
 // Client-side convenience only -- what actually protects the data is the
 // Firestore security rule on the grievances collection (see script.js),
 // which checks this same list server-side. Keep the two in sync.
-const ADMIN_EMAILS = ['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com','grievance-team@pehli-kamai.internal'];
+const ADMIN_EMAILS = ['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehlikamaitm@gmail.com'];
 
-// The "shared staff password" gate signs in behind the scenes as this one
-// fixed Firebase Auth account -- not a real inbox, just a login that all
-// staff use with the one shared password, entered by whoever creates the
-// account (Firebase Console -> Authentication -> Add user). No backend,
-// no service account key -- this is exactly the same client Firestore
-// SDK + rule every other sign-in on the site already uses.
-const SHARED_ADMIN_EMAIL = 'grievance-team@pehli-kamai.internal';
+// The "shared staff password" gate signs in behind the scenes as the
+// team's existing shared inbox account -- already on the admin list, no
+// new email needed. No backend, no service-account key -- this is
+// exactly the same client Firestore SDK + rule every other sign-in on
+// the site already uses, just with one shared login instead of
+// individual ones.
+const SHARED_ADMIN_EMAIL = 'pehlikamaitm@gmail.com';
 
 function toast(msg){
   const t = document.getElementById('toast');
