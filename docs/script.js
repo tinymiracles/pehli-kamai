@@ -75,7 +75,7 @@ emailjs.init(EJ_PK);
 // a Google Sheet, and saves each youth's auto-generated resume into a Drive
 // folder. Deployed Apps Script Web App URL (see sheet-logger/SETUP.md) —
 // leave blank to disable.
-const SHEET_LOG_URL='https://script.google.com/macros/s/AKfycbygblsCHsQEFIqlqIfTgCt9OdN0uvngk7eKnPs9BAB2t31pk857-kAv82p8ZBYUwyoY/exec';
+const SHEET_LOG_URL='https://script.google.com/macros/s/AKfycbzz76kQJjrnDLO8rwUn-Y8xAllezp9GR-4s4quoPDfBqaXMHY0z89dnzS5t_4c1mkoR/exec';
 function logSignup(type,payload){
   if(!SHEET_LOG_URL)return;
   try{
@@ -1278,6 +1278,9 @@ function openHRAccount(){
   showPage('hraccount');
 }
 
+let hrAcctTab='details';
+let hrAcctEditing=false;
+
 function renderHRAccountView(){
   const body=document.getElementById('hr-acct-body');
   const u=hrUser;
@@ -1286,31 +1289,96 @@ function renderHRAccountView(){
       <button onclick="openSignIn()" style="margin-top:10px;padding:11px 22px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer">Sign in</button>`;
     return;
   }
+  hrAcctTab='details';
+  hrAcctEditing=false;
   body.innerHTML=`
     <button class="pf-back" onclick="showPage('home')" style="margin-bottom:20px">&larr; Back to home</button>
-    <div style="display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px">
-      <div style="width:50px;height:50px;border-radius:50%;background:var(--teal);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px">${ini(u.name)}</div>
-      <div>
-        <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink)">${u.name}</div>
-        <div style="font-size:12px;color:var(--ink-3);margin-top:2px">${u.company}</div>
-        <div style="font-size:11px;color:var(--ink-4);margin-top:2px">${u.email}</div>
+    <div class="acct-shell">
+      <aside class="acct-side">
+        <div class="acct-avatar">${ini(u.name)}</div>
+        <div class="acct-name">${u.name}</div>
+        <div class="acct-sub">${u.company}</div>
+        <div class="acct-email">${u.email}</div>
+        <nav class="acct-nav">
+          <button class="acct-nav-item active" id="acct-nav-details" onclick="setHRAcctTab('details')">My details</button>
+          <button class="acct-nav-item" id="acct-nav-enquiries" onclick="setHRAcctTab('enquiries')">My enquiries</button>
+        </nav>
+        <button class="acct-signout" onclick="if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}">Sign out</button>
+      </aside>
+      <div class="acct-main">
+        <div class="acct-panel" id="acct-panel-details"></div>
+        <div class="acct-panel hidden" id="acct-panel-enquiries">
+          <h2>My enquiries</h2>
+          <div class="acct-panel-sub">Candidates you've expressed interest in.</div>
+          <div id="hr-acct-enquiries"><div style="padding:20px 0;text-align:center;color:var(--ink-4);font-size:13px">Loading…</div></div>
+        </div>
       </div>
     </div>
-    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:12px 14px;margin-bottom:4px;font-size:12.5px;color:#2e7d32">
+  `;
+  renderHRDetailsPanel();
+  loadHRAccountEnquiries(u.email);
+}
+
+function setHRAcctTab(tab){
+  hrAcctTab=tab;
+  document.getElementById('acct-nav-details').classList.toggle('active',tab==='details');
+  document.getElementById('acct-nav-enquiries').classList.toggle('active',tab==='enquiries');
+  document.getElementById('acct-panel-details').classList.toggle('hidden',tab!=='details');
+  document.getElementById('acct-panel-enquiries').classList.toggle('hidden',tab!=='enquiries');
+}
+
+function renderHRDetailsPanel(){
+  const u=hrUser;
+  const panel=document.getElementById('acct-panel-details');
+  if(hrAcctEditing){
+    panel.innerHTML=`
+      <h2>Edit my details</h2>
+      <div class="acct-panel-sub">Update your information below.</div>
+      <div class="lf">
+        <div class="acct-field-row">
+          <div><label>Your name *</label><input type="text" id="hra-nm"/></div>
+          <div><label>Phone *</label><input type="tel" id="hra-ph"/></div>
+        </div>
+        <div style="margin-top:14px"><label>Company *</label><input type="text" id="hra-co"/></div>
+        <div class="acct-field-row" style="margin-top:14px">
+          <div><label>Industry *</label><select id="hra-ind">${HR_INDUSTRIES.map(x=>`<option>${x}</option>`).join('')}</select></div>
+          <div><label>City *</label><input type="text" id="hra-city"/></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn-lf-submit" style="width:auto;padding:0 26px" onclick="saveHRAccountEdit()">Save changes</button>
+          <button onclick="hrAcctEditing=false;renderHRDetailsPanel()" style="padding:0 20px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Cancel</button>
+        </div>
+      </div>
+    `;
+    // Set via .value, not interpolated into the HTML above -- avoids a
+    // stray quote/ampersand in a name or company ever breaking the markup.
+    document.getElementById('hra-nm').value=u.name||'';
+    document.getElementById('hra-ph').value=u.phone||'';
+    document.getElementById('hra-co').value=u.company||'';
+    document.getElementById('hra-city').value=u.city||'';
+    const sel=document.getElementById('hra-ind');
+    for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===u.industry){sel.selectedIndex=i;break;}}
+    return;
+  }
+  panel.innerHTML=`
+    <h2>My details</h2>
+    <div class="acct-panel-sub">Your account information.</div>
+    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:12px 14px;margin-bottom:22px;font-size:12.5px;color:#2e7d32">
       ✅ Full candidate details unlocked — no review step during the pilot.
     </div>
-    <div class="pf-info-list">
+    <div class="pf-info-list" style="margin-top:0;padding-top:0;border-top:none">
       <div><span>Phone</span><span>${u.phone||'—'}</span></div>
       <div><span>Industry</span><span>${u.industry||'—'}</span></div>
       <div><span>City</span><span>${u.city||'—'}</span></div>
     </div>
-    <button class="btn-lf-submit" style="margin-top:18px" onclick="renderHRAccountEdit()">Edit my details</button>
-    <button onclick="if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}" style="width:100%;padding:10px;margin-top:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Sign out</button>
-    <button onclick="confirmDeleteHRAccount()" style="width:100%;padding:10px;margin-top:10px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:13px;color:#c62828;cursor:pointer">Delete my account</button>
-    <h3 style="margin:32px 0 12px;font-size:16px">My enquiries</h3>
-    <div id="hr-acct-enquiries"><div style="padding:20px 0;text-align:center;color:var(--ink-4);font-size:13px">Loading…</div></div>
+    <button class="btn-lf-submit" style="margin-top:22px;width:auto;padding:0 26px" onclick="hrAcctEditing=true;renderHRDetailsPanel()">Edit my details</button>
+    <hr class="acct-hr">
+    <div class="acct-danger" style="border:1px solid rgba(197,64,54,.3);border-radius:10px;padding:18px 20px">
+      <h2 style="font-size:15px;margin-bottom:4px">Delete account</h2>
+      <p style="font-size:12.5px;color:var(--ink-4);margin:0 0 14px">This permanently removes your account and cannot be undone.</p>
+      <button onclick="confirmDeleteHRAccount()" style="padding:9px 20px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:12.5px;color:#c62828;cursor:pointer">Delete my account</button>
+    </div>
   `;
-  loadHRAccountEnquiries(u.email);
 }
 
 // Which candidates this specific HR account has actually sent an
@@ -1320,19 +1388,19 @@ function renderHRAccountView(){
 // read, so this where() is just for relevance, not security.
 function loadHRAccountEnquiries(email){
   const el=document.getElementById('hr-acct-enquiries');
+  const rowsHTML=(snap)=>snap.docs.map(d=>{
+    const e=d.data();
+    return `<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)">
+      <div>
+        <div style="font-size:13.5px;font-weight:700;color:var(--ink)">${e.candidateName||'—'}</div>
+        <div style="font-size:11.5px;color:var(--ink-3);margin-top:2px">${e.candidateSectors||''}${e.candidateLocation?' · 📍 '+e.candidateLocation:''}</div>
+      </div>
+      <div style="font-size:11px;color:var(--ink-4);white-space:nowrap">${e.time||''}</div>
+    </div>`;
+  }).join('');
   db.collection('hr_enquiries').where('hrEmail','==',email).orderBy('savedAt','desc').get()
     .then(snap=>{
-      if(snap.empty){el.innerHTML='<p style="font-size:13px;color:var(--ink-4)">You haven\'t expressed interest in anyone yet.</p>';return;}
-      el.innerHTML=snap.docs.map(d=>{
-        const e=d.data();
-        return `<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)">
-          <div>
-            <div style="font-size:13.5px;font-weight:700;color:var(--ink)">${e.candidateName||'—'}</div>
-            <div style="font-size:11.5px;color:var(--ink-3);margin-top:2px">${e.candidateSectors||''}${e.candidateLocation?' · 📍 '+e.candidateLocation:''}</div>
-          </div>
-          <div style="font-size:11px;color:var(--ink-4);white-space:nowrap">${e.time||''}</div>
-        </div>`;
-      }).join('');
+      el.innerHTML=snap.empty?'<p style="font-size:13px;color:var(--ink-4)">You haven\'t expressed interest in anyone yet.</p>':rowsHTML(snap);
     })
     .catch(()=>{
       // Firestore needs a composite index for a where()+orderBy() on two
@@ -1340,46 +1408,9 @@ function loadHRAccountEnquiries(email){
       // created yet, fall back to an unordered read rather than showing
       // nothing.
       db.collection('hr_enquiries').where('hrEmail','==',email).get().then(snap=>{
-        if(snap.empty){el.innerHTML='<p style="font-size:13px;color:var(--ink-4)">You haven\'t expressed interest in anyone yet.</p>';return;}
-        el.innerHTML=snap.docs.map(d=>{
-          const e=d.data();
-          return `<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)">
-            <div>
-              <div style="font-size:13.5px;font-weight:700;color:var(--ink)">${e.candidateName||'—'}</div>
-              <div style="font-size:11.5px;color:var(--ink-3);margin-top:2px">${e.candidateSectors||''}${e.candidateLocation?' · 📍 '+e.candidateLocation:''}</div>
-            </div>
-            <div style="font-size:11px;color:var(--ink-4);white-space:nowrap">${e.time||''}</div>
-          </div>`;
-        }).join('');
+        el.innerHTML=snap.empty?'<p style="font-size:13px;color:var(--ink-4)">You haven\'t expressed interest in anyone yet.</p>':rowsHTML(snap);
       }).catch(()=>{el.innerHTML='<p style="font-size:13px;color:var(--ink-4)">Could not load your enquiries right now.</p>';});
     });
-}
-
-function renderHRAccountEdit(){
-  const u=hrUser;
-  document.getElementById('hr-acct-body').innerHTML=`
-    <div class="lf">
-      <div class="lf-row-2">
-        <div><label>Your name *</label><input type="text" id="hra-nm"/></div>
-        <div><label>Phone *</label><input type="tel" id="hra-ph"/></div>
-      </div>
-      <div><label>Company *</label><input type="text" id="hra-co"/></div>
-      <div class="lf-row-2">
-        <div><label>Industry *</label><select id="hra-ind">${HR_INDUSTRIES.map(x=>`<option>${x}</option>`).join('')}</select></div>
-        <div><label>City *</label><input type="text" id="hra-city"/></div>
-      </div>
-      <button class="btn-lf-submit" onclick="saveHRAccountEdit()">Save changes</button>
-      <button onclick="renderHRAccountView()" style="width:100%;padding:10px;margin-top:8px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Cancel</button>
-    </div>
-  `;
-  // Set via .value, not interpolated into the HTML above -- avoids a
-  // stray quote/ampersand in a name or company ever breaking the markup.
-  document.getElementById('hra-nm').value=u.name||'';
-  document.getElementById('hra-ph').value=u.phone||'';
-  document.getElementById('hra-co').value=u.company||'';
-  document.getElementById('hra-city').value=u.city||'';
-  const sel=document.getElementById('hra-ind');
-  for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===u.industry){sel.selectedIndex=i;break;}}
 }
 
 function saveHRAccountEdit(){
@@ -1397,7 +1428,8 @@ function saveHRAccountEdit(){
       localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
       updateHRHeader();
       toast('Account updated.');
-      renderHRAccountView();
+      hrAcctEditing=false;
+      renderHRDetailsPanel();
     })
     .catch(()=>toast('Could not save changes — try again.'));
 }
