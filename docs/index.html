@@ -801,13 +801,17 @@
 </div>
 
 <!-- ADD PROFILE MODAL -->
-<div class="ov" id="a-ov">
-  <div class="modal">
-    <div class="m-hdr">
-      <div class="m-name" id="a-modal-title" style="padding-top:6px">Add a youth profile</div>
-      <button class="m-cl" onclick="closeA()">✕</button>
-    </div>
-    <div class="m-bdy">
+<!-- ━━ ADD/EDIT PROFILE PAGE ━━ (was a modal; same "real page, not a
+     popup" pattern as the profile/report/HR-account pages, with a
+     cleaner, more spacious form-service look -- Meghna's reference was
+     a Zoho Form: full page, generous white space, one boxed card. -->
+<div class="hidden" id="view-addprofile">
+  <div class="about-wrap-new">
+    <div class="acct-crumb"><a onclick="showPage('home')">Home</a> / <span class="cur">Add your profile</span></div>
+    <h1 class="page-h1" id="a-modal-title">Add your <em>profile</em></h1>
+  </div>
+  <div class="legal-wrap" style="max-width:680px">
+    <div class="af-card">
       <div class="af">
         <div class="af-section-lbl">About you</div>
         <div class="lf-row-2">
@@ -912,14 +916,14 @@
   </div>
 </div>
 
-<!-- YOUTH DASHBOARD MODAL -->
-<div class="ov" id="yt-ov">
-  <div class="modal" style="max-width:480px">
-    <div class="m-hdr">
-      <div class="m-name" style="padding-top:6px" id="yt-dash-title">My Profile</div>
-      <button class="m-cl" onclick="closeYtDash()">✕</button>
-    </div>
-    <div class="m-bdy" id="yt-dash-body"></div>
+<!-- ━━ YOUTH ACCOUNT PAGE ━━ (was a modal; same sidebar+panel design
+     format as the HR account page) -->
+<div class="hidden" id="view-ytaccount">
+  <div class="about-wrap-new">
+    <h1 class="page-h1">My <em>profile</em></h1>
+  </div>
+  <div class="legal-wrap" style="max-width:960px">
+    <div id="yt-acct-body"></div>
   </div>
 </div>
 

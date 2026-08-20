@@ -197,6 +197,7 @@ function showPage(p){
   if(p==='report')resetGrievanceForm();
   if(p==='admin')loadAdminDashboard();
   if(p==='hraccount')renderHRAccountView();
+  if(p==='ytaccount')renderYtAccountView();
   window.scrollTo(0,0);
 }
 
@@ -379,7 +380,7 @@ function showProfile(id){
     document.getElementById('pf-similar-grid').innerHTML=similar.map(s=>{
       const sName=full?s.name:maskName(s.name);
       const sLoc=full?s.location:'Mumbai';
-      return `<button onclick="showProfile(${s.id})"><div class="sm-name">${sName}</div><div class="sm-sector">${s.sector}</div><div class="sm-loc">📍 ${sLoc}</div></button>`;
+      return `<button onclick="showProfile(${s.id})"><div class="sm-name">${sName}</div><div class="sm-sector">${s.sector}</div><div class="sm-loc">${sLoc}</div></button>`;
     }).join('');
   } else {
     simWrap.style.display='none';
@@ -578,7 +579,7 @@ function uploadPendingResume(uid,email){
 
 function openAdd(){
   editingEmail=null;pendingResume=null;atTrack='';hasWorkExp=false;hasVolunteered=false;
-  const t=document.getElementById('a-modal-title');if(t)t.textContent='Add your profile';
+  const t=document.getElementById('a-modal-title');if(t)t.innerHTML='Add your <em>profile</em>';
   ['a-nm','a-sk','a-ab','a-ph','a-lg','a-loc','a-inst','a-em-yt','a-pw','a-pw2','a-exco','a-exdu','a-exro','a-volorg','a-voldur','a-volrole'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
   const emf=document.getElementById('a-em-yt');if(emf){emf.readOnly=false;emf.style.opacity='';}
   document.getElementById('a-ed').value='';
@@ -593,7 +594,7 @@ function openAdd(){
   while(sc.options.length)sc.remove(0);
   sc.add(new Option('Select sector...',''));
   [...new Set(Object.values(TRACK_SECTORS).flat())].sort().forEach(o=>sc.add(new Option(o,o)));
-  document.getElementById('a-ov').classList.add('open');
+  showPage('addprofile');
 }
 
 function saveProfile(){
@@ -713,7 +714,7 @@ function saveProfile(){
   emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc+' ('+trk+')',candidate_location:loc,candidate_note:noteMsg,viewed_at:t,message_type:'New Profile — '+nm,to_email:N_EMAIL3}).catch(()=>{});
 }
 
-function closeA(){document.getElementById('a-ov').classList.remove('open');}
+function closeA(){showPage('home');}
 
 // ── header hamburger menu ────────────────────────────────
 function toggleHdrMenu(){document.getElementById('hdr-menu').classList.toggle('open');}
@@ -884,7 +885,7 @@ function renderAdminRows(rows){
   if(!rows.length){rowsEl.innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--fi-ink-2)">No grievances yet.</td></tr>';return;}
   rowsEl.innerHTML=rows.map(r=>{
     const when=r.createdAt?new Date(r.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}):'';
-    const urgencyBadge=r.urgency==='Very urgent'?'🔴':r.urgency==='Somewhat urgent'?'🟠':'⚪';
+    const urgencyColor=r.urgency==='Very urgent'?'#c54036':r.urgency==='Somewhat urgent'?'#c9820a':'var(--ink-3)';
     const shot=r.screenshotURL?`<a href="${r.screenshotURL}" target="_blank" style="color:var(--teal);font-weight:700">View</a>`:'—';
     const statusOpts=['open','acknowledged','resolved'].map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('');
     return `<tr>
@@ -892,7 +893,7 @@ function renderAdminRows(rows){
       <td>${when}</td>
       <td>${r.name||''}<br><span style="font-size:11px;color:var(--ink-3)">${r.email||''}</span></td>
       <td>${r.category||''}</td>
-      <td>${urgencyBadge} ${r.urgency||''}</td>
+      <td style="color:${urgencyColor};font-weight:600">${r.urgency||''}</td>
       <td>${r.relatedTo||'—'}</td>
       <td style="max-width:260px;white-space:pre-wrap">${(r.description||'').slice(0,220)}${(r.description||'').length>220?'…':''}</td>
       <td>${shot}</td>
@@ -1036,19 +1037,15 @@ function youthLogin(){
     });
 }
 
+let ytIsNewSignup=false;
+
+// Real page now (was a modal) -- same "not a popup" pattern as the HR
+// account page, and same sidebar+panel design format.
 function openYtDash(acct,isNew){
   currentYtAcct=acct;
+  ytIsNewSignup=!!isNew;
   updateYouthHeader();
-  document.getElementById('yt-ov').classList.add('open');
-  document.getElementById('yt-dash-title').textContent='My Profile';
-  document.getElementById('yt-dash-body').innerHTML='<div style="padding:50px 0;text-align:center;color:var(--ink-4);font-size:13px">Loading…</div>';
-  db.collection('hr_enquiries').where('candidateName','==',acct.name).get()
-    .then(snap=>renderYtDash(acct,isNew,snap.size))
-    .catch(()=>{
-      const enqs=JSON.parse(localStorage.getItem('typc_enquiries')||'[]');
-      const n=enqs.filter(e=>e.candidateName===acct.name).length;
-      renderYtDash(acct,isNew,n);
-    });
+  showPage('ytaccount');
 }
 
 // Same idea as updateHRHeader(): once a youth is signed in this
@@ -1068,51 +1065,81 @@ function updateYouthHeader(){
   addBtn.onclick=currentYtAcct?(()=>openYtDash(currentYtAcct)):(()=>openAdd());
 }
 
-function renderYtDash(acct,isNew,n){
+function renderYtAccountView(){
+  const body=document.getElementById('yt-acct-body');
+  const acct=currentYtAcct;
+  if(!acct){
+    body.innerHTML=`<p style="font-size:14.5px;color:var(--fi-ink-2);max-width:60ch">Sign in with your youth account to see this.</p>
+      <button onclick="openSignIn()" style="margin-top:10px;padding:11px 22px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer">Sign in</button>`;
+    return;
+  }
+  const isNew=ytIsNewSignup;
+  ytIsNewSignup=false;
+  body.innerHTML=`
+    <button class="pf-back" onclick="showPage('home')" style="margin-bottom:20px">&larr; Back to home</button>
+    <div class="acct-shell">
+      <aside class="acct-side">
+        <div class="acct-avatar">${ini(acct.name)}</div>
+        <div class="acct-name">${acct.name}</div>
+        <div class="acct-sub">${acct.sector} &middot; ${acct.location}, Mumbai</div>
+        <div class="acct-email">${acct.email}</div>
+        <button class="acct-signout" onclick="youthSignOut()">Sign out</button>
+      </aside>
+      <div class="acct-main">
+        <div class="acct-panel" id="yt-acct-panel"><div style="padding:20px 0;text-align:center;color:var(--ink-4);font-size:13px">Loading…</div></div>
+      </div>
+    </div>
+  `;
+  db.collection('hr_enquiries').where('candidateName','==',acct.name).get()
+    .then(snap=>renderYtProfilePanel(acct,isNew,snap.size))
+    .catch(()=>{
+      const enqs=JSON.parse(localStorage.getItem('typc_enquiries')||'[]');
+      const n=enqs.filter(e=>e.candidateName===acct.name).length;
+      renderYtProfilePanel(acct,isNew,n);
+    });
+}
+
+function renderYtProfilePanel(acct,isNew,n){
   const hasResume=acct.resumeKey&&RESUMES[acct.resumeKey];
-  document.getElementById('yt-dash-body').innerHTML=`
-    ${isNew?`<div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:14px 16px;margin-bottom:16px;text-align:center">
-      <div style="font-size:18px;margin-bottom:4px">🎉</div>
+  const panel=document.getElementById('yt-acct-panel');
+  if(!panel)return; // page navigated away before the enquiry count loaded
+  panel.innerHTML=`
+    ${isNew?`<div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:14px 16px;margin-bottom:20px;text-align:center">
       <div style="font-weight:700;color:#2e7d32;font-size:14px">Your profile is live!</div>
       <div style="font-size:12px;color:#388e3c;margin-top:4px">Your resume has been automatically created. You can view it below.</div>
     </div>`:''}
-    <div style="display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px">
-      <div style="width:50px;height:50px;border-radius:50%;background:var(--teal);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px">${ini(acct.name)}</div>
-      <div>
-        <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink)">${acct.name}</div>
-        <div style="font-size:12px;color:var(--ink-3);margin-top:2px">${acct.sector} &nbsp;·&nbsp; 📍 ${acct.location}, Mumbai</div>
-        <div style="font-size:11px;color:var(--ink-4);margin-top:2px">${acct.email}</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+    <h2>My profile</h2>
+    <div class="acct-panel-sub">Your account information.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px">
       <div style="background:${n>0?'#e8f5e9':'var(--bg)'};border:1.5px solid ${n>0?'#a5d6a7':'var(--line-d)'};border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:26px;font-weight:800;color:${n>0?'#2e7d32':'var(--ink-4)'}">${n}</div>
         <div style="font-size:10.5px;color:${n>0?'#388e3c':'var(--ink-4)'};font-weight:600;margin-top:3px">HR${n===1?' has':' have'} expressed interest</div>
       </div>
       <div style="background:var(--teal-soft);border:1.5px solid var(--teal-mid);border-radius:10px;padding:14px;text-align:center">
-        <div style="font-size:26px">✅</div>
-        <div style="font-size:10.5px;color:var(--teal-dark);font-weight:600;margin-top:3px">Profile is live</div>
+        <div style="font-size:26px;font-weight:800;color:var(--teal)">Live</div>
+        <div style="font-size:10.5px;color:var(--teal-dark);font-weight:600;margin-top:3px">Profile status</div>
       </div>
     </div>
-    ${hasResume?`<button onclick="closeYtDash();openR(${acct.id||'curId'})" style="display:block;width:100%;padding:11px;background:var(--teal);color:white;text-align:center;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:10px;box-sizing:border-box;cursor:pointer;border:none;font-family:var(--sans)">📄 View my resume</button>`:''}
-    ${acct.resumeFileURL?`<a href="${acct.resumeFileURL}" target="_blank" style="display:block;width:100%;padding:11px;background:transparent;color:var(--teal);text-align:center;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:10px;box-sizing:border-box;cursor:pointer;border:1.5px solid var(--teal);font-family:var(--sans);text-decoration:none">📎 View my uploaded resume</a>`:''}
-    <div style="font-size:11.5px;color:var(--ink-3);line-height:1.6;margin-bottom:14px;padding:10px 12px;background:var(--bg);border-radius:8px">
+    ${hasResume?`<button onclick="openR(${acct.id||'curId'})" style="display:block;width:100%;padding:11px;background:var(--teal);color:white;text-align:center;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:10px;box-sizing:border-box;cursor:pointer;border:none;font-family:var(--sans)">View my resume</button>`:''}
+    ${acct.resumeFileURL?`<a href="${acct.resumeFileURL}" target="_blank" style="display:block;width:100%;padding:11px;background:transparent;color:var(--teal);text-align:center;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:10px;box-sizing:border-box;cursor:pointer;border:1.5px solid var(--teal);font-family:var(--sans);text-decoration:none">View my uploaded resume</a>`:''}
+    <div style="font-size:11.5px;color:var(--ink-3);line-height:1.6;margin-bottom:18px;padding:10px 12px;background:var(--bg);border-radius:8px">
       Pehli Kamai will personally call you when an HR is interested.<br>Questions? <strong>+91 9326691744</strong> or <strong>+91 99204 45917</strong>
     </div>
-    <button class="btn-lf-submit" onclick="closeYtDash();youthEditProfile()" style="margin-bottom:10px">Edit my profile</button>
-    <button onclick="closeYtDash()" style="width:100%;padding:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer;margin-bottom:10px">Close</button>
-    <button onclick="youthSignOut()" style="width:100%;padding:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer;margin-bottom:10px">Sign out</button>
-    <button onclick="confirmDeleteYouthAccount()" style="width:100%;padding:10px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:13px;color:#c62828;cursor:pointer">Delete my account</button>
+    <button class="btn-lf-submit" style="width:auto;padding:0 26px" onclick="youthEditProfile()">Edit my profile</button>
+    <hr class="acct-hr">
+    <div class="acct-danger" style="border:1px solid rgba(197,64,54,.3);border-radius:10px;padding:18px 20px">
+      <h2 style="font-size:15px;margin-bottom:4px">Delete account</h2>
+      <p style="font-size:12.5px;color:var(--ink-4);margin:0 0 14px">This permanently removes your account and profile, and cannot be undone.</p>
+      <button onclick="confirmDeleteYouthAccount()" style="padding:9px 20px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:12.5px;color:#c62828;cursor:pointer">Delete my account</button>
+    </div>
   `;
 }
-
-function closeYtDash(){document.getElementById('yt-ov').classList.remove('open');}
 
 function youthSignOut(){
   if(!confirm('Sign out?'))return;
   currentYtAcct=null;
   auth.signOut().catch(()=>{});
-  closeYtDash();
+  showPage('home');
   updateYouthHeader();
   toast('Signed out.');
 }
@@ -1143,7 +1170,7 @@ function deleteYouthAccount(){
     .then(()=>{
       if(acct){const idx=DATA.findIndex(d=>d.id===acct.id);if(idx>-1)DATA.splice(idx,1);}
       currentYtAcct=null;
-      closeYtDash();
+      showPage('home');
       updateYouthHeader();
       render();
       toast('Your account and profile have been deleted.');
@@ -1169,7 +1196,7 @@ function youthEditProfile(){
   const email=acct.email;
   openAdd();
   editingEmail=email;
-  const t=document.getElementById('a-modal-title');if(t)t.textContent='Update my profile';
+  const t=document.getElementById('a-modal-title');if(t)t.innerHTML='Update my <em>profile</em>';
   setTimeout(()=>{
     document.getElementById('a-nm').value=acct.name||'';
     document.getElementById('a-ed').value=acct.edu||'';
@@ -1183,7 +1210,7 @@ function youthEditProfile(){
     document.getElementById('a-ab').value=acct.about||'';
     if(acct.expCompany){hasWorkExp=true;toggleExp(true);document.getElementById('a-exco').value=acct.expCompany||'';document.getElementById('a-exdu').value=acct.expDuration||'';document.getElementById('a-exro').value=acct.expRole||'';}
     if(acct.volOrg){hasVolunteered=true;toggleVol(true);document.getElementById('a-volorg').value=acct.volOrg||'';document.getElementById('a-voldur').value=acct.volDuration||'';document.getElementById('a-volrole').value=acct.volRole||'';}
-    if(acct.resumeFileURL){document.getElementById('rdrop-lbl').innerHTML=`✅ You already have a resume uploaded (<a href="${acct.resumeFileURL}" target="_blank" onclick="event.stopPropagation()">view it</a>) — drop a new file here to replace it`;document.getElementById('resume-drop').style.borderColor='var(--teal)';}
+    if(acct.resumeFileURL){document.getElementById('rdrop-lbl').innerHTML=`You already have a resume uploaded (<a href="${acct.resumeFileURL}" target="_blank" onclick="event.stopPropagation()">view it</a>) — drop a new file here to replace it`;document.getElementById('resume-drop').style.borderColor='var(--teal)';}
     // Already agreed once at signup -- reflect that instead of showing
     // freshly-unticked boxes for someone who's just editing their profile.
     document.getElementById('a-age').checked=true;
@@ -1337,7 +1364,7 @@ function renderHRDetailsPanel(){
     <h2>My details</h2>
     <div class="acct-panel-sub">Your account information.</div>
     <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:12px 14px;margin-bottom:6px;font-size:12.5px;color:#2e7d32">
-      ✅ Full candidate details unlocked — no review step during the pilot.
+      Full candidate details unlocked — no review step during the pilot.
     </div>
 
     <div class="acct-section">

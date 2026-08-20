@@ -244,7 +244,11 @@ body{font-family:var(--sans);background:var(--ink);color:var(--text);min-height:
 .hi-thanks-title{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;}
 .hi-thanks-sub{font-size:13px;color:var(--ink-3);line-height:1.6;}
 
-/* ADD MODAL FORM */
+/* ADD PROFILE PAGE FORM (was a modal -- .af-card gives the fields a
+   boxed, contained look now that they sit on the open page background
+   instead of a modal's own white surface) */
+.af-card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:36px 40px;box-shadow:0 4px 20px rgba(13,36,38,.06);margin-bottom:60px;}
+@media(max-width:700px){.af-card{padding:24px 20px;}}
 .af{display:flex;flex-direction:column;gap:11px;}
 .af label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--fi-ink-2);display:block;margin-bottom:3px;}
 .af input,.af select,.af textarea{width:100%;border:1.5px solid var(--line-d);border-radius:7px;padding:8px 12px;font-family:var(--sans);font-size:13px;color:var(--ink);outline:none;background:var(--bg);transition:border .14s;}
