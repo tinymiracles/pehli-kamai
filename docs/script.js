@@ -1038,6 +1038,7 @@ function youthLogin(){
 
 function openYtDash(acct,isNew){
   currentYtAcct=acct;
+  updateYouthHeader();
   document.getElementById('yt-ov').classList.add('open');
   document.getElementById('yt-dash-title').textContent='My Profile';
   document.getElementById('yt-dash-body').innerHTML='<div style="padding:50px 0;text-align:center;color:var(--ink-4);font-size:13px">Loading…</div>';
@@ -1048,6 +1049,23 @@ function openYtDash(acct,isNew){
       const n=enqs.filter(e=>e.candidateName===acct.name).length;
       renderYtDash(acct,isNew,n);
     });
+}
+
+// Same idea as updateHRHeader(): once a youth is signed in this
+// session, "Upload your profile" becomes "My account" and reopens
+// their dashboard instead of the blank signup form. HR takes priority
+// if somehow both are set in the same session -- updateHRHeader()
+// already hides this button entirely for a signed-in HR account.
+function updateYouthHeader(){
+  const addBtn=document.getElementById('btn-add-profile');
+  if(!addBtn||hrUser)return;
+  if(currentYtAcct){
+    addBtn.textContent='My account';
+    addBtn.onclick=()=>openYtDash(currentYtAcct);
+  } else {
+    addBtn.textContent='Upload your profile';
+    addBtn.onclick=()=>openAdd();
+  }
 }
 
 function renderYtDash(acct,isNew,n){
@@ -1083,11 +1101,21 @@ function renderYtDash(acct,isNew,n){
     </div>
     <button class="btn-lf-submit" onclick="closeYtDash();youthEditProfile()" style="margin-bottom:10px">Edit my profile</button>
     <button onclick="closeYtDash()" style="width:100%;padding:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer;margin-bottom:10px">Close</button>
+    <button onclick="youthSignOut()" style="width:100%;padding:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer;margin-bottom:10px">Sign out</button>
     <button onclick="confirmDeleteYouthAccount()" style="width:100%;padding:10px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:13px;color:#c62828;cursor:pointer">Delete my account</button>
   `;
 }
 
 function closeYtDash(){document.getElementById('yt-ov').classList.remove('open');}
+
+function youthSignOut(){
+  if(!confirm('Sign out?'))return;
+  currentYtAcct=null;
+  auth.signOut().catch(()=>{});
+  closeYtDash();
+  updateYouthHeader();
+  toast('Signed out.');
+}
 
 function confirmDeleteYouthAccount(){
   if(!confirm('Delete your account and remove your profile from Pehli Kamai? This cannot be undone.'))return;
@@ -1116,6 +1144,7 @@ function deleteYouthAccount(){
       if(acct){const idx=DATA.findIndex(d=>d.id===acct.id);if(idx>-1)DATA.splice(idx,1);}
       currentYtAcct=null;
       closeYtDash();
+      updateYouthHeader();
       render();
       toast('Your account and profile have been deleted.');
     })
@@ -1410,6 +1439,11 @@ function updateHRHeader(){
     if(hrUser){hrMenuLink.textContent='My account';hrMenuLink.onclick=()=>{openHRAccount();toggleHdrMenu();};}
     else{hrMenuLink.textContent='HR Login';hrMenuLink.onclick=()=>{openSignIn();toggleHdrMenu();};}
   }
+  // Runs before the dead-button early-return below so it isn't skipped:
+  // whichever of HR/youth just signed in or out, this keeps
+  // "Upload your profile" in sync (updateYouthHeader() itself is a
+  // no-op whenever hrUser is set, so HR always wins the button).
+  updateYouthHeader();
   if(!btn)return;
   if(hrUser){
     btn.className='hr-logged';
