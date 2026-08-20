@@ -54,6 +54,15 @@
   select.status{font-family:inherit;font-size:12.5px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink);}
   .loading,.empty{text-align:center;padding:50px 20px;color:var(--ink-3);font-size:14px;}
 
+  /* — section nav — */
+  .admin-tabs{display:flex;gap:4px;border-bottom:1.5px solid var(--line);margin-bottom:26px;overflow-x:auto;}
+  .admin-tab{background:none;border:none;padding:12px 18px;font-family:inherit;font-size:13.5px;font-weight:600;
+    color:var(--ink-3);cursor:pointer;white-space:nowrap;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:color .15s,border-color .15s;}
+  .admin-tab:hover{color:var(--ink);}
+  .admin-tab.active{color:var(--teal);border-bottom-color:var(--teal);}
+  .admin-section{display:none;}
+  .admin-section.active{display:block;}
+
   /* — pipeline status — */
   .pipe-hdr{display:flex;align-items:center;justify-content:space-between;margin:36px 0 14px;}
   .pipe-hdr h2{font-size:17px;margin:0;}
@@ -86,39 +95,55 @@
     <h1>Grievance <em>dashboard</em></h1>
     <button class="signout" id="signout">Sign out</button>
   </div>
-  <div class="stats" id="stats"></div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th>Ref</th><th>Received</th><th>Name</th><th>Category</th><th>Urgency</th>
-        <th>About</th><th>What happened</th><th>Screenshot</th><th>Status</th>
-      </tr></thead>
-      <tbody id="rows"><tr><td colspan="9" class="loading">Loading…</td></tr></tbody>
-    </table>
+
+  <nav class="admin-tabs">
+    <button class="admin-tab active" data-tab="grievances">Grievances</button>
+    <button class="admin-tab" data-tab="analytics">Analytics</button>
+    <button class="admin-tab" data-tab="errors">Errors</button>
+    <button class="admin-tab" data-tab="pipeline">Sheet &amp; Drive</button>
+  </nav>
+
+  <div class="admin-section active" id="section-grievances">
+    <div class="stats" id="stats"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Ref</th><th>Received</th><th>Name</th><th>Category</th><th>Urgency</th>
+          <th>About</th><th>What happened</th><th>Screenshot</th><th>Status</th>
+        </tr></thead>
+        <tbody id="rows"><tr><td colspan="9" class="loading">Loading…</td></tr></tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="pipe-hdr">
-    <h2>Analytics <span style="font-weight:400;color:var(--ink-3);font-size:12px">(last 30 days)</span></h2>
-    <button class="signout" id="analytics-refresh">Refresh</button>
-  </div>
-  <div id="analytics-body" class="pipe-body">
-    <div class="loading">Loading…</div>
-  </div>
-
-  <div class="pipe-hdr">
-    <h2>Errors <span style="font-weight:400;color:var(--ink-3);font-size:12px">(last 7 days)</span></h2>
-    <button class="signout" id="errors-refresh">Refresh</button>
-  </div>
-  <div id="errors-body" class="pipe-body">
-    <div class="loading">Loading…</div>
+  <div class="admin-section" id="section-analytics">
+    <div class="pipe-hdr">
+      <h2>Analytics <span style="font-weight:400;color:var(--ink-3);font-size:12px">(last 30 days)</span></h2>
+      <button class="signout" id="analytics-refresh">Refresh</button>
+    </div>
+    <div id="analytics-body" class="pipe-body">
+      <div class="loading">Loading…</div>
+    </div>
   </div>
 
-  <div class="pipe-hdr">
-    <h2>Sheet &amp; Drive pipeline</h2>
-    <button class="signout" id="pipe-refresh">Refresh</button>
+  <div class="admin-section" id="section-errors">
+    <div class="pipe-hdr">
+      <h2>Errors <span style="font-weight:400;color:var(--ink-3);font-size:12px">(last 7 days)</span></h2>
+      <button class="signout" id="errors-refresh">Refresh</button>
+    </div>
+    <div id="errors-body" class="pipe-body">
+      <div class="loading">Loading…</div>
+    </div>
   </div>
-  <div id="pipe-body" class="pipe-body">
-    <div class="loading">Checking…</div>
+
+  <div class="admin-section" id="section-pipeline">
+    <div class="pipe-hdr">
+      <h2>Sheet &amp; Drive pipeline</h2>
+      <button class="signout" id="pipe-refresh">Refresh</button>
+    </div>
+    <div id="pipe-body" class="pipe-body">
+      <div class="loading">Checking…</div>
+    </div>
   </div>
 </div>
 
@@ -234,7 +259,7 @@ async function loadErrors(){
   try{
     const snap = await db.collection('client_errors').where('ts','>=',cutoff).get();
     const events = snap.docs.map(d=>d.data()).sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
-    if(!events.length){ el.innerHTML = '<div class="pipe-card" style="grid-column:1/-1">✅ No errors reported in the last 7 days.</div>'; return; }
+    if(!events.length){ el.innerHTML = '<div class="pipe-card" style="grid-column:1/-1">No errors reported in the last 7 days.</div>'; return; }
     const rows = events.slice(0,15).map(e=>`<div class="pipe-card" style="grid-column:1/-1;text-align:left">
       <div class="pc-sub"><strong>${esc(e.message||'Unknown error')}</strong></div>
       <div class="pc-sub" style="margin-top:4px">${esc(e.page||'')} ${e.ts?'· '+esc(new Date(e.ts).toLocaleString('en-IN')):''}</div>
@@ -385,12 +410,24 @@ async function setStatus(id, status){
   }
 }
 
+function setAdminTab(tab){
+  document.querySelectorAll('.admin-tab').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+  document.querySelectorAll('.admin-section').forEach(sec=>{
+    sec.classList.toggle('active', sec.id === 'section-' + tab);
+  });
+}
+
 document.getElementById('pw-submit').addEventListener('click', login);
 document.getElementById('pw').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
 document.getElementById('signout').addEventListener('click', signOut);
 document.getElementById('pipe-refresh').addEventListener('click', loadPipelineStatus);
 document.getElementById('analytics-refresh').addEventListener('click', loadAnalytics);
 document.getElementById('errors-refresh').addEventListener('click', loadErrors);
+document.querySelectorAll('.admin-tab').forEach(btn=>{
+  btn.addEventListener('click', () => setAdminTab(btn.dataset.tab));
+});
 
 auth.onAuthStateChanged(user => {
   if(user && ADMIN_EMAILS.includes((user.email||'').toLowerCase())){
