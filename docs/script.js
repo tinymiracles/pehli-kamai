@@ -263,7 +263,7 @@ function render(){
   const card=d=>`<div class="pcard" onclick="showProfile(${d.id})">
     <div class="pc-name">${full?d.name:maskName(d.name)}</div>
     <div class="pc-sector">${d.sector}</div>
-    <div class="pc-area">📍 ${full?d.location+(d.location.toLowerCase().includes('mumbai')?'':', Mumbai'):'Mumbai'}</div>
+    <div class="pc-area">${full?d.location+(d.location.toLowerCase().includes('mumbai')?'':', Mumbai'):'Mumbai'}</div>
     <div class="pc-avail"><span class="avail-dot"></span>Available</div>
   </div>`;
   // The scrolling-marquee rows below duplicate each row's cards
@@ -312,7 +312,7 @@ function openR(id){
       body.innerHTML=`<div class="rv-wrap" oncontextmenu="return false" style="background:white;overflow:hidden">${redact}<div style="padding:8px">${imgs}</div><div class="rv-badge">view only</div></div>`;
     }
   }else{
-    body.innerHTML=`<div class="rv-none"><div style="font-size:28px;opacity:0.2">📄</div><p>Resume coming soon.</p></div>`;
+    body.innerHTML=`<div class="rv-none"><p>Resume coming soon.</p></div>`;
   }
   document.getElementById('r-ov').classList.add('open');
 }
@@ -343,7 +343,7 @@ function updateShortlistUI(){
   if(countEl)countEl.textContent=shortlist.length;
   if(!btn||curId==null)return;
   const on=isShortlisted(curId);
-  btn.textContent=on?'✓ Shortlisted':'Add to shortlist';
+  btn.textContent=on?'Shortlisted':'Add to shortlist';
   btn.classList.toggle('on',on);
 }
 
@@ -362,7 +362,7 @@ function showProfile(id){
 
   document.getElementById('pf-av').textContent=shownName.charAt(0).toUpperCase();
   document.getElementById('pf-name').textContent=shownName;
-  document.getElementById('pf-location').textContent='📍 '+shownLoc;
+  document.getElementById('pf-location').textContent=shownLoc;
   document.getElementById('pf-tags').innerHTML=
     `<span>${d.edu}</span><span>${d.sector}</span>`+
     (d.resume?'<span>Resume ready</span>':'<span>Resume not uploaded yet</span>');
@@ -459,7 +459,7 @@ function submitInterest(){
     candidate_location: d.location+', Mumbai',
     candidate_note: 'HR: '+name+' | Phone: '+phone+' | Email: '+email+' | Company: '+(company||'Not specified'),
     viewed_at: t,
-    message_type: '⭐ HR INTERESTED — '+name+' ('+phone+')'
+    message_type: 'HR INTERESTED — '+name+' ('+phone+')'
   };
 
   // Send to Meghna, Rishikesh, and the shared Pehli Kamai inbox
@@ -535,7 +535,7 @@ function handleFile(input){
   const okTypes=['application/pdf','image/jpeg','image/jpg','image/png'];
   if(!okTypes.includes(file.type)){toast('Please upload a PDF or image (JPG/PNG).');return;}
   pendingResume=file;
-  document.getElementById('rdrop-lbl').innerHTML=`✅ <strong>${file.name}</strong> ready — <span style="text-decoration:underline;cursor:pointer" onclick="event.stopPropagation();clearPendingResume()">remove</span>`;
+  document.getElementById('rdrop-lbl').innerHTML=`<strong>${file.name}</strong> ready — <span style="text-decoration:underline;cursor:pointer" onclick="event.stopPropagation();clearPendingResume()">remove</span>`;
   document.getElementById('resume-drop').style.borderColor='var(--teal)';
 }
 
@@ -801,7 +801,7 @@ function handleGrievanceFile(input){
   if(file.size>5*1024*1024){toast('Screenshot too large — max 5MB');return;}
   if(!['image/jpeg','image/jpg','image/png'].includes(file.type)){toast('Please attach a JPG or PNG screenshot.');return;}
   pendingGrievanceFile=file;
-  document.getElementById('gr-drop-lbl').innerHTML=`✅ <strong>${file.name}</strong> attached`;
+  document.getElementById('gr-drop-lbl').innerHTML=`<strong>${file.name}</strong> attached`;
   document.getElementById('gr-drop').style.borderColor='var(--teal)';
 }
 function handleGrievanceDrop(e){
@@ -831,8 +831,7 @@ function submitGrievance(){
   const finish=(screenshotURL,screenshotNote)=>{
     db.collection('grievances').add({refNo,name,email,category,relatedTo:related,urgency,description:desc,screenshotURL:screenshotURL||'',status:'open',createdAt:new Date().toISOString()}).catch(()=>{});
     logSignup('grievance',{refNo,name,email,category,relatedTo:related,urgency,description:desc});
-    const urgencyFlag=urgency==='Very urgent'?'🔴':urgency==='Somewhat urgent'?'🟠':'🚩';
-    const grData={candidate_name:name,candidate_sectors:category,candidate_location:(related?'Re: '+related+' — ':'')+(screenshotNote||'No screenshot attached'),candidate_note:desc,viewed_at:t,message_type:urgencyFlag+' Grievance '+refNo+' ('+urgency+') — '+category};
+    const grData={candidate_name:name,candidate_sectors:category,candidate_location:(related?'Re: '+related+' — ':'')+(screenshotNote||'No screenshot attached'),candidate_note:desc,viewed_at:t,message_type:'Grievance '+refNo+' ('+urgency+') — '+category};
     emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL}).catch(()=>{});
     emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL2}).catch(()=>{});
     emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL3}).catch(()=>{});
@@ -1279,7 +1278,6 @@ function openHRAccount(){
 }
 
 let hrAcctTab='details';
-let hrAcctEditing=false;
 
 function renderHRAccountView(){
   const body=document.getElementById('hr-acct-body');
@@ -1290,9 +1288,7 @@ function renderHRAccountView(){
     return;
   }
   hrAcctTab='details';
-  hrAcctEditing=false;
   body.innerHTML=`
-    <button class="pf-back" onclick="showPage('home')" style="margin-bottom:20px">&larr; Back to home</button>
     <div class="acct-shell">
       <aside class="acct-side">
         <div class="acct-avatar">${ini(u.name)}</div>
@@ -1300,8 +1296,8 @@ function renderHRAccountView(){
         <div class="acct-sub">${u.company}</div>
         <div class="acct-email">${u.email}</div>
         <nav class="acct-nav">
-          <button class="acct-nav-item active" id="acct-nav-details" onclick="setHRAcctTab('details')">My details</button>
-          <button class="acct-nav-item" id="acct-nav-enquiries" onclick="setHRAcctTab('enquiries')">My enquiries</button>
+          <button class="acct-nav-item active" id="acct-nav-details" onclick="setHRAcctTab('details')"><span class="aci">👤</span>My details</button>
+          <button class="acct-nav-item" id="acct-nav-enquiries" onclick="setHRAcctTab('enquiries')"><span class="aci">💬</span>My enquiries</button>
         </nav>
         <button class="acct-signout" onclick="if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}">Sign out</button>
       </aside>
@@ -1327,51 +1323,66 @@ function setHRAcctTab(tab){
   document.getElementById('acct-panel-enquiries').classList.toggle('hidden',tab!=='enquiries');
 }
 
+// Always-editable, sectioned like a real settings page (a description
+// next to each group of fields, one Save per section) rather than the
+// old plain label:value list + a single "Edit" toggle for the whole
+// panel -- both sections' Save buttons call the same
+// saveHRAccountEdit(), which reads every field regardless of which
+// button was clicked, so this is really one form visually split in two,
+// not two independent saves.
 function renderHRDetailsPanel(){
   const u=hrUser;
   const panel=document.getElementById('acct-panel-details');
-  if(hrAcctEditing){
-    panel.innerHTML=`
-      <h2>Edit my details</h2>
-      <div class="acct-panel-sub">Update your information below.</div>
-      <div class="lf">
-        <div class="acct-field-row">
-          <div><label>Your name *</label><input type="text" id="hra-nm"/></div>
-          <div><label>Phone *</label><input type="tel" id="hra-ph"/></div>
-        </div>
-        <div style="margin-top:14px"><label>Company *</label><input type="text" id="hra-co"/></div>
-        <div class="acct-field-row" style="margin-top:14px">
-          <div><label>Industry *</label><select id="hra-ind">${HR_INDUSTRIES.map(x=>`<option>${x}</option>`).join('')}</select></div>
-          <div><label>City *</label><input type="text" id="hra-city"/></div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:20px">
-          <button class="btn-lf-submit" style="width:auto;padding:0 26px" onclick="saveHRAccountEdit()">Save changes</button>
-          <button onclick="hrAcctEditing=false;renderHRDetailsPanel()" style="padding:0 20px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Cancel</button>
-        </div>
-      </div>
-    `;
-    // Set via .value, not interpolated into the HTML above -- avoids a
-    // stray quote/ampersand in a name or company ever breaking the markup.
-    document.getElementById('hra-nm').value=u.name||'';
-    document.getElementById('hra-ph').value=u.phone||'';
-    document.getElementById('hra-co').value=u.company||'';
-    document.getElementById('hra-city').value=u.city||'';
-    const sel=document.getElementById('hra-ind');
-    for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===u.industry){sel.selectedIndex=i;break;}}
-    return;
-  }
   panel.innerHTML=`
     <h2>My details</h2>
     <div class="acct-panel-sub">Your account information.</div>
-    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:12px 14px;margin-bottom:22px;font-size:12.5px;color:#2e7d32">
+    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:12px 14px;margin-bottom:6px;font-size:12.5px;color:#2e7d32">
       ✅ Full candidate details unlocked — no review step during the pilot.
     </div>
-    <div class="pf-info-list" style="margin-top:0;padding-top:0;border-top:none">
-      <div><span>Phone</span><span>${u.phone||'—'}</span></div>
-      <div><span>Industry</span><span>${u.industry||'—'}</span></div>
-      <div><span>City</span><span>${u.city||'—'}</span></div>
+
+    <div class="acct-section">
+      <div class="acct-section-head">
+        <h3>Personal information</h3>
+        <p>Your name and phone number — shared with a candidate's team only once an introduction is actually made.</p>
+      </div>
+      <div class="acct-section-fields">
+        <div class="lf" style="width:100%">
+          <div class="acct-field-row">
+            <div><label>Your name *</label><input type="text" id="hra-nm"></div>
+            <div><label>Phone *</label><input type="tel" id="hra-ph"></div>
+          </div>
+        </div>
+        <button class="btn-lf-submit" style="width:auto;padding:0 22px" onclick="saveHRAccountEdit()">Save</button>
+      </div>
     </div>
-    <button class="btn-lf-submit" style="margin-top:22px;width:auto;padding:0 26px" onclick="hrAcctEditing=true;renderHRDetailsPanel()">Edit my details</button>
+
+    <div class="acct-section">
+      <div class="acct-section-head">
+        <h3>Company information</h3>
+        <p>Where you work and what industry you're in — shown to our team, never on a public page.</p>
+      </div>
+      <div class="acct-section-fields">
+        <div class="lf" style="width:100%">
+          <div><label>Company *</label><input type="text" id="hra-co"></div>
+          <div class="acct-field-row" style="margin-top:14px">
+            <div><label>Industry *</label><select id="hra-ind">${HR_INDUSTRIES.map(x=>`<option>${x}</option>`).join('')}</select></div>
+            <div><label>City *</label><input type="text" id="hra-city"></div>
+          </div>
+        </div>
+        <button class="btn-lf-submit" style="width:auto;padding:0 22px" onclick="saveHRAccountEdit()">Save</button>
+      </div>
+    </div>
+
+    <div class="acct-section">
+      <div class="acct-section-head">
+        <h3>Email address</h3>
+        <p>Used to sign in. Contact us if you ever need this changed.</p>
+      </div>
+      <div class="acct-section-fields">
+        <div class="lf" style="width:100%"><label>Email</label><input type="email" value="${u.email||''}" disabled style="opacity:.6;cursor:not-allowed"></div>
+      </div>
+    </div>
+
     <hr class="acct-hr">
     <div class="acct-danger" style="border:1px solid rgba(197,64,54,.3);border-radius:10px;padding:18px 20px">
       <h2 style="font-size:15px;margin-bottom:4px">Delete account</h2>
@@ -1379,6 +1390,14 @@ function renderHRDetailsPanel(){
       <button onclick="confirmDeleteHRAccount()" style="padding:9px 20px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:12.5px;color:#c62828;cursor:pointer">Delete my account</button>
     </div>
   `;
+  // Set via .value, not interpolated into the HTML above -- avoids a
+  // stray quote/ampersand in a name or company ever breaking the markup.
+  document.getElementById('hra-nm').value=u.name||'';
+  document.getElementById('hra-ph').value=u.phone||'';
+  document.getElementById('hra-co').value=u.company||'';
+  document.getElementById('hra-city').value=u.city||'';
+  const sel=document.getElementById('hra-ind');
+  for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===u.industry){sel.selectedIndex=i;break;}}
 }
 
 // Which candidates this specific HR account has actually sent an
@@ -1428,7 +1447,6 @@ function saveHRAccountEdit(){
       localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
       updateHRHeader();
       toast('Account updated.');
-      hrAcctEditing=false;
       renderHRDetailsPanel();
     })
     .catch(()=>toast('Could not save changes — try again.'));
@@ -1512,7 +1530,6 @@ const ADMIN_EMAILS=['meghna@tinymiracles.com','rishikesh@tinymiracles.com','pehl
 function canAccessAdmin(){return !!(hrUser&&hrUser.email&&ADMIN_EMAILS.includes(hrUser.email.toLowerCase()));}
 
 function updateHRHeader(){
-  const btn=document.getElementById('btn-hr-login');
   const addBtn=document.getElementById('btn-add-profile');
   const adminLink=document.getElementById('hdr-admin-link');
   if(adminLink)adminLink.style.display=canAccessAdmin()?'':'none';
@@ -1532,23 +1549,16 @@ function updateHRHeader(){
     hrMenuLink.textContent=typeof t==='function'?t(key):(hrUser?'My account':'HR Login');
     hrMenuLink.onclick=hrUser?(()=>{openHRAccount();toggleHdrMenu();}):(()=>{openSignIn();toggleHdrMenu();});
   }
-  // Runs before the dead-button early-return below so it isn't skipped:
-  // whichever of HR/youth just signed in or out, this keeps
-  // "Upload your profile" in sync (updateYouthHeader() itself is a
-  // no-op whenever hrUser is set, so HR always wins the button).
+  // "Upload your profile" makes no sense once you're signed in as HR --
+  // this used to live inside a branch gated on a header button
+  // (#btn-hr-login) that doesn't exist in the current header markup, so
+  // it silently never ran and the button just sat there regardless of
+  // being signed in as HR. Setting it directly here instead.
+  if(addBtn)addBtn.style.display=hrUser?'none':'';
+  // Runs after that so, once HR signs out, updateYouthHeader() gets a
+  // chance to put the button back to whichever state youth login left
+  // it in (it's a no-op whenever hrUser is set).
   updateYouthHeader();
-  if(!btn)return;
-  if(hrUser){
-    btn.className='hr-logged';
-    btn.textContent=hrUser.name+' · '+hrUser.company+' ▾';
-    btn.onclick=()=>openHRAccount();
-    if(addBtn){addBtn.style.display='none';}
-  } else {
-    btn.className='btn-ghost';
-    btn.textContent='Login';
-    btn.onclick=openSignIn;
-    if(addBtn){addBtn.style.display='';}
-  }
 }
 
 // ── ASSESSMENT ─────────────────────────────────────
