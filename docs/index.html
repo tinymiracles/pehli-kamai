@@ -56,8 +56,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
     <div class="hdr-menu" id="hdr-menu">
-      <span class="hdr-menu-label"><span id="h-tot">53</span> candidates</span>
-      <button class="hdr-menu-item" onclick="openSignIn();toggleHdrMenu()">HR Login</button>
+      <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()">HR Login</button>
       <button class="hdr-menu-item" onclick="openCF();toggleHdrMenu()">Contact Us</button>
       <button class="hdr-menu-item" onclick="showPage('report');toggleHdrMenu()">Report a concern</button>
       <a class="hdr-menu-item" id="hdr-admin-link" style="display:none" href="/admin/" target="_blank" rel="noopener" onclick="toggleHdrMenu()">Grievance dashboard ↗</a>
@@ -403,7 +402,7 @@
 
     <h2>What we collect</h2>
     <p><strong>If you create a Youth profile:</strong> your name, phone number, email, password, education level, school/college, year of passing, sector and skills, languages, neighbourhood, a short note on the work you're looking for, and — only if you choose to share them — past work experience or volunteering, and a resume file you upload. If you don't upload one, we generate one for you from these details. If you complete our background/work-readiness questionnaire, that assessment and any rating shown on your profile is also collected and shown to employers — if you think a rating is wrong, you can ask us to review it (see Grievance Redressal).</p>
-    <p><strong>If you create an HR account:</strong> your name, phone, email, password, company name, industry, and city. New HR accounts are reviewed by our team before full access to candidate details unlocks.</p>
+    <p><strong>If you create an HR account:</strong> your name, phone, email, password, company name, industry, and city.</p>
     <p><strong>If you use "Let's talk" or "I'm interested":</strong> your name, organisation (if any), email, phone (where asked), and your message.</p>
     <p><strong>If you use "Connect via WhatsApp":</strong> this opens your own WhatsApp with a pre-filled message to our team containing the candidate's name, sector, and location — sent through WhatsApp (operated by Meta), not through Pehli Kamai's own systems.</p>
 
@@ -420,10 +419,10 @@
     <p>Your account and profile data lives in Google Firebase (Firestore database), hosted in Google Cloud's <strong>asia-south1 (Mumbai)</strong> region — it stays in India. An uploaded resume file is stored in Firebase Storage. We also keep an internal backup system, operated only by our own team and not shared outside the organisation, as a safeguard against data loss. Email notifications about new signups and enquiries are sent via a transactional email provider. The website itself is hosted on Vercel and GitHub Pages, whose infrastructure may operate outside India. None of these providers may use your data for their own purposes — they process it only on our behalf.</p>
 
     <h2>Who sees what</h2>
-    <p>Anyone visiting the site sees a masked version of each candidate profile — first name and last initial, city-level location only. Full names, exact neighbourhoods, and contact details are only visible to HR accounts our team has reviewed and approved. Your phone number and email are never shown on your public profile at all; they're only shared with a specific employer once an introduction is made.</p>
+    <p>Anyone visiting the site sees a masked version of each candidate profile — first name and last initial, city-level location only. Full names, exact neighbourhoods, and contact details are visible to any signed-in HR account during our current pilot phase. Your phone number and email are never shown on your public profile at all; they're only shared with a specific employer once an introduction is made.</p>
 
     <h2>How long we keep it, and what happens after you're placed</h2>
-    <p>As long as your account is active. If you'd like it deleted, contact us (see Grievance Redressal) and we'll remove your account and associated data within <strong>30 days</strong>. If you haven't logged in for 24 months, we may reach out before removing an inactive profile, giving at least 48 hours' notice first. Once you're placed in a job, your profile comes down from public browsing; we may keep a record of the placement and any employer feedback for our own reporting, and you can ask to see what's recorded about you.</p>
+    <p>As long as your account is active. You can delete your account and profile yourself, any time, from your account page — this removes it immediately, not after a waiting period. If you'd rather have our team do it for you, contact us (see Grievance Redressal). If you haven't logged in for 24 months, we may reach out before removing an inactive profile, giving at least 48 hours' notice first. Once you're placed in a job, your profile comes down from public browsing; we may keep a record of the placement and any employer feedback for our own reporting, and you can ask to see what's recorded about you.</p>
 
     <h2>Applicants under 18</h2>
     <p><strong>You must be 18 or older to create a Youth profile on Pehli Kamai.</strong> The sign-up form requires you to confirm this before your profile is created.</p>
@@ -1052,7 +1051,7 @@
                 I agree to the <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal);font-weight:700">Privacy Policy</a> and <a onclick="event.preventDefault();showPage('terms')" href="#" style="color:var(--teal);font-weight:700">Terms &amp; Conditions</a>. *
               </label>
               <button class="btn-lf-submit" onclick="hrSignUp()">Create account</button>
-              <div class="lf-note">New accounts are reviewed by our team before full candidate details unlock.</div>
+              <div class="lf-note">Full candidate details unlock right away — no review step during the pilot.</div>
             </div>
           </div>
         </div>

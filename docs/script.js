@@ -1191,7 +1191,7 @@ function hrSignIn(){
           hrUser={name:data.name,phone:data.phone,email:data.email,company:data.company,industry:data.industry,city:data.city,approved:data.approved===true};
           localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
           closeHRLogin();updateHRHeader();render();
-          toast(hrUser.approved?'Welcome back, '+hrUser.name+'!':'Signed in — your account is still pending review, so candidate details stay masked for now.');
+          toast('Welcome back, '+hrUser.name+'!');
         } else {toast('Account not found. Please create one.');switchLoginTab('up');}
       });
     })
@@ -1219,24 +1219,18 @@ function hrSignUp(){
   auth.createUserWithEmailAndPassword(em,pw)
     .then(cred=>{
       cred.user.sendEmailVerification();
-      // New HR accounts start unapproved -- candidate names/neighbourhoods
-      // stay masked for them until someone at Tiny Miracles verifies the
-      // account and flips this to true (in the Firebase console, e.g.
-      // after a quick call). See canSeeFull().
-      const hrData={uid:cred.user.uid,name:nm,phone:ph,email:em,company:co,industry:ind,city:city,role:'hr',approved:false,createdAt:new Date().toISOString()};
+      // Pilot phase: every HR account sees full candidate details right
+      // away, no manual review step -- that's a deliberate call, not an
+      // oversight (see canSeeFull()). Kept the `approved` field itself
+      // rather than deleting the whole mechanism, since it's the same
+      // flag the post-pilot paid-access gate is expected to reuse later.
+      const hrData={uid:cred.user.uid,name:nm,phone:ph,email:em,company:co,industry:ind,city:city,role:'hr',approved:true,createdAt:new Date().toISOString()};
       db.collection('hr_accounts').doc(cred.user.uid).set(hrData).catch(()=>{});
       logSignup('hr',{name:nm,phone:ph,email:em,org:co,industry:ind,city:city});
-      hrUser={name:nm,phone:ph,email:em,company:co,industry:ind,city:city,approved:false};
+      hrUser={name:nm,phone:ph,email:em,company:co,industry:ind,city:city,approved:true};
       localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
-      closeHRLogin();updateHRHeader();
-      toast('Account created! Verify your email, then our team will review before full access unlocks.');
-      // Tell the team a new HR account needs review -- otherwise "pending"
-      // just sits there with nobody knowing to look.
-      const t=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
-      const reviewData={candidate_name:nm,candidate_sectors:ind,candidate_location:city,candidate_note:'New HR account awaiting approval — '+co+' ('+ph+', '+em+'). Approve in Firebase console: hr_accounts/'+cred.user.uid,viewed_at:t,message_type:'🔒 HR account needs approval — '+nm};
-      emailjs.send(EJ_SID,EJ_TID,{...reviewData,to_email:N_EMAIL}).catch(()=>{});
-      emailjs.send(EJ_SID,EJ_TID,{...reviewData,to_email:N_EMAIL2}).catch(()=>{});
-      emailjs.send(EJ_SID,EJ_TID,{...reviewData,to_email:N_EMAIL3}).catch(()=>{});
+      closeHRLogin();updateHRHeader();render();
+      toast('Account created! Verify your email to finish setting up.');
     })
     .catch(e=>{
       if(e.code==='auth/email-already-in-use'){toast('Email already registered — please sign in.');switchLoginTab('in');}
@@ -1265,8 +1259,8 @@ function renderHRAccountView(){
         <div style="font-size:11px;color:var(--ink-4);margin-top:2px">${u.email}</div>
       </div>
     </div>
-    <div style="background:${u.approved?'#e8f5e9':'#fff8e1'};border:1.5px solid ${u.approved?'#a5d6a7':'#ffe082'};border-radius:10px;padding:12px 14px;margin-bottom:4px;font-size:12.5px;color:${u.approved?'#2e7d32':'#8a6d00'}">
-      ${u.approved?'✅ Approved — you can see full candidate details.':'⏳ Pending review — candidate names stay masked until our team approves your account.'}
+    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:12px 14px;margin-bottom:4px;font-size:12.5px;color:#2e7d32">
+      ✅ Full candidate details unlocked — no review step during the pilot.
     </div>
     <div class="pf-info-list">
       <div><span>Phone</span><span>${u.phone||'—'}</span></div>
@@ -1363,11 +1357,15 @@ function promptReauthAndDeleteHR_(){
     .catch(()=>toast('Incorrect password — account not deleted.'));
 }
 
-// True only for a logged-in HR account that's been manually approved.
-// Everything that reveals a candidate's real name or exact neighbourhood
-// checks this instead of just "is someone logged in as HR" -- signing up
-// alone should never unlock that.
-function canSeeFull(){return !!(hrUser&&hrUser.approved===true);}
+// Pilot phase: any signed-in HR account sees full candidate details --
+// no manual review, per Meghna's call. Deliberately not checking
+// hrUser.approved here so this also covers accounts created before this
+// change (still sitting at approved:false in Firestore from the old
+// review step) without needing to hand-fix each one. The `approved`
+// field itself is left alone in the data model -- it's the flag the
+// post-pilot paid-access gate is expected to reuse, it just isn't
+// enforced right now.
+function canSeeFull(){return !!hrUser;}
 
 // "Priya Sharma" -> "Priya S." -- enough to recognise a profile you've
 // already seen, not enough to identify someone from the public grid.
@@ -1404,10 +1402,18 @@ function updateHRHeader(){
   const addBtn=document.getElementById('btn-add-profile');
   const adminLink=document.getElementById('hdr-admin-link');
   if(adminLink)adminLink.style.display=canAccessAdmin()?'':'none';
+  // Hamburger-menu link: "HR Login" when signed out, "My account" once
+  // signed in as HR -- was hardcoded to always say "HR Login" and always
+  // open the sign-in flow, even for someone already logged in.
+  const hrMenuLink=document.getElementById('hdr-hr-link');
+  if(hrMenuLink){
+    if(hrUser){hrMenuLink.textContent='My account';hrMenuLink.onclick=()=>{openHRAccount();toggleHdrMenu();};}
+    else{hrMenuLink.textContent='HR Login';hrMenuLink.onclick=()=>{openSignIn();toggleHdrMenu();};}
+  }
   if(!btn)return;
   if(hrUser){
     btn.className='hr-logged';
-    btn.textContent=hrUser.name+' · '+hrUser.company+(hrUser.approved?'':' (pending review)')+' ▾';
+    btn.textContent=hrUser.name+' · '+hrUser.company+' ▾';
     btn.onclick=()=>openHRAccount();
     if(addBtn){addBtn.style.display='none';}
   } else {
@@ -1553,7 +1559,6 @@ function updateAboutStats(){
   const abTot=document.getElementById('ab-tot'); if(abTot) abTot.textContent=DATA.length;
   const abRes=document.getElementById('ab-res'); if(abRes) abRes.textContent=DATA.filter(d=>d.resume).length;
   const abSec=document.getElementById('ab-sec'); if(abSec) abSec.textContent=new Set(DATA.map(d=>d.sector)).size+'+';
-  const hTot=document.getElementById('h-tot'); if(hTot) hTot.textContent=DATA.length;
   const sTot=document.getElementById('s-tot'); if(sTot) sTot.textContent=DATA.length;
   const dTot=document.getElementById('d-tot'); if(dTot) dTot.textContent=DATA.length;
   const hiwTot=document.getElementById('hiw-tot'); if(hiwTot) hiwTot.textContent=DATA.length;
