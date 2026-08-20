@@ -1059,13 +1059,13 @@ function openYtDash(acct,isNew){
 function updateYouthHeader(){
   const addBtn=document.getElementById('btn-add-profile');
   if(!addBtn||hrUser)return;
-  if(currentYtAcct){
-    addBtn.textContent='My account';
-    addBtn.onclick=()=>openYtDash(currentYtAcct);
-  } else {
-    addBtn.textContent='Upload your profile';
-    addBtn.onclick=()=>openAdd();
-  }
+  // Same data-i18n-stays-set reasoning as the HR version above -- keeps
+  // this correct across a later language switch, not just at the
+  // moment of login.
+  const key=currentYtAcct?'menu_myaccount':'btn_upload';
+  addBtn.setAttribute('data-i18n',key);
+  addBtn.textContent=typeof t==='function'?t(key):(currentYtAcct?'My account':'Upload your profile');
+  addBtn.onclick=currentYtAcct?(()=>openYtDash(currentYtAcct)):(()=>openAdd());
 }
 
 function renderYtDash(acct,isNew,n){
@@ -1436,8 +1436,16 @@ function updateHRHeader(){
   // open the sign-in flow, even for someone already logged in.
   const hrMenuLink=document.getElementById('hdr-hr-link');
   if(hrMenuLink){
-    if(hrUser){hrMenuLink.textContent='My account';hrMenuLink.onclick=()=>{openHRAccount();toggleHdrMenu();};}
-    else{hrMenuLink.textContent='HR Login';hrMenuLink.onclick=()=>{openSignIn();toggleHdrMenu();};}
+    // Keeping data-i18n set (to whichever key currently applies) rather
+    // than just writing textContent once means a later language switch
+    // -- via applyTranslations() re-scanning every [data-i18n] element --
+    // still updates this button correctly instead of leaving it stuck
+    // in whatever language it was in at login. t() falls back to the
+    // English string if i18n.js hasn't loaded for some reason.
+    const key=hrUser?'menu_myaccount':'menu_hrlogin';
+    hrMenuLink.setAttribute('data-i18n',key);
+    hrMenuLink.textContent=typeof t==='function'?t(key):(hrUser?'My account':'HR Login');
+    hrMenuLink.onclick=hrUser?(()=>{openHRAccount();toggleHdrMenu();}):(()=>{openSignIn();toggleHdrMenu();});
   }
   // Runs before the dead-button early-return below so it isn't skipped:
   // whichever of HR/youth just signed in or out, this keeps

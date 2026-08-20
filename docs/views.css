@@ -153,6 +153,11 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
   font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--fi-ink);cursor:pointer;
   text-decoration:none;display:block;}
 .hdr-menu-item:hover{background:var(--bg-light-tint);}
+.lang-switch{display:flex;gap:4px;padding:4px 4px 8px;margin-bottom:4px;border-bottom:1px solid var(--line);}
+.lang-switch button{flex:1;background:none;border:1.5px solid var(--line-d);border-radius:7px;padding:6px 4px;
+  font-family:var(--sans);font-size:12.5px;font-weight:700;color:var(--fi-ink-2);cursor:pointer;transition:all .15s;}
+.lang-switch button:hover{border-color:var(--teal);color:var(--fi-ink);}
+.lang-switch button.active{background:var(--teal);border-color:var(--teal);color:#fff;}
 @media(max-width:700px){
   .hdr{padding:0 16px;height:auto;flex-wrap:wrap;gap:12px;padding-top:10px;padding-bottom:10px;}
   .hdr-right{width:100%;margin-left:0;}

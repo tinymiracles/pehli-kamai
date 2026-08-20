@@ -44,21 +44,26 @@
     </div>
   </button>
   <nav class="tabs">
-    <button class="tab" id="nl-home" onclick="showPage('home')" aria-current="true">Hire a fresher</button>
-    <button class="tab" onclick="goHomeThenScroll(scrollToHowItWorks)">How it works</button>
-    <button class="tab" onclick="goHomeThenScroll(scrollToCandidates)">Candidates</button>
-    <button class="tab" onclick="openAdd()">Kaam chahiye</button>
-    <button class="tab" id="nl-about" onclick="showPage('about')">Our story</button>
+    <button class="tab" id="nl-home" onclick="showPage('home')" aria-current="true" data-i18n="nav_hire">Hire a fresher</button>
+    <button class="tab" onclick="goHomeThenScroll(scrollToHowItWorks)" data-i18n="nav_how">How it works</button>
+    <button class="tab" onclick="goHomeThenScroll(scrollToCandidates)" data-i18n="nav_candidates">Candidates</button>
+    <button class="tab" onclick="openAdd()" data-i18n="nav_kaam">Kaam chahiye</button>
+    <button class="tab" id="nl-about" onclick="showPage('about')" data-i18n="nav_story">Our story</button>
   </nav>
   <div class="hdr-right">
-    <button class="btn-add" id="btn-add-profile" onclick="openAdd()">Upload your profile</button>
+    <button class="btn-add" id="btn-add-profile" onclick="openAdd()" data-i18n="btn_upload">Upload your profile</button>
     <button class="hdr-menu-btn" id="hdr-menu-btn" onclick="toggleHdrMenu()" aria-label="More">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
     <div class="hdr-menu" id="hdr-menu">
-      <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()">HR Login</button>
-      <button class="hdr-menu-item" onclick="openCF();toggleHdrMenu()">Contact Us</button>
-      <button class="hdr-menu-item" onclick="showPage('report');toggleHdrMenu()">Report a concern</button>
+      <div class="lang-switch">
+        <button data-lang="en" onclick="setLang('en')">EN</button>
+        <button data-lang="hi" onclick="setLang('hi')">हिं</button>
+        <button data-lang="mr" onclick="setLang('mr')">मर</button>
+      </div>
+      <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()" data-i18n="menu_hrlogin">HR Login</button>
+      <button class="hdr-menu-item" onclick="openCF();toggleHdrMenu()" data-i18n="menu_contact">Contact Us</button>
+      <button class="hdr-menu-item" onclick="showPage('report');toggleHdrMenu()" data-i18n="menu_report">Report a concern</button>
       <a class="hdr-menu-item" id="hdr-admin-link" style="display:none" href="/admin/" target="_blank" rel="noopener" onclick="toggleHdrMenu()">Grievance dashboard ↗</a>
     </div>
   </div>
@@ -89,15 +94,15 @@
       <div class="fi-hero-copy">
         <h1 class="fi-h1">Pehli <em>Kamai</em></h1>
         <div class="fi-hero-rule"></div>
-        <p class="fi-lede">Need college students for a short-term survey? A hospitality hire that's a quick learner? A data entry operator who'll actually show up? Our candidates span accounting, data entry, hospitality, sales, creative media, and more.</p>
+        <p class="fi-lede" data-i18n="hero_lede">Need college students for a short-term survey? A hospitality hire that's a quick learner? A data entry operator who'll actually show up? Our candidates span accounting, data entry, hospitality, sales, creative media, and more.</p>
         <div class="fi-hero-stats">
-          <div class="fi-hero-stat"><div class="fi-hero-stat-n" id="hero-tot">53</div><div class="fi-hero-stat-l">Candidates</div></div>
-          <div class="fi-hero-stat"><div class="fi-hero-stat-n">10+</div><div class="fi-hero-stat-l">Sectors</div></div>
-          <div class="fi-hero-stat"><div class="fi-hero-stat-n">Mumbai</div><div class="fi-hero-stat-l">Based</div></div>
+          <div class="fi-hero-stat"><div class="fi-hero-stat-n" id="hero-tot">53</div><div class="fi-hero-stat-l" data-i18n="hero_stat_candidates">Candidates</div></div>
+          <div class="fi-hero-stat"><div class="fi-hero-stat-n">10+</div><div class="fi-hero-stat-l" data-i18n="hero_stat_sectors">Sectors</div></div>
+          <div class="fi-hero-stat"><div class="fi-hero-stat-n">Mumbai</div><div class="fi-hero-stat-l" data-i18n="hero_stat_based">Based</div></div>
         </div>
         <div class="fi-cta-row">
-          <button class="fi-cta" onclick="scrollToCandidates()">Browse profiles &rarr;</button>
-          <button class="fi-cta ghost" onclick="openAdd()">Naukri dhoond rahe ho? &rarr;</button>
+          <button class="fi-cta" onclick="scrollToCandidates()" data-i18n="hero_cta_browse">Browse profiles &rarr;</button>
+          <button class="fi-cta ghost" onclick="openAdd()" data-i18n="hero_cta_kaam">Naukri dhoond rahe ho? &rarr;</button>
         </div>
       </div>
     </div>
@@ -110,8 +115,8 @@
        visual instead of just a pull-quote. -->
   <section class="fi-hiw">
     <div class="hiw-in">
-      <span class="fi-hiw-label">How it works</span>
-      <p class="hiw-p">"How it works is simple. You browse profiles. You pick who you like. We make the introduction — and we stay in the loop until the candidate's first day, and after."</p>
+      <span class="fi-hiw-label" data-i18n="nav_how">How it works</span>
+      <p class="hiw-p" data-i18n="hiw_quote">"How it works is simple. You browse profiles. You pick who you like. We make the introduction — and we stay in the loop until the candidate's first day, and after."</p>
     </div>
 
     <div class="fi-steps reveal-stagger">
@@ -125,8 +130,8 @@
           <img src="assets/img/hiw-browse.jpg" alt="Resumes coming together on a laptop" loading="lazy">
         </div>
         <div class="fi-step-num">1</div>
-        <h3>You browse</h3>
-        <p>Search <span id="hiw-tot">53</span> fresher profiles by sector, location, or availability.</p>
+        <h3 data-i18n="step1_title">You browse</h3>
+        <p data-i18n="step1_desc">Search <span id="hiw-tot">53</span> fresher profiles by sector, location, or availability.</p>
       </div>
 
       <!-- Step 2: You pick — the profile-card + magnifying-glass recreation -->
@@ -150,8 +155,8 @@
           </g></svg>
         </div>
         <div class="fi-step-num lime">2</div>
-        <h3>You pick</h3>
-        <p>Pick the candidates you want to talk to. Download the list.</p>
+        <h3 data-i18n="step2_title">You pick</h3>
+        <p data-i18n="step2_desc">Pick the candidates you want to talk to. Download the list.</p>
       </div>
 
       <!-- Step 3: We introduce -->
@@ -160,8 +165,8 @@
           <img src="assets/img/hiw-introduce.jpg" alt="HR and candidate talking over a laptop" loading="lazy">
         </div>
         <div class="fi-step-num">3</div>
-        <h3>We introduce</h3>
-        <p>We make the introduction and set up the first conversation.</p>
+        <h3 data-i18n="step3_title">We introduce</h3>
+        <p data-i18n="step3_desc">We make the introduction and set up the first conversation.</p>
       </div>
 
       <!-- Step 4: Pehli kamai — pinned notes on a corkboard -->
@@ -191,7 +196,7 @@
         </div>
         <div class="fi-step-num lime">4</div>
         <h3>Pehli kamai</h3>
-        <p>We stay in the loop until the candidate's first day, and after.</p>
+        <p data-i18n="step4_desc">We stay in the loop until the candidate's first day, and after.</p>
       </div>
     </div>
   </section>
@@ -200,16 +205,16 @@
     <div class="ss-in">
       <div class="ss-cand">
         <span class="ss-cand-n" id="rc">43</span>
-        <span class="ss-cand-l">Candidates</span>
+        <span class="ss-cand-l" data-i18n="hero_stat_candidates">Candidates</span>
       </div>
       <div class="chips" id="chips"></div>
       <div class="ss-right">
         <div class="s-wrap">
           <svg class="s-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input class="s-in" id="q" placeholder="Search…" oninput="render()"/>
+          <input class="s-in" id="q" placeholder="Search…" oninput="render()" data-i18n-placeholder="search_placeholder"/>
         </div>
         <select class="loc-sel" id="loc-sel" onchange="render()">
-          <option value="all">All locations</option>
+          <option value="all" data-i18n="search_all_locations">All locations</option>
         </select>
       </div>
     </div>
@@ -225,9 +230,9 @@
        colors rather than the watermarked source frames. -->
   <section class="fi-sectors">
     <div class="fi-sectors-in">
-      <span class="fi-hiw-label">Jobs across every sector</span>
-      <h2>Every kind of job, one portal</h2>
-      <p>Shop floors, back-offices, clinics, workshops — whatever the job looks like, we've got candidates ready for it: accounting, data entry, hospitality, sales, technical trades, and more.</p>
+      <span class="fi-hiw-label" data-i18n="sectors_label">Jobs across every sector</span>
+      <h2 data-i18n="sectors_h2">Every kind of job, one portal</h2>
+      <p data-i18n="sectors_p">Shop floors, back-offices, clinics, workshops — whatever the job looks like, we've got candidates ready for it: accounting, data entry, hospitality, sales, technical trades, and more.</p>
     </div>
     <div class="fi-sectors-grid">
       <!-- Retail & sales -->
@@ -236,9 +241,9 @@
           <img src="assets/img/sector-retail.jpg" alt="Retail and sales" loading="lazy">
         </div>
         <div class="fi-sector-body">
-          <span class="fi-sector-tag">Retail &amp; Sales</span>
-          <h3>On the shop floor</h3>
-          <p>Counter sales, stock handling, and customer-facing roles across retail chains.</p>
+          <span class="fi-sector-tag" data-i18n="sector1_tag">Retail &amp; Sales</span>
+          <h3 data-i18n="sector1_h3">On the shop floor</h3>
+          <p data-i18n="sector1_p">Counter sales, stock handling, and customer-facing roles across retail chains.</p>
         </div>
       </div>
 
@@ -248,9 +253,9 @@
           <img src="assets/img/sector-office.png" alt="Office and data entry" loading="lazy">
         </div>
         <div class="fi-sector-body">
-          <span class="fi-sector-tag">Office &amp; Data Entry</span>
-          <h3>Back-office &amp; ops</h3>
-          <p>Data entry, accounting support, and administrative roles in real offices.</p>
+          <span class="fi-sector-tag" data-i18n="sector2_tag">Office &amp; Data Entry</span>
+          <h3 data-i18n="sector2_h3">Back-office &amp; ops</h3>
+          <p data-i18n="sector2_p">Data entry, accounting support, and administrative roles in real offices.</p>
         </div>
       </div>
 
@@ -262,9 +267,9 @@
           <img src="assets/img/sector-healthcare.webp" alt="Healthcare support" loading="lazy">
         </div>
         <div class="fi-sector-body">
-          <span class="fi-sector-tag">Technical &amp; Healthcare-support</span>
-          <h3>Skilled &amp; service roles</h3>
-          <p>Technical trades and healthcare-support attendants, trained and ready.</p>
+          <span class="fi-sector-tag" data-i18n="sector3_tag">Technical &amp; Healthcare-support</span>
+          <h3 data-i18n="sector3_h3">Skilled &amp; service roles</h3>
+          <p data-i18n="sector3_p">Technical trades and healthcare-support attendants, trained and ready.</p>
         </div>
       </div>
     </div>
@@ -1164,27 +1169,27 @@
     <div class="ft-brand-block">
       <div class="ft-brand-name">Pehli <span>Kamai</span></div>
       <div class="ft-brand-sub">by tiny miracles</div>
-      <div class="ft-brand-desc">Connecting Mumbai's youth with their first real opportunity. We work with young people from underserved communities to find dignified employment.</div>
+      <div class="ft-brand-desc" data-i18n="footer_desc">Connecting Mumbai's youth with their first real opportunity. We work with young people from underserved communities to find dignified employment.</div>
     </div>
     <div class="ft-col">
-      <div class="ft-col-label">Explore</div>
-      <a onclick="showPage('home')">Home</a>
-      <a onclick="goHomeThenScroll(scrollToCandidates)">Candidates</a>
-      <a onclick="showPage('about')">About Us</a>
-      <a onclick="openSignIn()">HR Login</a>
+      <div class="ft-col-label" data-i18n="footer_explore">Explore</div>
+      <a onclick="showPage('home')" data-i18n="footer_home">Home</a>
+      <a onclick="goHomeThenScroll(scrollToCandidates)" data-i18n="nav_candidates">Candidates</a>
+      <a onclick="showPage('about')" data-i18n="footer_about">About Us</a>
+      <a onclick="openSignIn()" data-i18n="menu_hrlogin">HR Login</a>
     </div>
     <div class="ft-col">
-      <div class="ft-col-label">Contact</div>
+      <div class="ft-col-label" data-i18n="footer_contact_label">Contact</div>
       <a href="mailto:pehlikamaitm@gmail.com" class="ft-contact-email">pehlikamaitm@gmail.com</a>
       <a href="https://tinymiracles.com" target="_blank">tinymiracles.com</a>
-      <a onclick="openCF()">Send us a message →</a>
+      <a onclick="openCF()" data-i18n="footer_send_message">Send us a message →</a>
     </div>
     <div class="ft-col">
-      <div class="ft-col-label">Legal</div>
-      <a onclick="showPage('privacy')">Privacy Policy</a>
-      <a onclick="showPage('terms')">Terms &amp; Conditions</a>
-      <a onclick="showPage('grievance')">Grievance Redressal</a>
-      <a onclick="showPage('report')" class="ft-report-link">Report a concern →</a>
+      <div class="ft-col-label" data-i18n="footer_legal_label">Legal</div>
+      <a onclick="showPage('privacy')" data-i18n="footer_privacy">Privacy Policy</a>
+      <a onclick="showPage('terms')" data-i18n="footer_terms">Terms &amp; Conditions</a>
+      <a onclick="showPage('grievance')" data-i18n="footer_grievance">Grievance Redressal</a>
+      <a onclick="showPage('report')" class="ft-report-link" data-i18n="footer_report">Report a concern →</a>
     </div>
   </div>
   <div class="ft-bottom">
@@ -1204,6 +1209,7 @@
 
 <script src="shutter.js"></script>
 <script src="resumes-data.js"></script>
+<script src="i18n.js?v=1"></script>
 <script src="script.js?v=5"></script>
 <!-- pk-hiw3d needs three.js's GLTFLoader, which only ships as an ES module —
      this is the one component on the site loaded this way. Everything else
