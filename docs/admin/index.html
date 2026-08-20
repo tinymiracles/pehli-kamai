@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <title>Grievance dashboard — Pehli Kamai</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -97,6 +98,22 @@
   </div>
 
   <div class="pipe-hdr">
+    <h2>Analytics <span style="font-weight:400;color:var(--ink-3);font-size:12px">(last 30 days)</span></h2>
+    <button class="signout" id="analytics-refresh">Refresh</button>
+  </div>
+  <div id="analytics-body" class="pipe-body">
+    <div class="loading">Loading…</div>
+  </div>
+
+  <div class="pipe-hdr">
+    <h2>Errors <span style="font-weight:400;color:var(--ink-3);font-size:12px">(last 7 days)</span></h2>
+    <button class="signout" id="errors-refresh">Refresh</button>
+  </div>
+  <div id="errors-body" class="pipe-body">
+    <div class="loading">Loading…</div>
+  </div>
+
+  <div class="pipe-hdr">
     <h2>Sheet &amp; Drive pipeline</h2>
     <button class="signout" id="pipe-refresh">Refresh</button>
   </div>
@@ -155,7 +172,77 @@ function showDash(){
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('dash').classList.remove('hidden');
   loadGrievances();
+  loadAnalytics();
+  loadErrors();
   loadPipelineStatus();
+}
+
+// analytics_events is written by every visitor (open create, per the
+// Firestore rule), so this read deliberately stays a plain where() on
+// one field only -- no orderBy() paired with it -- to avoid needing a
+// composite index the first time this runs. Sorting the (small, 30-day)
+// result set client-side instead.
+async function loadAnalytics(){
+  const el = document.getElementById('analytics-body');
+  el.innerHTML = '<div class="loading">Loading…</div>';
+  const cutoff = new Date(Date.now() - 30*24*60*60*1000).toISOString();
+  try{
+    const snap = await db.collection('analytics_events').where('ts','>=',cutoff).get();
+    const events = snap.docs.map(d=>d.data());
+    const counts = {};
+    events.forEach(e=>{ counts[e.type]=(counts[e.type]||0)+1; });
+    const pageCounts = {};
+    events.filter(e=>e.type==='pageview').forEach(e=>{
+      const p=(e.meta&&e.meta.page)||'unknown';
+      pageCounts[p]=(pageCounts[p]||0)+1;
+    });
+    const sectorCounts = {};
+    events.filter(e=>e.type==='signup_youth'||e.type==='interest').forEach(e=>{
+      const s=e.meta&&e.meta.sector;
+      if(s) sectorCounts[s]=(sectorCounts[s]||0)+1;
+    });
+    const topPages = Object.entries(pageCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const topSectors = Object.entries(sectorCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+
+    const stat=(label,n)=>`<div class="pipe-card"><div class="pc-label">${esc(label)}</div><div class="pc-n">${n}</div></div>`;
+    const cards = [
+      stat('Pageviews',counts.pageview||0),
+      stat('Youth signups',counts.signup_youth||0),
+      stat('HR signups',counts.signup_hr||0),
+      stat("I'm Interested clicks",counts.interest||0),
+      stat('Contact messages',counts.contact||0),
+      stat('Grievances filed',counts.grievance||0),
+    ];
+    if(topPages.length){
+      cards.push(`<div class="pipe-card" style="grid-column:1/-1"><div class="pc-label">Top pages</div><div class="pc-sub" style="margin-top:8px;line-height:2">${topPages.map(([p,n])=>`${esc(p)}: <strong>${n}</strong>`).join(' &nbsp;·&nbsp; ')}</div></div>`);
+    }
+    if(topSectors.length){
+      cards.push(`<div class="pipe-card" style="grid-column:1/-1"><div class="pc-label">Top sectors (signups + interest)</div><div class="pc-sub" style="margin-top:8px;line-height:2">${topSectors.map(([s,n])=>`${esc(s)}: <strong>${n}</strong>`).join(' &nbsp;·&nbsp; ')}</div></div>`);
+    }
+    el.innerHTML = events.length ? cards.join('') : '<div class="empty">No events yet -- this fills in as people actually use the site.</div>';
+  }catch(e){
+    el.innerHTML = `<div class="pipe-error">Could not load analytics (${esc(e.message||'permission error')}).</div>`;
+  }
+}
+
+// Same reasoning as loadAnalytics() -- where() only, sort client-side,
+// no composite index needed.
+async function loadErrors(){
+  const el = document.getElementById('errors-body');
+  el.innerHTML = '<div class="loading">Loading…</div>';
+  const cutoff = new Date(Date.now() - 7*24*60*60*1000).toISOString();
+  try{
+    const snap = await db.collection('client_errors').where('ts','>=',cutoff).get();
+    const events = snap.docs.map(d=>d.data()).sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
+    if(!events.length){ el.innerHTML = '<div class="pipe-card" style="grid-column:1/-1">✅ No errors reported in the last 7 days.</div>'; return; }
+    const rows = events.slice(0,15).map(e=>`<div class="pipe-card" style="grid-column:1/-1;text-align:left">
+      <div class="pc-sub"><strong>${esc(e.message||'Unknown error')}</strong></div>
+      <div class="pc-sub" style="margin-top:4px">${esc(e.page||'')} ${e.ts?'· '+esc(new Date(e.ts).toLocaleString('en-IN')):''}</div>
+    </div>`);
+    el.innerHTML = `<div class="pipe-card"><div class="pc-label">Total</div><div class="pc-n bad">${events.length}</div></div>` + rows.join('');
+  }catch(e){
+    el.innerHTML = `<div class="pipe-error">Could not load errors (${esc(e.message||'permission error')}).</div>`;
+  }
 }
 
 function loadPipelineStatus(){
@@ -302,6 +389,8 @@ document.getElementById('pw-submit').addEventListener('click', login);
 document.getElementById('pw').addEventListener('keydown', e => { if(e.key === 'Enter') login(); });
 document.getElementById('signout').addEventListener('click', signOut);
 document.getElementById('pipe-refresh').addEventListener('click', loadPipelineStatus);
+document.getElementById('analytics-refresh').addEventListener('click', loadAnalytics);
+document.getElementById('errors-refresh').addEventListener('click', loadErrors);
 
 auth.onAuthStateChanged(user => {
   if(user && ADMIN_EMAILS.includes((user.email||'').toLowerCase())){

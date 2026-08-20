@@ -88,6 +88,43 @@ function logSignup(type,payload){
   }catch(e){}
 }
 
+// ── ANALYTICS ─────────────────────────────────────
+// First-party, minimal-data event tracking -- no visitor identity, no
+// cookies, no third-party script sending this off to anyone else. Just
+// enough to answer "how many people actually use this and where do
+// they drop off", read back in /admin's Analytics panel. Fire-and-
+// forget like logSignup() above -- never blocks or breaks the actual
+// user action if this fails, and kept as a separate call from
+// logSignup() deliberately so a Sheet-logger misconfiguration (like
+// today's) can never also silently take analytics down with it.
+function trackEvent(type,meta){
+  try{
+    db.collection('analytics_events').add({type,meta:meta||{},ts:new Date().toISOString()}).catch(()=>{});
+  }catch(e){}
+}
+
+// ── CLIENT ERROR MONITORING ───────────────────────
+// If the site breaks for a real visitor, this is how you'd otherwise
+// find out: not at all, unless they happen to tell you. Logs the error
+// message and which page it happened on (window.__pkCurrentPage, set
+// by showPage()) to Firestore, surfaced in /admin's Errors panel.
+// Capped per page load so one error firing in a loop can't flood the
+// database with hundreds of near-identical rows.
+let clientErrorCount=0;
+const CLIENT_ERROR_LIMIT=5;
+function logClientError(message){
+  if(clientErrorCount>=CLIENT_ERROR_LIMIT)return;
+  clientErrorCount++;
+  try{
+    db.collection('client_errors').add({message:String(message).slice(0,500),page:window.__pkCurrentPage||'unknown',ts:new Date().toISOString()}).catch(()=>{});
+  }catch(e){}
+}
+window.addEventListener('error',e=>{logClientError(e.message||'Unknown error');});
+window.addEventListener('unhandledrejection',e=>{
+  const r=e.reason;
+  logClientError('Unhandled promise rejection: '+(r&&r.message?r.message:String(r)));
+});
+
 // Map allData to OG format
 function inferTrack(sectors){
   const soc=['Teaching','Community','Social','Field Work','Health','Environment','NSS','Education Support'];
@@ -199,6 +236,8 @@ function showPage(p){
   if(p==='hraccount')renderHRAccountView();
   if(p==='ytaccount')renderYtAccountView();
   window.scrollTo(0,0);
+  window.__pkCurrentPage=p; // read by the client-error handler for context
+  trackEvent('pageview',{page:p});
 }
 
 // The intro isn't a one-shot thing you have to click a button to see again —
@@ -453,6 +492,7 @@ function submitInterest(){
   saveEnquiry({hrName:name,hrPhone:phone,hrEmail:email,hrCompany:company||'',
     candidateName:d.name,candidateSectors:d.skills.join(', '),
     candidateLocation:d.location+', Mumbai',time:t});
+  trackEvent('interest',{sector:d.sector});
 
   const emailData = {
     candidate_name: d.name,
@@ -687,6 +727,7 @@ function saveProfile(){
       db.collection('youth_accounts').doc(uid).set(acct).catch(()=>{});
       db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,donorConsent,createdAt:new Date().toISOString()}).catch(()=>{});
       logSignup('youth',{name:nm,email,phone:ph,edu:ed,institution:inst,sector:sc,location:loc,skills:sk.join(', '),about:ab,resumeHtml:html});
+      trackEvent('signup_youth',{sector:sc,location:loc}); // no name/email/phone -- aggregate only
       uploadPendingResume(uid,email);
       // Cache the profile for the "Firestore doc missing" fallback in
       // youthLogin() -- never the password. Firebase Auth is the one place
@@ -751,6 +792,7 @@ function submitContact(){
   db.collection('contact_enquiries').add({name,email,org,contactType:type,msg,createdAt:new Date().toISOString()}).catch(()=>{});
   // Mirror to the Sheet too, same as HR/youth signups.
   logSignup('contact',{name,email,org,contactType:type,msg});
+  trackEvent('contact',{contactType:type});
 
   const contactEmailData={
     candidate_name:name,candidate_sectors:type,candidate_location:org||'Not specified',
@@ -832,6 +874,7 @@ function submitGrievance(){
   const finish=(screenshotURL,screenshotNote)=>{
     db.collection('grievances').add({refNo,name,email,category,relatedTo:related,urgency,description:desc,screenshotURL:screenshotURL||'',status:'open',createdAt:new Date().toISOString()}).catch(()=>{});
     logSignup('grievance',{refNo,name,email,category,relatedTo:related,urgency,description:desc});
+    trackEvent('grievance',{category,urgency});
     const grData={candidate_name:name,candidate_sectors:category,candidate_location:(related?'Re: '+related+' — ':'')+(screenshotNote||'No screenshot attached'),candidate_note:desc,viewed_at:t,message_type:'Grievance '+refNo+' ('+urgency+') — '+category};
     emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL}).catch(()=>{});
     emailjs.send(EJ_SID,EJ_TID,{...grData,to_email:N_EMAIL2}).catch(()=>{});
@@ -1283,6 +1326,7 @@ function hrSignUp(){
       const hrData={uid:cred.user.uid,name:nm,phone:ph,email:em,company:co,industry:ind,city:city,role:'hr',approved:true,createdAt:new Date().toISOString()};
       db.collection('hr_accounts').doc(cred.user.uid).set(hrData).catch(()=>{});
       logSignup('hr',{name:nm,phone:ph,email:em,org:co,industry:ind,city:city});
+      trackEvent('signup_hr',{industry:ind,city:city});
       hrUser={name:nm,phone:ph,email:em,company:co,industry:ind,city:city,approved:true};
       localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
       closeHRLogin();updateHRHeader();render();
