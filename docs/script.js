@@ -1439,7 +1439,7 @@ function loadHRAccountEnquiries(email){
     return `<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)">
       <div>
         <div style="font-size:13.5px;font-weight:700;color:var(--ink)">${e.candidateName||'—'}</div>
-        <div style="font-size:11.5px;color:var(--ink-3);margin-top:2px">${e.candidateSectors||''}${e.candidateLocation?' · 📍 '+e.candidateLocation:''}</div>
+        <div style="font-size:11.5px;color:var(--ink-3);margin-top:2px">${e.candidateSectors||''}${e.candidateLocation?' · '+e.candidateLocation:''}</div>
       </div>
       <div style="font-size:11px;color:var(--ink-4);white-space:nowrap">${e.time||''}</div>
     </div>`;

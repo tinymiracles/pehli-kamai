@@ -261,7 +261,7 @@ function render(rows){
 
   rowsEl.innerHTML = rows.map(r=>{
     const when = r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}) : '';
-    const urgencyDot = r.urgency==='Very urgent' ? '🔴' : r.urgency==='Somewhat urgent' ? '🟠' : '⚪';
+    const urgencyColor = r.urgency==='Very urgent' ? '#c54036' : r.urgency==='Somewhat urgent' ? '#c9820a' : 'var(--ink-3)';
     const shot = r.screenshotURL ? `<a class="shot" href="${esc(r.screenshotURL)}" target="_blank" rel="noopener">View</a>` : '—';
     const opts = ['open','acknowledged','resolved'].map(s=>
       `<option value="${s}" ${r.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
@@ -272,7 +272,7 @@ function render(rows){
       <td>${when}</td>
       <td>${esc(r.name||'')}<br><span class="muted">${esc(r.email||'')}</span></td>
       <td>${esc(r.category||'')}</td>
-      <td>${urgencyDot} ${esc(r.urgency||'')}</td>
+      <td style="color:${urgencyColor};font-weight:600">${esc(r.urgency||'')}</td>
       <td>${esc(r.relatedTo||'—')}</td>
       <td style="max-width:260px;white-space:pre-wrap">${desc}</td>
       <td>${shot}</td>
