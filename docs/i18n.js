@@ -69,6 +69,7 @@ const TRANSLATIONS = {
     footer_terms: 'Terms & Conditions',
     footer_grievance: 'Grievance Redressal',
     footer_report: 'Report a concern →',
+    footer_browse_label: 'Browse profiles',
   },
   hi: {
     nav_hire: 'फ्रेशर को नौकरी दें',
@@ -120,6 +121,7 @@ const TRANSLATIONS = {
     footer_terms: 'नियम और शर्तें',
     footer_grievance: 'शिकायत निवारण',
     footer_report: 'शिकायत दर्ज करें →',
+    footer_browse_label: 'प्रोफ़ाइल देखें',
   },
   mr: {
     nav_hire: 'फ्रेशरला कामावर घ्या',
@@ -171,6 +173,7 @@ const TRANSLATIONS = {
     footer_terms: 'अटी व शर्ती',
     footer_grievance: 'तक्रार निवारण',
     footer_report: 'तक्रार नोंदवा →',
+    footer_browse_label: 'प्रोफाइल्स पाहा',
   },
 };
 
