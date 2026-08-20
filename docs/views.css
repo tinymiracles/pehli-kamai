@@ -91,9 +91,9 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 .fi-hero-stat-l{font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.6px;
   text-transform:uppercase;color:var(--fi-ink-2);}
 .fi-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
-.fi-cta{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;background:var(--teal);
-  color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;}
-.fi-cta:hover{background:#0c6b64;}
+.fi-cta{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;background:var(--lime);
+  color:#0d2426;border:none;border-radius:8px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;}
+.fi-cta:hover{background:#b9cc5c;}
 .fi-cta.ghost{background:transparent;border:1.5px solid #fff;color:#fff;}
 .fi-cta.ghost:hover{background:rgba(255,255,255,.14);}
 .fi-hero-foot{font-family:var(--sans);font-size:12.5px;color:rgba(255,255,255,.8);}
