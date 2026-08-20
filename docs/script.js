@@ -196,6 +196,7 @@ function showPage(p){
   }
   if(p==='report')resetGrievanceForm();
   if(p==='admin')loadAdminDashboard();
+  if(p==='hraccount')renderHRAccountView();
   window.scrollTo(0,0);
 }
 
@@ -1270,16 +1271,23 @@ function hrSignUp(){
 // ── HR ACCOUNT (view / edit / delete) ────────────────────────────
 const HR_INDUSTRIES=['Retail & FMCG','Banking & Finance','IT & Technology','Healthcare','Hospitality & Food','Manufacturing','Education & NGO','Media & Marketing','Logistics & Supply Chain','Real Estate','Other'];
 
+// Real page now (was a modal) -- same "not a popup" pattern as the
+// profile/report/admin pages.
 function openHRAccount(){
   if(!hrUser){toast('Please sign in first.');return;}
-  document.getElementById('hr-acct-ov').classList.add('open');
-  renderHRAccountView();
+  showPage('hraccount');
 }
-function closeHRAccount(){document.getElementById('hr-acct-ov').classList.remove('open');}
 
 function renderHRAccountView(){
+  const body=document.getElementById('hr-acct-body');
   const u=hrUser;
-  document.getElementById('hr-acct-body').innerHTML=`
+  if(!u){
+    body.innerHTML=`<p style="font-size:14.5px;color:var(--fi-ink-2);max-width:60ch">Sign in with your HR account to see this.</p>
+      <button onclick="openSignIn()" style="margin-top:10px;padding:11px 22px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer">Sign in</button>`;
+    return;
+  }
+  body.innerHTML=`
+    <button class="pf-back" onclick="showPage('home')" style="margin-bottom:20px">&larr; Back to home</button>
     <div style="display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px">
       <div style="width:50px;height:50px;border-radius:50%;background:var(--teal);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px">${ini(u.name)}</div>
       <div>
@@ -1297,9 +1305,54 @@ function renderHRAccountView(){
       <div><span>City</span><span>${u.city||'—'}</span></div>
     </div>
     <button class="btn-lf-submit" style="margin-top:18px" onclick="renderHRAccountEdit()">Edit my details</button>
-    <button onclick="closeHRAccount();if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}" style="width:100%;padding:10px;margin-top:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Sign out</button>
+    <button onclick="if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}" style="width:100%;padding:10px;margin-top:10px;background:transparent;border:1.5px solid var(--line-d);border-radius:8px;font-family:var(--sans);font-size:13px;color:var(--ink-3);cursor:pointer">Sign out</button>
     <button onclick="confirmDeleteHRAccount()" style="width:100%;padding:10px;margin-top:10px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:13px;color:#c62828;cursor:pointer">Delete my account</button>
+    <h3 style="margin:32px 0 12px;font-size:16px">My enquiries</h3>
+    <div id="hr-acct-enquiries"><div style="padding:20px 0;text-align:center;color:var(--ink-4);font-size:13px">Loading…</div></div>
   `;
+  loadHRAccountEnquiries(u.email);
+}
+
+// Which candidates this specific HR account has actually sent an
+// enquiry about ("I'm Interested") -- filtered by their own email, not
+// the site-wide unfiltered list the (separate, older) Enquiries page
+// shows. hr_enquiries' Firestore rule already allows any signed-in
+// read, so this where() is just for relevance, not security.
+function loadHRAccountEnquiries(email){
+  const el=document.getElementById('hr-acct-enquiries');
+  db.collection('hr_enquiries').where('hrEmail','==',email).orderBy('savedAt','desc').get()
+    .then(snap=>{
+      if(snap.empty){el.innerHTML='<p style="font-size:13px;color:var(--ink-4)">You haven\'t expressed interest in anyone yet.</p>';return;}
+      el.innerHTML=snap.docs.map(d=>{
+        const e=d.data();
+        return `<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)">
+          <div>
+            <div style="font-size:13.5px;font-weight:700;color:var(--ink)">${e.candidateName||'—'}</div>
+            <div style="font-size:11.5px;color:var(--ink-3);margin-top:2px">${e.candidateSectors||''}${e.candidateLocation?' · 📍 '+e.candidateLocation:''}</div>
+          </div>
+          <div style="font-size:11px;color:var(--ink-4);white-space:nowrap">${e.time||''}</div>
+        </div>`;
+      }).join('');
+    })
+    .catch(()=>{
+      // Firestore needs a composite index for a where()+orderBy() on two
+      // different fields the first time this runs -- if that hasn't been
+      // created yet, fall back to an unordered read rather than showing
+      // nothing.
+      db.collection('hr_enquiries').where('hrEmail','==',email).get().then(snap=>{
+        if(snap.empty){el.innerHTML='<p style="font-size:13px;color:var(--ink-4)">You haven\'t expressed interest in anyone yet.</p>';return;}
+        el.innerHTML=snap.docs.map(d=>{
+          const e=d.data();
+          return `<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)">
+            <div>
+              <div style="font-size:13.5px;font-weight:700;color:var(--ink)">${e.candidateName||'—'}</div>
+              <div style="font-size:11.5px;color:var(--ink-3);margin-top:2px">${e.candidateSectors||''}${e.candidateLocation?' · 📍 '+e.candidateLocation:''}</div>
+            </div>
+            <div style="font-size:11px;color:var(--ink-4);white-space:nowrap">${e.time||''}</div>
+          </div>`;
+        }).join('');
+      }).catch(()=>{el.innerHTML='<p style="font-size:13px;color:var(--ink-4)">Could not load your enquiries right now.</p>';});
+    });
 }
 
 function renderHRAccountEdit(){
@@ -1366,7 +1419,7 @@ function deleteHRAccount(){
     .then(()=>{
       hrUser=null;
       localStorage.removeItem('typc_hr_user');
-      closeHRAccount();
+      showPage('home');
       updateHRHeader();
       render();
       toast('Your account has been deleted.');
