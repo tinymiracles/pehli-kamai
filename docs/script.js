@@ -1160,11 +1160,17 @@ function renderYtAccountView(){
     </div>
   `;
   db.collection('hr_enquiries').where('candidateName','==',acct.name).get()
-    .then(snap=>renderYtProfilePanel(acct,isNew,snap.size))
+    .then(snap=>{
+      const enquiries=[];
+      snap.forEach(doc=>enquiries.push({...doc.data(),id:doc.id}));
+      renderYtProfilePanel(acct,isNew,snap.size);
+      loadYtApplications(enquiries);
+    })
     .catch(()=>{
       const enqs=JSON.parse(localStorage.getItem('typc_enquiries')||'[]');
       const n=enqs.filter(e=>e.candidateName===acct.name).length;
       renderYtProfilePanel(acct,isNew,n);
+      loadYtApplications(enqs);
     });
 }
 
@@ -1189,6 +1195,10 @@ function renderYtProfilePanel(acct,isNew,n){
         <div style="font-size:10.5px;color:var(--teal-dark);font-weight:600;margin-top:3px">Profile status</div>
       </div>
     </div>
+    <div style="margin-bottom:24px;padding:16px;background:var(--bg);border-radius:10px;border:1.5px solid var(--line-d)">
+      <h3 style="font-size:13.5px;font-weight:700;color:var(--ink-1);margin:0 0 12px">Application Status</h3>
+      <div id="yt-applications" style="font-size:12px;color:var(--ink-4)">Loading your applications...</div>
+    </div>
     ${hasResume?`<button onclick="openR(${acct.id||'curId'})" style="display:block;width:100%;padding:11px;background:var(--teal);color:white;text-align:center;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:10px;box-sizing:border-box;cursor:pointer;border:none;font-family:var(--sans)">View my resume</button>`:''}
     ${acct.resumeFileURL?`<a href="${acct.resumeFileURL}" target="_blank" style="display:block;width:100%;padding:11px;background:transparent;color:var(--teal);text-align:center;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:10px;box-sizing:border-box;cursor:pointer;border:1.5px solid var(--teal);font-family:var(--sans);text-decoration:none">View my uploaded resume</a>`:''}
     <div style="font-size:11.5px;color:var(--ink-3);line-height:1.6;margin-bottom:18px;padding:10px 12px;background:var(--bg);border-radius:8px">
@@ -1202,6 +1212,37 @@ function renderYtProfilePanel(acct,isNew,n){
       <button onclick="confirmDeleteYouthAccount()" style="padding:9px 20px;background:transparent;border:1.5px solid #e57373;border-radius:8px;font-family:var(--sans);font-size:12.5px;color:#c62828;cursor:pointer">Delete my account</button>
     </div>
   `;
+}
+
+function loadYtApplications(enquiries){
+  const appDiv=document.getElementById('yt-applications');
+  if(!appDiv)return;
+  if(!enquiries||enquiries.length===0){
+    appDiv.innerHTML='<div style="color:var(--ink-4);font-size:12px">No applications yet. HR teams will reach out once they are interested in your profile.</div>';
+    return;
+  }
+  const appsList=enquiries.map(enq=>{
+    const company=enq.hrCompany||enq.company||'HR Company';
+    const date=enq.createdAt||enq.dateCreated||'Recently';
+    const status=enq.status||'Interested';
+    const statusColor={
+      'interested':'#2e7d32',
+      'viewing':'#0097a7',
+      'interview':'#f57c00',
+      'rejected':'#c62828',
+      'placed':'#1565c0'
+    }[status.toLowerCase()]||'#0097a7';
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-light)">
+        <div style="flex:1">
+          <div style="font-weight:600;color:var(--ink-1);font-size:13px">${company}</div>
+          <div style="font-size:11px;color:var(--ink-4);margin-top:2px">${date}</div>
+        </div>
+        <div style="background:${statusColor}20;color:${statusColor};padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap">${status}</div>
+      </div>
+    `;
+  }).join('');
+  appDiv.innerHTML=appsList;
 }
 
 function youthSignOut(){
