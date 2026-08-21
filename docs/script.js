@@ -309,7 +309,7 @@ function render(){
   });
   document.getElementById('rc').textContent=f.length;
   const g=document.getElementById('grid');
-  if(!f.length){g.innerHTML=`<div class="empty" style="padding:60px 40px"><div style="font-size:28px;color:var(--teal-mid)">✦</div><div class="empty-h">No candidates found.</div></div>`;return;}
+  if(!f.length){g.innerHTML=`<div class="empty" style="padding:60px 40px"><div class="empty-h">No candidates found.</div></div>`;return;}
   const full=canSeeFull();
   const card=d=>`<div class="pcard" onclick="showProfile(${d.id})">
     <div class="pc-name">${full?d.name:maskName(d.name)}</div>
@@ -808,7 +808,7 @@ function submitContact(){
   const contactEmailData={
     candidate_name:name,candidate_sectors:type,candidate_location:org||'Not specified',
     candidate_note:msg,viewed_at:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),
-    message_type:'📩 Contact Form — '+type
+    message_type:'Contact Form — '+type
   };
   // Notify Meghna, Rishikesh, and the shared inbox, same as the other flows.
   emailjs.send(EJ_SID,EJ_TID,{...contactEmailData,to_email:N_EMAIL2}).catch(()=>{});
@@ -1010,7 +1010,6 @@ function renderEnquiries(){
   const body=document.getElementById('enq-body');
   if(!list.length){
     body.innerHTML=`<div class="enq-empty">
-      <div class="enq-empty-icon">📭</div>
       <div class="enq-empty-h">No enquiries yet</div>
       <div class="enq-empty-p">When HR submits interest in a candidate, it will appear here.</div>
     </div>`;
@@ -1025,15 +1024,15 @@ function renderEnquiries(){
           <div class="enq-time">${e.time}</div>
         </div>
         <div class="enq-hr-info">
-          <span class="enq-pill">👤 ${e.hrName}</span>
-          <span class="enq-pill">📞 ${e.hrPhone}</span>
-          <span class="enq-pill">✉️ ${e.hrEmail}</span>
-          ${e.hrCompany?`<span class="enq-pill">🏢 ${e.hrCompany}</span>`:''}
+          <span class="enq-pill">${e.hrName}</span>
+          <span class="enq-pill">${e.hrPhone}</span>
+          <span class="enq-pill">${e.hrEmail}</span>
+          ${e.hrCompany?`<span class="enq-pill">${e.hrCompany}</span>`:''}
         </div>
         <div class="enq-sector">Sectors: ${e.candidateSectors} · ${e.candidateLocation}</div>
         <div class="enq-card-actions">
-          <button class="btn-enq-wa" onclick="window.open('https://wa.me/91'+${JSON.stringify(e.hrPhone)}.replace(/\D/g,''),'_blank')">💬 WhatsApp HR</button>
-          <button class="btn-enq-mail" onclick="window.open('mailto:${e.hrEmail}?subject=Re: ${encodeURIComponent(e.candidateName)} — Pehli Kamai','_blank')">✉️ Email HR</button>
+          <button class="btn-enq-wa" onclick="window.open('https://wa.me/91'+${JSON.stringify(e.hrPhone)}.replace(/\D/g,''),'_blank')">WhatsApp HR</button>
+          <button class="btn-enq-mail" onclick="window.open('mailto:${e.hrEmail}?subject=Re: ${encodeURIComponent(e.candidateName)} — Pehli Kamai','_blank')">Email HR</button>
         </div>
       </div>
     </div>`).join('')}</div>`;
@@ -1378,8 +1377,8 @@ function renderHRAccountView(){
         <div class="acct-sub">${u.company}</div>
         <div class="acct-email">${u.email}</div>
         <nav class="acct-nav">
-          <button class="acct-nav-item active" id="acct-nav-details" onclick="setHRAcctTab('details')"><span class="aci">👤</span>My details</button>
-          <button class="acct-nav-item" id="acct-nav-enquiries" onclick="setHRAcctTab('enquiries')"><span class="aci">💬</span>My enquiries</button>
+          <button class="acct-nav-item active" id="acct-nav-details" onclick="setHRAcctTab('details')">My details</button>
+          <button class="acct-nav-item" id="acct-nav-enquiries" onclick="setHRAcctTab('enquiries')">My enquiries</button>
         </nav>
         <button class="acct-signout" onclick="if(confirm('Sign out?')){hrUser=null;localStorage.removeItem('typc_hr_user');auth.signOut().catch(()=>{});location.reload();}">Sign out</button>
       </aside>
