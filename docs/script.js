@@ -138,7 +138,7 @@ const DATA = allData.map(c=>{
     key: c.key,
     name: c.name,
     age: 21,
-    edu: c.note.includes('BCom')||c.note.includes('BA')||c.note.includes('BMS')||c.note.includes('B.Com') ? 'Graduate' : c.note.includes('HSC')||c.note.includes('12th') ? '12th Pass' : '10th Pass',
+    edu: c.note.includes('BCom')||c.note.includes('BA')||c.note.includes('BMS')||c.note.includes('B.Com')||c.note.includes('TYBAMMC')||c.note.includes('TYBCOM')||c.note.includes('pursuing')||c.note.includes('Master') ? 'Graduate' : c.note.includes('HSC')||c.note.includes('12th')||c.note.includes('Higher Secondary') ? '12th Pass' : c.note.includes('ITI')||c.note.includes('certified')||c.note.includes('MSCIT') ? 'ITI/Trade' : '10th Pass',
     sector: c.sectors[0] || 'Other',
     role: c.sectors[0] ? c.sectors[0]+' — Looking for work' : 'Looking for work',
     exp: c.note.includes('exp')||c.note.includes('yr')||c.note.includes('year')||c.note.includes('worked')||c.note.includes('Engineer') ? 'experienced' : 'fresher',
@@ -156,6 +156,17 @@ const DATA = allData.map(c=>{
 let sl=new Set(), curSec='all', curId=null, pendingResume=null, editingEmail=null, currentYtAcct=null;
 
 function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();}
+
+// Normalize education level for filtering
+function normalizeEdu(eduStr){
+  if(!eduStr)return 'all';
+  const s=eduStr.toLowerCase();
+  if(s.includes('graduate')||s.includes('masters')||s.includes('m.'))return 'graduate';
+  if(s.includes('12th')||s.includes('hsc')||s.includes('higher secondary'))return '12th';
+  if(s.includes('iti')||s.includes('trade')||s.includes('technical'))return 'itk';
+  if(s.includes('10th')||s.includes('ssc')||s.includes('secondary'))return '10th';
+  return 'all';
+}
 
 // Page nav
 // .ss (the search/filter bar) is position:sticky, and calling
@@ -301,9 +312,14 @@ function setSec(el,s){
 function render(){
   const q=document.getElementById('q').value.toLowerCase();
   const loc=document.getElementById('loc-sel').value;
+  const edu=document.getElementById('edu-sel').value;
   let f=DATA.filter(d=>{
     if(curSec!=='all'&&d.track!==curSec)return false;
     if(loc!=='all'&&d.location!==loc)return false;
+    if(edu!=='all'){
+      const edLevel=normalizeEdu(d.edu);
+      if(edLevel!==edu)return false;
+    }
     if(q){const h=`${d.name} ${d.sector} ${d.skills.join(' ')} ${d.location} ${d.about}`.toLowerCase();if(!h.includes(q))return false;}
     return true;
   });

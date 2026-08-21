@@ -234,6 +234,13 @@
           <svg class="s-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input class="s-in" id="q" placeholder="Search…" oninput="render()" data-i18n-placeholder="search_placeholder"/>
         </div>
+        <select class="loc-sel" id="edu-sel" onchange="render()">
+          <option value="all">All education levels</option>
+          <option value="10th">10th Pass</option>
+          <option value="12th">12th Pass</option>
+          <option value="graduate">Graduate</option>
+          <option value="itk">ITI/Trade</option>
+        </select>
         <select class="loc-sel" id="loc-sel" onchange="render()">
           <option value="all" data-i18n="search_all_locations">All locations</option>
         </select>
