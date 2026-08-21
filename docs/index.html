@@ -67,9 +67,9 @@
   </button>
   <nav class="tabs">
     <button class="tab" id="nl-home" onclick="showPage('home')" aria-current="true" data-i18n="nav_hire">Hire a fresher</button>
-    <button class="tab" onclick="goHomeThenScroll(scrollToHowItWorks)" data-i18n="nav_how">How it works</button>
-    <button class="tab" onclick="goHomeThenScroll(scrollToCandidates)" data-i18n="nav_candidates">Candidates</button>
-    <button class="tab" onclick="openAdd()" data-i18n="nav_kaam">Kaam chahiye</button>
+    <button class="tab" id="nl-how" onclick="goHomeThenScroll(scrollToHowItWorks,'nl-how')" data-i18n="nav_how">How it works</button>
+    <button class="tab" id="nl-candidates" onclick="goHomeThenScroll(scrollToCandidates,'nl-candidates')" data-i18n="nav_candidates">Candidates</button>
+    <button class="tab" id="nl-kaam" onclick="setActiveTab('nl-kaam');openAdd()" data-i18n="nav_kaam">Kaam chahiye</button>
     <button class="tab" id="nl-about" onclick="showPage('about')" data-i18n="nav_story">Our story</button>
   </nav>
   <div class="hdr-right">
@@ -445,7 +445,7 @@
     <p>Your account and profile data lives in Google Firebase (Firestore database), hosted in Google Cloud's <strong>asia-south1 (Mumbai)</strong> region — it stays in India. An uploaded resume file is stored in Firebase Storage. We also keep an internal backup system, operated only by our own team and not shared outside the organisation, as a safeguard against data loss. Email notifications about new signups and enquiries are sent via a transactional email provider. The website itself is hosted on Vercel and GitHub Pages, whose infrastructure may operate outside India. None of these providers may use your data for their own purposes — they process it only on our behalf.</p>
 
     <h2>Who sees what</h2>
-    <p>Anyone visiting the site sees a masked version of each candidate profile — first name and last initial, city-level location only. Full names, exact neighbourhoods, and contact details are visible to any signed-in HR account during our current pilot phase. Your phone number and email are never shown on your public profile at all; they're only shared with a specific employer once an introduction is made.</p>
+    <p>Anyone visiting the site sees a masked version of each candidate profile — first name and last initial, city-level location only. Full names, exact neighbourhoods, and contact details are visible to any signed-in HR account. Your phone number and email are never shown on your public profile at all; they're only shared with a specific employer once an introduction is made.</p>
 
     <h2>How long we keep it, and what happens after you're placed</h2>
     <p>As long as your account is active. You can delete your account and profile yourself, any time, from your account page — this removes it immediately, not after a waiting period. If you'd rather have our team do it for you, contact us (see Grievance Redressal). If you haven't logged in for 24 months, we may reach out before removing an inactive profile, giving at least 48 hours' notice first. Once you're placed in a job, your profile comes down from public browsing; we may keep a record of the placement and any employer feedback for our own reporting, and you can ask to see what's recorded about you.</p>
@@ -1080,7 +1080,6 @@
                 I agree to the <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal);font-weight:700">Privacy Policy</a> and <a onclick="event.preventDefault();showPage('terms')" href="#" style="color:var(--teal);font-weight:700">Terms &amp; Conditions</a>. *
               </label>
               <button class="btn-lf-submit" onclick="hrSignUp()">Create account</button>
-              <div class="lf-note">Full candidate details unlock right away — no review step during the pilot.</div>
             </div>
           </div>
         </div>
@@ -1198,7 +1197,7 @@
     <div class="ft-col">
       <div class="ft-col-label" data-i18n="footer_explore">Explore</div>
       <a onclick="showPage('home')" data-i18n="footer_home">Home</a>
-      <a onclick="goHomeThenScroll(scrollToCandidates)" data-i18n="nav_candidates">Candidates</a>
+      <a onclick="goHomeThenScroll(scrollToCandidates,'nl-candidates')" data-i18n="nav_candidates">Candidates</a>
       <a onclick="showPage('about')" data-i18n="footer_about">About Us</a>
       <a onclick="openSignIn()" data-i18n="menu_hrlogin">HR Login</a>
     </div>
