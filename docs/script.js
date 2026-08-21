@@ -1609,8 +1609,9 @@ function canAccessAdmin(){return !!(hrUser&&hrUser.email&&ADMIN_EMAILS.includes(
 
 function updateHRHeader(){
   const addBtn=document.getElementById('btn-add-profile');
-  const adminLink=document.getElementById('hdr-admin-link');
-  if(adminLink)adminLink.style.display=canAccessAdmin()?'':'none';
+  // No hamburger-menu link to the grievance dashboard -- that's an
+  // internal team tool, reached by a direct bookmarked URL to /admin/,
+  // not something to surface in the public nav even conditionally.
   // Hamburger-menu link: "HR Login" when signed out, "My account" once
   // signed in as HR -- was hardcoded to always say "HR Login" and always
   // open the sign-in flow, even for someone already logged in.
