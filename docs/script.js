@@ -1407,9 +1407,6 @@ function renderHRDetailsPanel(){
   panel.innerHTML=`
     <h2>My details</h2>
     <div class="acct-panel-sub">Your account information.</div>
-    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:12px 14px;margin-bottom:6px;font-size:12.5px;color:#2e7d32">
-      Full candidate details unlocked — no review step during the pilot.
-    </div>
 
     <div class="acct-section">
       <div class="acct-section-head">
