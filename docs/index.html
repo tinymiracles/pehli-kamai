@@ -84,6 +84,7 @@
         <button data-lang="mr" onclick="setLang('mr')">मर</button>
       </div>
       <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()" data-i18n="menu_hrlogin">HR Login</button>
+      <button class="hdr-menu-item" onclick="showPage('help');toggleHdrMenu()">Help & FAQ</button>
       <button class="hdr-menu-item" onclick="openCF();toggleHdrMenu()" data-i18n="menu_contact">Contact Us</button>
       <button class="hdr-menu-item" onclick="showPage('report');toggleHdrMenu()" data-i18n="menu_report">Report a concern</button>
     </div>
@@ -596,6 +597,124 @@
       <li>Every grievance is logged internally with its response and closure date, so there's a record if it's ever needed.</li>
       <li>If you're not satisfied with our response, you can escalate to the <strong>Data Protection Board of India</strong>, which has been constituted and is accepting complaints.</li>
     </ul>
+  </div>
+</div>
+
+<!-- ━━ HELP & FAQ ━━ -->
+<div class="hidden" id="view-help">
+  <div class="about-wrap-new">
+    <h1 class="page-h1">Help & <em>Resources</em></h1>
+    <div class="legal-meta">Frequently asked questions and support materials</div>
+  </div>
+  <div class="legal-wrap">
+    <h2>For Candidates</h2>
+
+    <h3>Getting Started</h3>
+    <div style="margin-bottom: 20px">
+      <div style="margin-bottom: 12px">
+        <strong>How do I create my profile?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Sign up with your phone number and email. Answer a few questions about your experience, education, and sectors you're interested in. We'll auto-generate a professional resume from your information.</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>Is there a cost to use Pehli Kamai?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">No. The platform is completely free for candidates. HR companies pay to access candidate profiles.</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>What information will HR companies see?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Once you sign up, HR teams can see your resume, work experience, skills, education, and location. Your phone number and email are only shared when an HR company expresses specific interest in you.</p>
+      </div>
+    </div>
+
+    <h3>Interview Preparation</h3>
+    <div style="margin-bottom: 20px">
+      <div style="margin-bottom: 12px">
+        <strong>Does Pehli Kamai offer interview coaching?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Yes! When an HR company expresses interest in you, we provide free pre-interview sessions covering:
+          Interview etiquette and professional communication
+          Common interview questions and how to answer them
+          Workplace skills and expectations</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>What is included in the pre-session training?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">We cover basic workplace skills including essential Excel functions commonly used in entry-level jobs, intro to AI tools, and professional communication tips.</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>Can I request additional training after getting a job?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Absolutely. We offer post-placement sessions to help you succeed in your new role, including advanced Excel skills and workplace software.</p>
+      </div>
+    </div>
+
+    <h3>Skill Development</h3>
+    <div style="margin-bottom: 20px">
+      <div style="margin-bottom: 12px">
+        <strong>What Excel skills should I learn?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">We focus on the most commonly used skills across jobs:
+          Basic formulas (SUM, AVERAGE, COUNT)
+          Filtering and sorting data
+          Creating pivot tables
+          Basic charts and data visualization
+          Working with multiple sheets</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>Where can I practice Excel online?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">
+          <a href="https://www.youtube.com/results?search_query=excel+tutorial+basics" target="_blank" style="color: var(--teal); text-decoration: none">YouTube Excel Tutorials</a> (Free)
+          <a href="https://support.microsoft.com/en-us/office" target="_blank" style="color: var(--teal); text-decoration: none; margin-left: 16px">Microsoft Office Support</a> (Free)
+          <a href="https://www.coursera.org/courses?query=excel" target="_blank" style="color: var(--teal); text-decoration: none; margin-left: 16px">Coursera Excel Courses</a> (Some free)
+        </p>
+      </div>
+    </div>
+
+    <h2>For HR Companies</h2>
+
+    <div style="margin-bottom: 20px">
+      <div style="margin-bottom: 12px">
+        <strong>How do I find candidates on Pehli Kamai?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">After signing up, browse our candidate directory. Use filters by education level (10th, 12th, graduate), sector, location, and skills to find candidates matching your requirements.</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>How do I express interest in a candidate?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Click on a candidate's profile and select "Express Interest" or "I Want to Hire." We'll immediately notify both you and the candidate, then provide interview coordination support.</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>What support does Pehli Kamai provide for interviews?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">We prepare candidates before their interview with you, ensuring they're ready. We also help coordinate scheduling and follow up with candidates on outcomes to track placements.</p>
+      </div>
+    </div>
+
+    <h2>General Support</h2>
+
+    <div style="margin-bottom: 20px">
+      <div style="margin-bottom: 12px">
+        <strong>Who do I contact if I have questions?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">
+          <strong>Call:</strong> +91 93266 91744 or +91 99204 45917<br>
+          <strong>Email:</strong> pehlikamaitm@gmail.com<br>
+          <strong>WhatsApp:</strong> Message us on +91 93266 91744
+        </p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>How long does it usually take to get placed?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">There's no set timeline. It depends on your profile, the market demand for your skills, and your location. We actively help by connecting you with interested HR companies.</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>I have a complaint or grievance. What do I do?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)"><a onclick="showPage('grievance')" style="color: var(--teal); text-decoration: none; cursor: pointer">Read our Grievance Redressal Policy</a> for detailed instructions on how to file a complaint.</p>
+      </div>
+    </div>
+
+    <h2>Privacy & Safety</h2>
+
+    <div style="margin-bottom: 20px">
+      <div style="margin-bottom: 12px">
+        <strong>Is my personal information safe?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Yes. We follow strict data protection practices. Read our <a onclick="showPage('privacy')" style="color: var(--teal); text-decoration: none; cursor: pointer">Privacy Policy</a> for details about how we collect, use, and protect your information.</p>
+      </div>
+      <div style="margin-bottom: 12px">
+        <strong>Who has access to my profile?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">All signed-in HR companies can see masked versions of your profile (first name, last initial, general location). Full details are only shared when an HR company specifically expresses interest in you.</p>
+      </div>
+    </div>
   </div>
 </div>
 
