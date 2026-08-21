@@ -202,14 +202,26 @@ function scrollToHowItWorks(){
 // hero's own button does this too), and otherwise waits two animation
 // frames -- i.e. until the browser has actually painted the newly-
 // shown page -- instead of guessing a delay.
-function goHomeThenScroll(fn){
+// tabId is set AFTER showPage('home') below, not before -- showPage()
+// unconditionally resets aria-current to match its own page param, so a
+// caller setting the tab first would just get silently overwritten the
+// moment this needed to navigate home first (e.g. clicking "How it works"
+// while sitting on the Our story page).
+function goHomeThenScroll(fn,tabId){
   const homeEl=document.getElementById('view-home');
   if(homeEl && homeEl.classList.contains('hidden')){
     showPage('home');
+    if(tabId)setActiveTab(tabId);
     requestAnimationFrame(()=>requestAnimationFrame(fn));
   } else {
+    if(tabId)setActiveTab(tabId);
     fn();
   }
+}
+
+function setActiveTab(id){
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-current','false'));
+  const el=document.getElementById(id);if(el)el.setAttribute('aria-current','true');
 }
 
 function showPage(p){
@@ -218,8 +230,7 @@ function showPage(p){
   const enteringHome = homeEl && homeEl.classList.contains('hidden') && p==='home';
   document.querySelectorAll('[id^="view-"]').forEach(x=>x.classList.add('hidden'));
   const v=document.getElementById('view-'+p);if(v)v.classList.remove('hidden');
-  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-current','false'));
-  const nl=document.getElementById('nl-'+p);if(nl)nl.setAttribute('aria-current','true');
+  setActiveTab('nl-'+p);
   // Same fix, same reason, for the how-it-works 3D scene sitting inside Home.
   if(leavingHome){
     const el=document.querySelector('.hiw3d-stage pk-hiw3d');
