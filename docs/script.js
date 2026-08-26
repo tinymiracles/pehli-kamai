@@ -561,33 +561,51 @@ function toggleVol(show){
   document.getElementById('af-vol-fields').style.display=show?'flex':'none';
 }
 
+// Two-column layout -- header band + a skills/education sidebar + a
+// main work-experience column -- matching the shape of a real uploaded
+// resume (see the "already have a resume?" PDF path) instead of a flat
+// stack of labelled fields. Built entirely from the profile form's own
+// fields; nothing here is invented (there's no separate "job title"
+// field, so the experience/volunteering entries use company/org + how
+// long + what they did there, same fields the form actually collects).
 function buildResumeHTML(d){
-  const edu=`${d.edu||''}${d.institution?' — '+d.institution:''}${d.passYear?', '+d.passYear:''}`;
-  const expSec=d.expCompany?`
-    <div class="gr-section">
-      <div class="gr-label">Experience</div>
-      <div class="gr-item-title">${d.expCompany}${d.expDuration?' &nbsp;·&nbsp; '+d.expDuration:''}</div>
-      ${d.expRole?`<div class="gr-item-desc">${d.expRole}</div>`:''}
-    </div>`:'';
-  const volSec=d.volOrg?`
-    <div class="gr-section">
-      <div class="gr-label">Volunteering</div>
-      <div class="gr-item-title">${d.volOrg}${d.volDuration?' &nbsp;·&nbsp; '+d.volDuration:''}</div>
-      ${d.volRole?`<div class="gr-item-desc">${d.volRole}</div>`:''}
-    </div>`:'';
-  const skillList=(d.skills||[]).join(' &nbsp;·&nbsp; ');
-  const langList=(d.langs||[]).join(' &nbsp;·&nbsp; ');
+  const skillItems=(d.skills||[]).map(s=>`<li>${s}</li>`).join('');
+  const expBlock=d.expCompany?`
+      <div class="gr-main-block">
+        <div class="gr-main-label">Work Experience</div>
+        <div class="gr-exp-title">${d.expCompany}</div>
+        ${d.expDuration?`<div class="gr-exp-meta">${d.expDuration}</div>`:''}
+        ${d.expRole?`<div class="gr-exp-desc">${d.expRole}</div>`:''}
+      </div>`:'';
+  const volBlock=d.volOrg?`
+      <div class="gr-main-block">
+        <div class="gr-main-label">Volunteering</div>
+        <div class="gr-exp-title">${d.volOrg}</div>
+        ${d.volDuration?`<div class="gr-exp-meta">${d.volDuration}</div>`:''}
+        ${d.volRole?`<div class="gr-exp-desc">${d.volRole}</div>`:''}
+      </div>`:'';
   return`<div class="gen-resume">
-    <div class="gr-head">
+    <div class="gr-header">
       <div class="gr-name">${d.name||''}</div>
-      <div class="gr-contact">${d.location||'Mumbai'}, Mumbai &nbsp;·&nbsp; ${d.sector||''}</div>
+      <div class="gr-tagline">${d.sector||''}${d.location?' &nbsp;·&nbsp; '+d.location+', Mumbai':''}</div>
     </div>
-    ${d.about?`<div class="gr-section"><div class="gr-label">Objective</div><div class="gr-text">${d.about}</div></div>`:''}
-    <div class="gr-section"><div class="gr-label">Education</div><div class="gr-text">${edu}</div></div>
-    ${expSec}
-    ${volSec}
-    ${skillList?`<div class="gr-section"><div class="gr-label">Skills</div><div class="gr-chips">${skillList}</div></div>`:''}
-    ${langList?`<div class="gr-section"><div class="gr-label">Languages</div><div class="gr-chips">${langList}</div></div>`:''}
+    <div class="gr-body">
+      <div class="gr-sidebar">
+        ${(d.skills&&d.skills.length)?`<div class="gr-side-block"><div class="gr-side-label">Key Skills</div><ul class="gr-skill-list">${skillItems}</ul></div>`:''}
+        <div class="gr-side-block">
+          <div class="gr-side-label">Education</div>
+          <div class="gr-side-text">${d.edu||''}</div>
+          ${d.institution?`<div class="gr-side-sub">${d.institution}</div>`:''}
+          ${d.passYear?`<div class="gr-side-sub">${d.passYear}</div>`:''}
+        </div>
+        ${(d.langs&&d.langs.length)?`<div class="gr-side-block"><div class="gr-side-label">Languages</div><div class="gr-side-text">${d.langs.join(', ')}</div></div>`:''}
+      </div>
+      <div class="gr-main">
+        ${d.about?`<div class="gr-main-block"><div class="gr-main-label">Profile Summary</div><div class="gr-main-text">${d.about}</div></div>`:''}
+        ${expBlock}
+        ${volBlock}
+      </div>
+    </div>
   </div>`;
 }
 
@@ -611,16 +629,28 @@ function buildStandaloneResumeHTML(d){
 <title>${(d.name||'Resume')} — Pehli Kamai</title>
 <style>
   body{margin:0;background:#fff;}
-  .gen-resume{font-family:'Manrope',system-ui,-apple-system,sans-serif;padding:28px 24px;max-width:640px;margin:0 auto;}
-  .gr-head{margin-bottom:22px;padding-bottom:14px;border-bottom:3px solid #0e7a72;}
-  .gr-name{font-family:'Instrument Serif',Georgia,serif;font-size:22px;font-weight:700;color:#07181a;text-transform:uppercase;letter-spacing:1px;}
-  .gr-contact{font-size:11px;color:#7a9c9f;margin-top:5px;}
-  .gr-section{margin-bottom:16px;}
-  .gr-label{font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#0e7a72;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid #e3e8e7;}
-  .gr-text{font-size:13px;color:#4a6b6e;line-height:1.75;}
-  .gr-item-title{font-size:13px;font-weight:600;color:#07181a;}
-  .gr-item-desc{font-size:12.5px;color:#4a6b6e;margin-top:5px;line-height:1.65;}
-  .gr-chips{font-size:13px;color:#4a6b6e;line-height:1.8;}
+  .gen-resume{font-family:'Manrope',system-ui,-apple-system,sans-serif;max-width:640px;margin:0 auto;border:1px solid #e3e8e7;}
+  .gr-header{background:#0e7a72;color:#fff;padding:22px 24px;}
+  .gr-name{font-family:'Instrument Serif',Georgia,serif;font-size:21px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  .gr-tagline{font-size:12px;color:rgba(255,255,255,.82);margin-top:4px;font-style:italic;}
+  .gr-body{display:flex;}
+  .gr-sidebar{width:150px;flex:none;background:#0c655e;color:#fff;padding:20px 16px;}
+  .gr-side-block{margin-bottom:20px;}
+  .gr-side-block:last-child{margin-bottom:0;}
+  .gr-side-label{font-size:8.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#c9dd6a;margin-bottom:8px;}
+  .gr-skill-list{list-style:none;padding:0;margin:0;}
+  .gr-skill-list li{font-size:11px;line-height:1.7;padding-left:10px;position:relative;color:rgba(255,255,255,.92);}
+  .gr-skill-list li::before{content:'';position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:#c9dd6a;}
+  .gr-side-text{font-size:11px;line-height:1.6;color:rgba(255,255,255,.92);}
+  .gr-side-sub{font-size:10px;color:rgba(255,255,255,.68);margin-top:2px;}
+  .gr-main{flex:1;padding:20px 22px;min-width:0;}
+  .gr-main-block{margin-bottom:18px;}
+  .gr-main-block:last-child{margin-bottom:0;}
+  .gr-main-label{font-size:9px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#0e7a72;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #c8d8da;}
+  .gr-main-text{font-size:12.5px;color:#4a6b6e;line-height:1.75;}
+  .gr-exp-title{font-size:12.5px;font-weight:700;color:#07181a;}
+  .gr-exp-meta{font-size:11px;color:#7a9c9f;margin-top:1px;margin-bottom:5px;}
+  .gr-exp-desc{font-size:12px;color:#4a6b6e;line-height:1.6;}
 </style>
 </head>
 <body>

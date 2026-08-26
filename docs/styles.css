@@ -262,17 +262,32 @@ body{font-family:var(--sans);background:var(--ink);color:var(--text);min-height:
 .af-section-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:2px;}
 .af-yn{padding:7px 22px;border:1.5px solid var(--line-d);border-radius:6px;background:transparent;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--ink-3);cursor:pointer;transition:all .15s;}
 .af-yn.act{background:var(--teal);border-color:var(--teal);color:white;}
-.gen-resume{font-family:var(--sans);padding:28px 24px;}
-.gr-head{margin-bottom:22px;padding-bottom:14px;border-bottom:3px solid var(--teal);}
-.gr-name{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:1px;}
-.gr-contact{font-size:11px;color:var(--ink-4);margin-top:5px;}
-.gr-section{margin-bottom:16px;}
-.gr-label{font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid var(--line);}
-.gr-text{font-size:13px;color:var(--ink-3);line-height:1.75;}
-.gr-item-title{font-size:13px;font-weight:600;color:var(--ink);}
-.gr-item-sub{font-size:11px;color:var(--ink-4);margin-top:2px;}
-.gr-item-desc{font-size:12.5px;color:var(--ink-3);margin-top:5px;line-height:1.65;}
-.gr-chips{font-size:13px;color:var(--ink-3);line-height:1.8;}
+/* Auto-generated resume -- two-column layout (header band + skills/
+   education sidebar + main work-experience column), the same shape as
+   the professionally-formatted resumes candidates upload themselves,
+   just built from the profile form's own fields rather than a PDF. */
+.gen-resume{font-family:var(--sans);}
+.gr-header{background:var(--teal);color:#fff;padding:22px 24px;}
+.gr-name{font-family:var(--serif);font-size:21px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.gr-tagline{font-size:12px;color:rgba(255,255,255,.82);margin-top:4px;font-style:italic;}
+.gr-body{display:flex;}
+.gr-sidebar{width:150px;flex:none;background:#0c655e;color:#fff;padding:20px 16px;}
+.gr-side-block{margin-bottom:20px;}
+.gr-side-block:last-child{margin-bottom:0;}
+.gr-side-label{font-size:8.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--lime);margin-bottom:8px;}
+.gr-skill-list{list-style:none;padding:0;margin:0;}
+.gr-skill-list li{font-size:11px;line-height:1.7;padding-left:10px;position:relative;color:rgba(255,255,255,.92);}
+.gr-skill-list li::before{content:'';position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:var(--lime);}
+.gr-side-text{font-size:11px;line-height:1.6;color:rgba(255,255,255,.92);}
+.gr-side-sub{font-size:10px;color:rgba(255,255,255,.68);margin-top:2px;}
+.gr-main{flex:1;padding:20px 22px;min-width:0;}
+.gr-main-block{margin-bottom:18px;}
+.gr-main-block:last-child{margin-bottom:0;}
+.gr-main-label{font-size:9px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--line-d);}
+.gr-main-text{font-size:12.5px;color:var(--ink-3);line-height:1.75;}
+.gr-exp-title{font-size:12.5px;font-weight:700;color:var(--ink);}
+.gr-exp-meta{font-size:11px;color:var(--ink-4);margin-top:1px;margin-bottom:5px;}
+.gr-exp-desc{font-size:12px;color:var(--ink-3);line-height:1.6;}
 
 /* MODAL ACTIONS */
 .m-act{display:flex;gap:8px;margin-top:16px;}
