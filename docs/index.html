@@ -137,7 +137,7 @@
           <div class="fi-hero-stat"><div class="fi-hero-stat-n">Mumbai</div><div class="fi-hero-stat-l" data-i18n="hero_stat_based">Based</div></div>
         </div>
         <div class="fi-cta-row">
-          <button class="fi-cta" onclick="scrollToCandidates()" data-i18n="hero_cta_browse">Browse profiles &rarr;</button>
+          <button class="fi-cta" id="hero-browse-cta" onclick="scrollToCandidates()" data-i18n="hero_cta_browse">Browse profiles &rarr;</button>
           <button class="fi-cta ghost" onclick="openAdd()" data-i18n="hero_cta_kaam">Naukri dhoond rahe ho? &rarr;</button>
         </div>
       </div>
@@ -1561,7 +1561,7 @@
     <div class="ft-col">
       <div class="ft-col-label" data-i18n="footer_explore">Explore</div>
       <a onclick="showPage('home')" data-i18n="footer_home">Home</a>
-      <a onclick="goHomeThenScroll(scrollToCandidates,'nl-candidates')" data-i18n="nav_candidates">Candidates</a>
+      <a id="footer-candidates-link" onclick="goHomeThenScroll(scrollToCandidates,'nl-candidates')" data-i18n="nav_candidates">Candidates</a>
       <a onclick="showPage('about')" data-i18n="footer_about">About Us</a>
       <a onclick="openSignIn()" data-i18n="menu_hrlogin">Sign in</a>
     </div>

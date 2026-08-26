@@ -1779,8 +1779,16 @@ function updateRoleNav(){
   const kaamTab=document.getElementById('nl-addprofile');  // "Kaam chahiye" -- youth-facing
   const hrLink=document.getElementById('hdr-hr-link');     // "Sign in" (HR) entry point
   const kaamCta=document.querySelector('.fi-cta.ghost');   // hero's "Naukri dhoond rahe ho?"
+  // "Candidates" is HR's browse-the-directory page -- a signed-in youth
+  // has no reason to be in there, they're the ones being browsed.
+  const candTab=document.getElementById('nl-candidates');
+  const browseCta=document.getElementById('hero-browse-cta'); // hero's "Browse profiles"
+  const footerCandLink=document.getElementById('footer-candidates-link');
   if(hireTab)hireTab.style.display=currentYtAcct?'none':'';
   if(hrLink)hrLink.style.display=currentYtAcct?'none':'';
+  if(candTab)candTab.style.display=currentYtAcct?'none':'';
+  if(browseCta)browseCta.style.display=currentYtAcct?'none':'';
+  if(footerCandLink)footerCandLink.style.display=currentYtAcct?'none':'';
   if(kaamTab)kaamTab.style.display=hrUser?'none':'';
   if(kaamCta)kaamCta.style.display=hrUser?'none':'';
 }
