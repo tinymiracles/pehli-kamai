@@ -1,9 +1,20 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Opts the whole page out of Chrome/Edge's own automatic page-translate
+     feature. Our in-app EN/हिं/मर switcher only retranslates a deliberately
+     scoped set of [data-i18n] elements (see i18n.js) -- it never touches
+     candidate names, brand names, or most form/legal text. Without this,
+     the browser's own translate can also kick in on top of that (it judges
+     by actual page content, not just the lang attribute) and run its
+     Google Translate pass over literally everything, including the parts
+     our switcher deliberately leaves alone -- that combination is what
+     reads as "everything got translated" when only the nav/hero/sectors
+     should have. -->
+<meta name="google" content="notranslate">
 <title>Pehli Kamai — tiny miracles</title>
 <meta name="description" content="Pehli Kamai connects Mumbai's youth from underserved communities with their first real job. Free for job-seekers, verified profiles for employers, personal placement support from Tiny Miracles.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -84,7 +95,7 @@
         <button data-lang="hi" onclick="setLang('hi')">हिं</button>
         <button data-lang="mr" onclick="setLang('mr')">मर</button>
       </div>
-      <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()" data-i18n="menu_hrlogin">HR Login</button>
+      <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()" data-i18n="menu_hrlogin">Sign in</button>
       <button class="hdr-menu-item" onclick="showPage('stories');toggleHdrMenu()">Success Stories</button>
       <button class="hdr-menu-item" onclick="showPage('training');toggleHdrMenu()">Free Training</button>
       <button class="hdr-menu-item" onclick="showPage('help');toggleHdrMenu()">Help & FAQ</button>
@@ -1552,7 +1563,7 @@
       <a onclick="showPage('home')" data-i18n="footer_home">Home</a>
       <a onclick="goHomeThenScroll(scrollToCandidates,'nl-candidates')" data-i18n="nav_candidates">Candidates</a>
       <a onclick="showPage('about')" data-i18n="footer_about">About Us</a>
-      <a onclick="openSignIn()" data-i18n="menu_hrlogin">HR Login</a>
+      <a onclick="openSignIn()" data-i18n="menu_hrlogin">Sign in</a>
     </div>
     <div class="ft-col">
       <div class="ft-col-label" data-i18n="footer_contact_label">Contact</div>

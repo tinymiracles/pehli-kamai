@@ -591,6 +591,44 @@ function buildResumeHTML(d){
   </div>`;
 }
 
+// buildResumeHTML() above returns a bare <div class="gen-resume">
+// fragment -- fine for the in-page modal, which already has styles.css
+// loaded and just renders it inline. But that same fragment is also what
+// gets saved as a standalone .html file in Drive (see saveResumeToDrive_
+// in sheet-logger/Code.gs) -- opened on its own, outside the site, with
+// no stylesheet available, it showed up as plain unstyled text (class
+// names with nothing defining them). This wraps the identical markup in
+// a real document with the handful of rules it actually uses copied in,
+// so the Drive copy looks like the resume it's meant to be instead of a
+// wall of plain text. Values below are the light-mode ones .gen-resume
+// already resolves to on the live site (styles.css), just written out
+// literally since a standalone file has no access to tokens.css/styles.css.
+function buildStandaloneResumeHTML(d){
+  return`<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>${(d.name||'Resume')} — Pehli Kamai</title>
+<style>
+  body{margin:0;background:#fff;}
+  .gen-resume{font-family:'Manrope',system-ui,-apple-system,sans-serif;padding:28px 24px;max-width:640px;margin:0 auto;}
+  .gr-head{margin-bottom:22px;padding-bottom:14px;border-bottom:3px solid #0e7a72;}
+  .gr-name{font-family:'Instrument Serif',Georgia,serif;font-size:22px;font-weight:700;color:#07181a;text-transform:uppercase;letter-spacing:1px;}
+  .gr-contact{font-size:11px;color:#7a9c9f;margin-top:5px;}
+  .gr-section{margin-bottom:16px;}
+  .gr-label{font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#0e7a72;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid #e3e8e7;}
+  .gr-text{font-size:13px;color:#4a6b6e;line-height:1.75;}
+  .gr-item-title{font-size:13px;font-weight:600;color:#07181a;}
+  .gr-item-desc{font-size:12.5px;color:#4a6b6e;margin-top:5px;line-height:1.65;}
+  .gr-chips{font-size:13px;color:#4a6b6e;line-height:1.8;}
+</style>
+</head>
+<body>
+${buildResumeHTML(d)}
+</body>
+</html>`;
+}
+
 // Optional "already have a resume?" upload -- kept separate from the
 // auto-generated resume (candidates still get that either way). The file
 // itself is held here until saveProfile() runs, then uploaded straight to
@@ -753,7 +791,7 @@ function saveProfile(){
       const acct={uid,id,email,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,resumeKey:key,resume:true,track:trk,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,ageConfirmed18:true,donorConsent,createdAt:new Date().toISOString()};
       db.collection('youth_accounts').doc(uid).set(acct).catch(()=>{});
       db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,donorConsent,createdAt:new Date().toISOString()}).catch(()=>{});
-      logSignup('youth',{name:nm,email,phone:ph,edu:ed,institution:inst,sector:sc,location:loc,skills:sk.join(', '),about:ab,resumeHtml:html});
+      logSignup('youth',{name:nm,email,phone:ph,edu:ed,institution:inst,sector:sc,location:loc,skills:sk.join(', '),about:ab,resumeHtml:buildStandaloneResumeHTML(resumeD)});
       trackEvent('signup_youth',{sector:sc,location:loc}); // no name/email/phone -- aggregate only
       uploadPendingResume(uid,email);
       // Cache the profile for the "Firestore doc missing" fallback in
@@ -1123,6 +1161,7 @@ function openYtDash(acct,isNew){
 // if somehow both are set in the same session -- updateHRHeader()
 // already hides this button entirely for a signed-in HR account.
 function updateYouthHeader(){
+  updateRoleNav();
   const addBtn=document.getElementById('btn-add-profile');
   if(!addBtn||hrUser)return;
   // Same data-i18n-stays-set reasoning as the HR version above -- keeps
@@ -1682,7 +1721,7 @@ function updateHRHeader(){
     // English string if i18n.js hasn't loaded for some reason.
     const key=hrUser?'menu_myaccount':'menu_hrlogin';
     hrMenuLink.setAttribute('data-i18n',key);
-    hrMenuLink.textContent=typeof t==='function'?t(key):(hrUser?'My account':'HR Login');
+    hrMenuLink.textContent=typeof t==='function'?t(key):(hrUser?'My account':'Sign in');
     hrMenuLink.onclick=hrUser?(()=>{openHRAccount();toggleHdrMenu();}):(()=>{openSignIn();toggleHdrMenu();});
   }
   // "Upload your profile" makes no sense once you're signed in as HR --
@@ -1691,10 +1730,29 @@ function updateHRHeader(){
   // it silently never ran and the button just sat there regardless of
   // being signed in as HR. Setting it directly here instead.
   if(addBtn)addBtn.style.display=hrUser?'none':'';
+  updateRoleNav();
   // Runs after that so, once HR signs out, updateYouthHeader() gets a
   // chance to put the button back to whichever state youth login left
   // it in (it's a no-op whenever hrUser is set).
   updateYouthHeader();
+}
+
+// Once someone is signed in as one role, nav aimed at the OTHER role is
+// just noise -- a signed-in youth isn't here to hire anyone (they're the
+// fresher), and a signed-in HR contact isn't job-hunting. Hidden rather
+// than relabelled, so a signed-out visitor still sees both. Called from
+// both updateHRHeader() and updateYouthHeader() since either a youth or
+// an HR login/logout can flip which side should be hidden, and the two
+// functions aren't always called together.
+function updateRoleNav(){
+  const hireTab=document.getElementById('nl-home');       // "Hire a fresher" -- HR-facing
+  const kaamTab=document.getElementById('nl-addprofile');  // "Kaam chahiye" -- youth-facing
+  const hrLink=document.getElementById('hdr-hr-link');     // "Sign in" (HR) entry point
+  const kaamCta=document.querySelector('.fi-cta.ghost');   // hero's "Naukri dhoond rahe ho?"
+  if(hireTab)hireTab.style.display=currentYtAcct?'none':'';
+  if(hrLink)hrLink.style.display=currentYtAcct?'none':'';
+  if(kaamTab)kaamTab.style.display=hrUser?'none':'';
+  if(kaamCta)kaamCta.style.display=hrUser?'none':'';
 }
 
 // ── ASSESSMENT ─────────────────────────────────────
