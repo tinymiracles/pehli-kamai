@@ -97,6 +97,7 @@
       </div>
       <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()" data-i18n="menu_hrlogin">Sign in</button>
       <button class="hdr-menu-item" onclick="showPage('stories');toggleHdrMenu()">Success Stories</button>
+      <button class="hdr-menu-item" onclick="showPage('journey');toggleHdrMenu()">Training Journey</button>
       <button class="hdr-menu-item" onclick="showPage('training');toggleHdrMenu()">Free Training</button>
       <button class="hdr-menu-item" onclick="showPage('help');toggleHdrMenu()">Help & FAQ</button>
       <button class="hdr-menu-item" onclick="openCF();toggleHdrMenu()" data-i18n="menu_contact">Contact Us</button>
@@ -814,50 +815,12 @@
       </div>
     </div>
 
-    <h2>Your Training Journey</h2>
-    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 18px;">Beyond these free resources, every youth on Pehli Kamai gets our own 5-day session series &mdash; two before you're picked, three more once you are.</p>
-
-    <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--teal); margin-bottom: 10px;">Pre &mdash; for everyone on the portal</div>
-    <div style="margin-bottom: 22px;">
-      <div style="display:flex; gap: 14px; padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--teal); flex: none; width: 34px;">1</div>
-        <div>
-          <div style="font-weight: 700; color: var(--ink-1); font-size: 13.5px; margin-bottom: 4px;">Self Foundation &amp; Branding</div>
-          <p style="font-size: 12px; color: var(--ink-3); margin: 0;">Know your strengths, build confidence, and learn how to present yourself the right way.</p>
-        </div>
+    <div style="padding: 20px; background: var(--teal-soft); border-radius: 10px; border: 1.5px solid var(--teal-mid); margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <div>
+        <h3 style="font-size: 15px; font-weight: 700; color: var(--teal-dark); margin: 0 0 4px;">There's more &mdash; your 5-day Training Journey</h3>
+        <p style="font-size: 13px; color: var(--teal-dark); margin: 0;">Two sessions before you're picked, three more once you are. See the full journey.</p>
       </div>
-      <div style="display:flex; gap: 14px; padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal);">
-        <div style="font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--teal); flex: none; width: 34px;">2</div>
-        <div>
-          <div style="font-weight: 700; color: var(--ink-1); font-size: 13.5px; margin-bottom: 4px;">Interview Mastery</div>
-          <p style="font-size: 12px; color: var(--ink-3); margin: 0;">Practice real interview scenarios and learn how to make a strong first impression.</p>
-        </div>
-      </div>
-    </div>
-
-    <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--teal); margin-bottom: 10px;">Post &mdash; once an employer selects you</div>
-    <div style="margin-bottom: 24px;">
-      <div style="display:flex; gap: 14px; padding: 14px; background: var(--teal-soft); border-radius: 8px; border-left: 3px solid var(--teal-mid); margin-bottom: 12px;">
-        <div style="font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--teal-dark); flex: none; width: 34px;">3</div>
-        <div>
-          <div style="font-weight: 700; color: var(--teal-dark); font-size: 13.5px; margin-bottom: 4px;">Workplace Behaviour</div>
-          <p style="font-size: 12px; color: var(--teal-dark); margin: 0;">Understand workplace etiquette, punctuality, and professional conduct.</p>
-        </div>
-      </div>
-      <div style="display:flex; gap: 14px; padding: 14px; background: var(--teal-soft); border-radius: 8px; border-left: 3px solid var(--teal-mid); margin-bottom: 12px;">
-        <div style="font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--teal-dark); flex: none; width: 34px;">4</div>
-        <div>
-          <div style="font-weight: 700; color: var(--teal-dark); font-size: 13.5px; margin-bottom: 4px;">Digital Tools &amp; Time Management</div>
-          <p style="font-size: 12px; color: var(--teal-dark); margin: 0;">Get comfortable with the everyday tools and habits that keep you productive.</p>
-        </div>
-      </div>
-      <div style="display:flex; gap: 14px; padding: 14px; background: var(--teal-soft); border-radius: 8px; border-left: 3px solid var(--teal-mid);">
-        <div style="font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--teal-dark); flex: none; width: 34px;">5</div>
-        <div>
-          <div style="font-weight: 700; color: var(--teal-dark); font-size: 13.5px; margin-bottom: 4px;">Teamwork &amp; Career Growth</div>
-          <p style="font-size: 12px; color: var(--teal-dark); margin: 0;">Learn to work well with others and plan your next steps forward.</p>
-        </div>
-      </div>
+      <button class="btn-add" style="flex-shrink:0;" onclick="showPage('journey')">View the journey &rarr;</button>
     </div>
 
     <h2>When You Join Pehli Kamai</h2>
@@ -875,6 +838,68 @@
       </p>
     </div>
 
+  </div>
+</div>
+
+<!-- ━━ TRAINING JOURNEY ━━ -->
+<div class="hidden" id="view-journey">
+  <div class="about-wrap-new">
+    <h1 class="page-h1">Your Training <em>Journey</em></h1>
+    <div class="legal-meta">Five real sessions with us &mdash; not just links to watch on your own</div>
+  </div>
+  <div class="wrap reveal" style="max-width:900px;margin:0 auto;padding:0 24px 8px;">
+    <p style="font-size:15px;line-height:1.8;color:var(--fi-ink-2);max-width:68ch;">
+      Getting hired isn't just about having a resume &mdash; it's knowing how to walk into a room, answer a tough question, and show up ready on day one. So every youth on Pehli Kamai goes through five sessions with our own team: two before an employer even sees your profile, three more once you're picked.
+    </p>
+  </div>
+
+  <div class="wrap reveal" style="max-width:1000px;margin:24px auto 0;padding:0 24px;">
+    <span class="fi-hiw-label">Pre &mdash; for everyone on the portal</span>
+  </div>
+  <div class="fi-steps journey-steps journey-steps-2" style="margin-top:14px;">
+    <div class="fi-step">
+      <div class="fi-step-num">1</div>
+      <div class="journey-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="8.5" cy="12" r="1.8"/><path d="M13 10.5h5M13 13.5h3"/></svg></div>
+      <h3>Self Foundation &amp; Branding</h3>
+      <p>Know your strengths, build confidence, and learn how to present yourself the right way.</p>
+    </div>
+    <div class="fi-step">
+      <div class="fi-step-num">2</div>
+      <div class="journey-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H8l-4 4Z"/><path d="M8 8.5h8M8 11.5h5"/></svg></div>
+      <h3>Interview Mastery</h3>
+      <p>Practice real interview scenarios and learn how to make a strong first impression.</p>
+    </div>
+  </div>
+
+  <div class="wrap reveal" style="max-width:1000px;margin:36px auto 0;padding:0 24px;">
+    <span class="fi-hiw-label">Post &mdash; once an employer selects you</span>
+  </div>
+  <div class="fi-steps journey-steps journey-steps-3" style="margin-top:14px;margin-bottom:56px;">
+    <div class="fi-step">
+      <div class="fi-step-num lime">3</div>
+      <div class="journey-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l3.2 3.2"/></svg></div>
+      <h3>Workplace Behaviour</h3>
+      <p>Understand workplace etiquette, punctuality, and professional conduct.</p>
+    </div>
+    <div class="fi-step">
+      <div class="fi-step-num lime">4</div>
+      <div class="journey-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="12" rx="1.5"/><path d="M1 20h22l-1.5-3H2.5Z"/></svg></div>
+      <h3>Digital Tools &amp; Time Management</h3>
+      <p>Get comfortable with the everyday tools and habits that keep you productive.</p>
+    </div>
+    <div class="fi-step">
+      <div class="fi-step-num lime">5</div>
+      <div class="journey-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16c2.5-5 7-5 9 0s6.5 5 9 0"/><path d="M17 6l3-2m0 0v2.5M20 4h-2.5"/></svg></div>
+      <h3>Teamwork &amp; Career Growth</h3>
+      <p>Learn to work well with others and plan your next steps forward.</p>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-bottom:90px;">
+    <div class="closer">
+      <p>That's the full journey &mdash; from your first session with us to succeeding in your first week on the job.</p>
+      <button onclick="openAdd()">Upload your profile &mdash; it's free, always</button>
+    </div>
   </div>
 </div>
 

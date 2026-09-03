@@ -321,6 +321,20 @@ pk-hiw3d.hot{cursor:pointer;}
   .fi-steps{grid-template-columns:1fr;padding:0 20px;}
 }
 
+/* Training Journey page -- reuses .fi-step's card/number/type styling
+   (already proven on the homepage's "How it works" steps) but at 2 and
+   3 columns instead of the fixed 4, and swaps the .fi-step-art image
+   slot for a small icon badge since there's no photography for each
+   session. */
+.journey-steps{max-width:1000px;}
+.journey-steps-2{grid-template-columns:1fr 1fr;}
+.journey-steps-3{grid-template-columns:repeat(3,1fr);}
+.journey-icon{width:44px;height:44px;border-radius:50%;background:var(--bg-light-tint);color:var(--teal);
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.journey-icon svg{width:22px;height:22px;}
+@media(max-width:1000px){.journey-steps-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:640px){.journey-steps-2,.journey-steps-3{grid-template-columns:1fr;padding:0 20px;}}
+
 /* ── sectors band — "the range of first jobs", three vignettes (retail /
    office & data entry / technical & healthcare). Was flat-vector SVG
    illustrations; swapped for the manager's own reference photos. The
