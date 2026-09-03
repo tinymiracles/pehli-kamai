@@ -326,7 +326,12 @@ pk-hiw3d.hot{cursor:pointer;}
    3 columns instead of the fixed 4, and swaps the .fi-step-art image
    slot for a small icon badge since there's no photography for each
    session. */
-.journey-steps{max-width:1000px;}
+/* Match .wrap/.about-wrap-new's exact width and padding (1240px / 44px)
+   so every section on this page shares the same left/right edge --
+   .fi-steps on its own uses a narrower 1180px/40px, which is fine for
+   the homepage but was leaving this page's cards and section labels
+   out of alignment with the page header above them. */
+.journey-steps{max-width:1240px;padding:0 44px;}
 .journey-steps-2{grid-template-columns:1fr 1fr;}
 .journey-steps-3{grid-template-columns:repeat(3,1fr);}
 .journey-icon{width:44px;height:44px;border-radius:50%;background:var(--bg-light-tint);color:var(--teal);
