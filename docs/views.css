@@ -321,24 +321,50 @@ pk-hiw3d.hot{cursor:pointer;}
   .fi-steps{grid-template-columns:1fr;padding:0 20px;}
 }
 
-/* Training Journey page -- reuses .fi-step's card/number/type styling
-   (already proven on the homepage's "How it works" steps) but at 2 and
-   3 columns instead of the fixed 4, and swaps the .fi-step-art image
-   slot for a small icon badge since there's no photography for each
-   session. */
-/* Match .wrap/.about-wrap-new's exact width and padding (1240px / 44px)
-   so every section on this page shares the same left/right edge --
-   .fi-steps on its own uses a narrower 1180px/40px, which is fine for
-   the homepage but was leaving this page's cards and section labels
-   out of alignment with the page header above them. */
-.journey-steps{max-width:1240px;padding:0 44px;}
-.journey-steps-2{grid-template-columns:1fr 1fr;}
-.journey-steps-3{grid-template-columns:repeat(3,1fr);}
-.journey-icon{width:44px;height:44px;border-radius:50%;background:var(--bg-light-tint);color:var(--teal);
+/* ── Training Journey page ── a real narrative path, not a static grid:
+   a bold hero states the offer, then a single connecting rail runs top
+   to bottom through all 5 sessions with a milestone break where the
+   story's actual turning point happens (getting selected) -- that
+   break is content, not decoration: it's the one thing that changes
+   what training you're even eligible for. */
+.jt-hero{background:linear-gradient(135deg,var(--teal) 0%,#0a5b55 100%);color:#fff;padding:72px 0 60px;}
+.jt-eyebrow{display:block;font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:16px;}
+.jt-h1{font-family:var(--serif);font-size:clamp(38px,5.4vw,58px);font-weight:700;line-height:1.05;margin:0 0 18px;}
+.jt-h1 em{font-style:italic;color:var(--lime);}
+.jt-lede{font-family:var(--sans);font-size:16px;line-height:1.85;color:rgba(255,255,255,.86);max-width:62ch;}
+
+.jt-timeline-section{background:var(--bg-light);padding:64px 0 20px;}
+.jt-timeline{position:relative;max-width:760px;margin:0 auto;padding-left:68px;}
+.jt-rail{position:absolute;left:23px;top:6px;bottom:60px;width:2px;background:var(--bg-light-tint);}
+.jt-item{position:relative;margin-bottom:36px;}
+.jt-node{position:absolute;left:-68px;top:0;width:48px;height:48px;border-radius:50%;background:var(--teal);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:21px;font-weight:700;
+  box-shadow:0 6px 16px rgba(14,122,114,.35);z-index:1;}
+.jt-node.lime{background:var(--lime);color:var(--fi-ink);box-shadow:0 6px 16px rgba(201,221,106,.5);}
+.jt-card{background:#fff;border:1px solid rgba(13,36,39,.08);border-radius:16px;padding:26px 28px;
+  box-shadow:0 6px 24px rgba(13,36,39,.07);border-left:4px solid var(--teal);}
+.jt-card.lime{border-left-color:var(--lime);}
+.jt-card-icon{width:42px;height:42px;border-radius:50%;background:var(--bg-light-tint);color:var(--teal);
   display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
-.journey-icon svg{width:22px;height:22px;}
-@media(max-width:1000px){.journey-steps-3{grid-template-columns:1fr 1fr;}}
-@media(max-width:640px){.journey-steps-2,.journey-steps-3{grid-template-columns:1fr;padding:0 20px;}}
+.jt-card-icon svg{width:21px;height:21px;}
+.jt-card h3{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--fi-ink);margin:0 0 8px;}
+.jt-card p{font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--fi-ink-2);margin:0;}
+
+.jt-milestone{position:relative;margin:-6px 0 30px -68px;padding-left:68px;}
+.jt-milestone::before{content:'';position:absolute;left:15px;top:50%;width:18px;height:18px;border-radius:50%;
+  background:var(--fi-ink);border:3px solid var(--bg-light);z-index:1;transform:translateY(-50%);}
+.jt-milestone span{display:inline-block;background:var(--fi-ink);color:#fff;font-family:var(--sans);
+  font-weight:700;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;padding:9px 18px;border-radius:20px;}
+
+@media(max-width:640px){
+  .jt-hero{padding:52px 0 44px;}
+  .jt-timeline{padding-left:52px;}
+  .jt-rail{left:15px;}
+  .jt-node{left:-52px;width:36px;height:36px;font-size:16px;}
+  .jt-card{padding:20px 18px;}
+  .jt-milestone{margin-left:-52px;padding-left:52px;}
+  .jt-milestone::before{left:7px;}
+}
 
 /* ── sectors band — "the range of first jobs", three vignettes (retail /
    office & data entry / technical & healthcare). Was flat-vector SVG
