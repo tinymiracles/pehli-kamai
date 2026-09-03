@@ -359,17 +359,8 @@ pk-hiw3d.hot{cursor:pointer;}
 @media(prefers-reduced-motion:reduce){
   .reveal,.reveal-stagger>*{opacity:1;transform:none;filter:none;transition:none;}
 }
-/* Duotone treatment -- the three source images arrived in three unrelated
-   palettes (teal/red, blue, purple/pink/yellow) that never belonged next
-   to each other or to the brand. Rather than replacing the artwork
-   (which just risks a fresh content mismatch), grayscale each image and
-   recolor it with the brand gradient via mix-blend-mode:color -- that
-   mode takes hue/saturation from the overlay and keeps luminosity from
-   the photo, so all three end up sharing one teal-to-lime palette while
-   keeping their original composition and detail intact. */
-.fi-sector-art{position:relative;aspect-ratio:4/3;background:var(--bg-light);overflow:hidden;}
-.fi-sector-art img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.05);}
-.fi-sector-art::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--teal),var(--lime));mix-blend-mode:color;}
+.fi-sector-art{aspect-ratio:4/3;background:var(--bg-light);overflow:hidden;}
+.fi-sector-art img{width:100%;height:100%;object-fit:cover;display:block;}
 .fi-sector-art--split{display:flex;}
 .fi-sector-art--split img{width:50%;}
 .fi-sector-body{padding:16px 18px 20px;}
