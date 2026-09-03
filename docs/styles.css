@@ -419,6 +419,21 @@ footer{background:var(--bg-light);color:var(--fi-ink);padding:0;position:relativ
   .btn-hr-login{padding:0 11px;font-size:11px;height:30px;}
   .btn-add{padding:0 12px;font-size:11px;height:30px;}
   .ss{top:56px;padding:0 16px;}
+  /* The search/filter strip (candidate count + sector chips + search box +
+     2 dropdowns) was one unwrapped flex row with flex-shrink:0 on its
+     pieces -- on a phone-width screen the pieces' combined natural width
+     is well over 2x the viewport, which was pushing the whole page into
+     horizontal scroll (confirmed: document.body.scrollWidth ~663px in a
+     375px viewport, exactly matching .ss-right's overflow). Letting the
+     row wrap, and .ss-right's own children wrap under it full-width,
+     keeps everything on-screen without touching the desktop layout at
+     all (this only applies under 700px). */
+  .ss-in{flex-wrap:wrap;height:auto;padding:10px 0;row-gap:10px;}
+  .ss-cand{padding-right:14px;margin-right:0;}
+  .chips{flex:1 1 auto;min-width:0;}
+  .ss-right{width:100%;flex-wrap:wrap;padding-left:0;gap:10px;}
+  .s-wrap{width:100%;}
+  .loc-sel{flex:1;min-width:0;}
   .hero{padding:36px 20px 36px;}
   .hero-brand{flex-direction:column;align-items:flex-start;gap:8px;}
   .hero-logo-big{width:56px;height:56px;}

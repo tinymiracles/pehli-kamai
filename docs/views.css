@@ -121,8 +121,9 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 .brand-name{font-family:var(--serif);font-style:italic;font-weight:700;font-size:19px;line-height:1;color:var(--ed-ink);}
 .brand-name span{color:var(--teal);}
 .brand-sub{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ed-ink-2);margin-top:3px;}
-.tabs{display:flex;gap:4px;}
-.tab{background:transparent;border:none;font-size:13px;font-weight:600;color:var(--ed-ink-2);
+.tabs{display:flex;gap:4px;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{background:transparent;border:none;font-size:13px;font-weight:600;color:var(--ed-ink-2);white-space:nowrap;flex-shrink:0;
      padding:7px 15px;border-radius:var(--r-sm);font-family:var(--sans);cursor:pointer;transition:color .15s,background .15s;}
 .tab:hover{color:var(--ed-ink);}
 .tab[aria-current="true"]{background:transparent;color:var(--ed-ink);font-weight:700;
