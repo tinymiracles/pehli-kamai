@@ -17,7 +17,22 @@
 <meta name="google" content="notranslate">
 <title>Pehli Kamai — tiny miracles</title>
 <meta name="description" content="Pehli Kamai connects Mumbai's youth from underserved communities with their first real job. Free for job-seekers, verified profiles for employers, personal placement support from Tiny Miracles.">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- Favicons. Google's guidance is a square whose sides are a multiple of 48px,
+     and it picks the most suitable size it can find; the old setup declared
+     only an SVG, which is a common reason Google falls back to its generic
+     globe in search results. PNGs are listed largest-last so browsers that
+     take the final match get the sharpest one. favicon.svg is deliberately no
+     longer referenced -- it is the retired teal starburst, not the logo. -->
+<link rel="icon" type="image/png" sizes="48x48" href="icon-48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<!-- iOS ignores PNG transparency on home-screen icons, so this one is
+     pre-composited onto brand teal rather than left to fall on black. -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<!-- Tints the mobile browser chrome to match, per theme. -->
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1f22" media="(prefers-color-scheme: dark)">
 <!-- The site is reachable at pehli-kamai.vercel.app, pehlikamai.com, and
      www.pehlikamai.com -- without a canonical tag, Google treats those as
      separate pages with duplicate content and can split ranking signals
