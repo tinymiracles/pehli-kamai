@@ -18,6 +18,26 @@
 <title>Pehli Kamai — tiny miracles</title>
 <meta name="description" content="Pehli Kamai connects Mumbai's youth from underserved communities with their first real job. Free for job-seekers, verified profiles for employers, personal placement support from Tiny Miracles.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- The site is reachable at pehli-kamai.vercel.app, pehlikamai.com, and
+     www.pehlikamai.com -- without a canonical tag, Google treats those as
+     separate pages with duplicate content and can split ranking signals
+     between them instead of crediting one. www.pehlikamai.com is what
+     actually serves the site (the bare domain redirects to it), so that's
+     the one every variant should point back to. -->
+<link rel="canonical" href="https://www.pehlikamai.com/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Pehli Kamai",
+  "alternateName": "Pehli Kamai by Tiny Miracles",
+  "url": "https://www.pehlikamai.com/",
+  "logo": "https://www.pehlikamai.com/favicon.svg",
+  "description": "Pehli Kamai connects Mumbai's youth from underserved communities with their first real job. Free for job-seekers, verified profiles for employers, personal placement support from Tiny Miracles.",
+  "areaServed": {"@type": "City", "name": "Mumbai"},
+  "sameAs": ["https://tinymiracles.com/"]
+}
+</script>
 
 <!-- Open Graph -- controls the preview card WhatsApp/Facebook/LinkedIn
      show when this link is shared. og:image needs an absolute URL
@@ -29,14 +49,14 @@
 <meta property="og:site_name" content="Pehli Kamai">
 <meta property="og:title" content="Pehli Kamai — first jobs for Mumbai's youth">
 <meta property="og:description" content="Connecting Mumbai's youth from underserved communities with their first real job. Free for job-seekers, verified profiles for employers.">
-<meta property="og:url" content="https://pehli-kamai.vercel.app/">
-<meta property="og:image" content="https://pehli-kamai.vercel.app/assets/img/sector-technical-new.png">
+<meta property="og:url" content="https://www.pehlikamai.com/">
+<meta property="og:image" content="https://www.pehlikamai.com/assets/img/sector-technical-new.png">
 <meta property="og:image:width" content="1024">
 <meta property="og:image:height" content="576">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Pehli Kamai — first jobs for Mumbai's youth">
 <meta name="twitter:description" content="Connecting Mumbai's youth from underserved communities with their first real job.">
-<meta name="twitter:image" content="https://pehli-kamai.vercel.app/assets/img/sector-technical-new.png">
+<meta name="twitter:image" content="https://www.pehlikamai.com/assets/img/sector-technical-new.png">
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
