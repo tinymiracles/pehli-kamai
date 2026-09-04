@@ -633,7 +633,14 @@ pk-hiw3d.hot{cursor:pointer;}
   .btn-add{padding:0 12px;font-size:12.5px;}
 }
 
-/* 5 — Logo steps with the device instead of a flat 28px everywhere. */
-.wm-logo{width:36px;height:36px;}
-@media(max-width:560px){.wm-logo{width:32px;height:32px;}}
-@media(min-width:1001px){.wm-logo{width:40px;height:40px;}}
+/* 5 — Logo steps with the device instead of a flat 28px everywhere.
+       Sized for the badge lockup: the name is lettered inside the mark, so it
+       needs enough px to stay readable. Below ~42px the lettering turns to mush. */
+.wm-logo{width:46px;height:46px;border-radius:6px;}
+@media(max-width:560px){.wm-logo{width:42px;height:42px;}}
+@media(min-width:1001px){.wm-logo{width:48px;height:48px;}}
+
+/* 6 — The badge already letters "Pehli Kamai", so the adjacent wordmark would
+       print the name twice — once legibly, once as a smudge. Drop it and keep
+       only the parent-org credit. */
+.brand-name{display:none;}
