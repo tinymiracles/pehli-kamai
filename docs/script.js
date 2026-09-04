@@ -1924,7 +1924,42 @@ function updateAboutStats(){
   const sTot=document.getElementById('s-tot'); if(sTot) sTot.textContent=DATA.length;
   const dTot=document.getElementById('d-tot'); if(dTot) dTot.textContent=DATA.length;
   const hiwTot=document.getElementById('hiw-tot'); if(hiwTot) hiwTot.textContent=DATA.length;
-  const heroTot=document.getElementById('hero-tot'); if(heroTot) heroTot.textContent=DATA.length;
+  const heroTot=document.getElementById('hero-tot'); if(heroTot) countUpOnce(heroTot,DATA.length);
+}
+
+/* Count a stat up from zero, but ONLY the first time. updateAboutStats() runs
+   again whenever mergeFirestoreCandidates() resolves, and re-animating on every
+   data refresh would make the hero number visibly flicker back to 0. After the
+   first run this just assigns the value.
+   Honours prefers-reduced-motion by skipping straight to the final number. */
+function countUpOnce(el,to){
+  const target=Number(to)||0;
+  const settle=()=>{ el.textContent=target; };
+  if(el.dataset.counted){ settle(); return; }
+
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  /* Bail to the plain number -- and crucially do NOT mark this as counted --
+     in three cases:
+       target<=0     this pass ran before mergeFirestoreCandidates() resolved,
+                     so spending the animation here would strand the real
+                     number and never animate it;
+       reduce        the user asked for no motion;
+       document.hidden  requestAnimationFrame does not fire in a background
+                     tab, so the loop would freeze on its first frame -- which
+                     paints 0 -- and the stat would read zero until focus.
+     Leaving `counted` unset means the next call still gets to animate. */
+  if(target<=0||reduce||document.hidden){ settle(); return; }
+
+  el.dataset.counted='1';
+  const DUR=900, t0=performance.now();
+  (function tick(now){
+    const p=Math.min(1,(now-t0)/DUR);
+    // ease-out cubic: fast start, gentle settle
+    const eased=1-Math.pow(1-p,3);
+    // round, and pin the last frame to the exact target so it never lands short
+    el.textContent = p<1 ? Math.round(eased*target) : target;
+    if(p<1) requestAnimationFrame(tick);
+  })(t0);
 }
 function boot(){
   buildChips();render();updateEnqBadge();updateAboutStats();

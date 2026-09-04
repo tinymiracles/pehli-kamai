@@ -384,8 +384,23 @@ pk-hiw3d.hot{cursor:pointer;}
 .fi-sector-card.in-view{opacity:1;transform:translateY(0);filter:blur(0);}
 .fi-sector-card:nth-child(2){transition-delay:.1s;}
 .fi-sector-card:nth-child(3){transition-delay:.2s;}
+
+/* Hover lift. Scoped to .in-view because the reveal above animates the same
+   transform property -- unscoped, hovering a not-yet-revealed card would
+   yank it to its lifted position and skip the reveal entirely. The transition
+   is re-declared short here so the lift feels immediate (.22s) rather than
+   inheriting the .7s reveal easing; releasing settles back over the reveal
+   duration, which reads as intentional rather than sluggish.
+   -4px matches the lift already used elsewhere in the codebase
+   (views.css .card:hover, styles.css line 164) instead of inventing a new one. */
+.fi-sector-card.in-view:hover{transform:translateY(-4px);
+  box-shadow:0 16px 36px rgba(13,36,39,.14);
+  transition:transform .22s ease,box-shadow .22s ease;}
+
 @media(prefers-reduced-motion:reduce){
   .fi-sector-card{opacity:1;transform:none;filter:none;transition:none;}
+  /* Keep the shadow cue on hover, drop the movement. */
+  .fi-sector-card.in-view:hover{transform:none;transition:box-shadow .22s ease;}
 }
 
 /* Generic scroll-reveal -- fade + rise + soften into focus. Applied via
