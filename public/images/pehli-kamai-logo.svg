@@ -1,0 +1,26 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+  <!-- Background rounded square -->
+  <rect x="30" y="30" width="240" height="240" rx="35" ry="35" fill="#0E7A72"/>
+  
+  <!-- Diagonal accent line (right side) -->
+  <path d="M 280 60 L 220 200" stroke="rgba(255,255,255,0.3)" stroke-width="12" stroke-linecap="round"/>
+  
+  <!-- Text: Pehli -->
+  <text x="75" y="120" font-family="'Segoe UI', 'Trebuchet MS', sans-serif" font-size="56" font-weight="700" fill="white" letter-spacing="-2">
+    Pehli
+  </text>
+  
+  <!-- Text: kamai -->
+  <text x="75" y="185" font-family="'Segoe UI', 'Trebuchet MS', sans-serif" font-size="56" font-weight="700" fill="white" letter-spacing="-2">
+    kamai
+  </text>
+  
+  <!-- Decorative dots after i's -->
+  <circle cx="135" cy="95" r="6" fill="white"/>
+  <circle cx="265" cy="160" r="6" fill="white"/>
+  
+  <!-- Small diamond accent (in the middle of kamai) -->
+  <g fill="#0E7A72">
+    <polygon points="155,150 163,158 155,166 147,158"/>
+  </g>
+</svg>
