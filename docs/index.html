@@ -115,6 +115,14 @@
         <button data-lang="hi" onclick="setLang('hi')">हिं</button>
         <button data-lang="mr" onclick="setLang('mr')">मर</button>
       </div>
+      <div class="hdr-menu-nav">
+        <div class="hdr-menu-label" data-i18n="menu_browse">Browse</div>
+        <button class="hdr-menu-item" onclick="showPage('home');toggleHdrMenu()" data-i18n="nav_hire">Hire a fresher</button>
+        <button class="hdr-menu-item" onclick="goHomeThenScroll(scrollToHowItWorks,'nl-how');toggleHdrMenu()" data-i18n="nav_how">How it works</button>
+        <button class="hdr-menu-item" onclick="goHomeThenScroll(scrollToCandidates,'nl-candidates');toggleHdrMenu()" data-i18n="nav_candidates">Candidates</button>
+        <button class="hdr-menu-item" onclick="openAdd();toggleHdrMenu()" data-i18n="nav_kaam">Kaam chahiye</button>
+        <button class="hdr-menu-item" onclick="showPage('about');toggleHdrMenu()" data-i18n="nav_story">Our story</button>
+      </div>
       <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()" data-i18n="menu_hrlogin">Sign in</button>
       <button class="hdr-menu-item" onclick="showPage('stories');toggleHdrMenu()">Success Stories</button>
       <button class="hdr-menu-item" onclick="showPage('journey');toggleHdrMenu()">Training Journey</button>

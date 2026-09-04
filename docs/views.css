@@ -589,3 +589,51 @@ pk-hiw3d.hot{cursor:pointer;}
   .shortlist-print th{text-align:left;padding:8px;border-bottom:2px solid #000;}
   .shortlist-print td{padding:8px;border-bottom:1px solid #ccc;}
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   RESPONSIVE HEADER FIX
+   Measured before: @800px .hdr-right ran to x=999 in an 800px viewport —
+   the Upload CTA and hamburger were 199px off-screen and unreachable.
+   @375px the bar wrapped to 3 rows / 147px (18% of screen) and showed the
+   tab strip AND the hamburger, with 342px of nav scrolled off behind a
+   hidden scrollbar. Appended (not edited in place) so these override the
+   earlier max-width:700px block by source order.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* 1 — Collapse primary nav into the hamburger before it can overflow.
+        Brand + 6 nowrap tabs + CTA need ~1000px of bar. */
+.hdr-menu-nav{display:none;flex-direction:column;gap:2px;
+  padding-bottom:6px;margin-bottom:4px;border-bottom:1px solid var(--line-d);}
+@media(max-width:1000px){
+  .tabs{display:none;}
+  .hdr-menu-nav{display:flex;}
+}
+
+/* 2 — Hard guarantee that nothing escapes the bar horizontally. */
+.hdr{min-width:0;}
+.brand{min-width:0;flex-shrink:1;}
+.brand-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hdr-right{flex-shrink:0;}
+
+/* 3 — One row at a constant 64px at every width. */
+@media(max-width:700px){
+  .hdr{padding:0 16px;height:64px;flex-wrap:nowrap;gap:14px;}
+  .hdr-right{width:auto;margin-left:auto;}
+  .hdr-menu{right:16px;left:16px;min-width:0;}
+}
+
+/* 4 — Reclaim width on phones: the decorative sub-line goes; the brand
+        name and the CTA both stay. Measured at 360px in en/hi/mr:
+        "Pehli Kamai" renders at its full 84px untruncated even against
+        the widest CTA label (Marathi, 174px), so there is no width
+        justification for hiding it. Guard 2 above ellipsizes it if a
+        narrower device ever does run out of room. */
+@media(max-width:560px){
+  .brand-sub{display:none;}
+  .btn-add{padding:0 12px;font-size:12.5px;}
+}
+
+/* 5 — Logo steps with the device instead of a flat 28px everywhere. */
+.wm-logo{width:36px;height:36px;}
+@media(max-width:560px){.wm-logo{width:32px;height:32px;}}
+@media(min-width:1001px){.wm-logo{width:40px;height:40px;}}
