@@ -453,6 +453,7 @@
   <div class="legal-wrap">
     <div class="legal-nav">
       <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('cookies')">Cookies</a>
       <a onclick="showPage('terms')">Terms &amp; Conditions</a>
       <a onclick="showPage('grievance')">Grievance Redressal</a>
     </div>
@@ -504,7 +505,8 @@
     <div class="legal-callout"><strong>We will never ask you for money.</strong> Creating a profile, being introduced to employers, and using this platform costs you nothing. If anyone claiming to be from Pehli Kamai asks you to pay a fee, a deposit, or hand over original documents, that is not us — tell us immediately.</div>
 
     <h2>Cookies and your browser's local storage</h2>
-    <p>We don't use tracking cookies or third-party analytics on this site. The site does keep a cached copy of your account in your browser's local storage, purely so you're not signed out unexpectedly — this stays on your device.</p>
+    <p>We don't use advertising cookies or cross-site trackers, and we don't build a profile of you or sell your browsing behaviour. The site keeps a cached copy of your account in your browser's local storage, purely so you're not signed out unexpectedly — this stays on your device and is necessary for accounts to work.</p>
+    <p>Separately, and <strong>only with your permission</strong>, we count anonymous page visits using Vercel Web Analytics so we can see which parts of the site are useful. It sets no cookies and doesn't identify you. It is off unless you switch it on, and if you decline, the script is never loaded at all. You can change your answer at any time — see <a onclick="showPage('cookies')">Cookies &amp; local storage</a> for the detail and the switch.</p>
 
     <h2>Security</h2>
     <p>Passwords are held only by Firebase Authentication, hashed and never visible to us. We use established providers for storage and take reasonable steps to protect your data. No online system is completely secure, and we don't claim otherwise.</p>
@@ -518,6 +520,51 @@
 </div>
 
 <!-- ━━ TERMS AND CONDITIONS ━━ -->
+<div class="hidden" id="view-cookies">
+  <div class="about-wrap-new">
+    <h1 class="page-h1">Cookies &amp; <em>local storage</em></h1>
+    <div class="legal-meta">Version 1.0 — last updated 4 September 2026</div>
+  </div>
+  <div class="legal-wrap">
+    <div class="legal-nav">
+      <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('cookies')">Cookies</a>
+      <a onclick="showPage('terms')">Terms &amp; Conditions</a>
+      <a onclick="showPage('grievance')">Grievance Redressal</a>
+    </div>
+
+    <h2>The short version</h2>
+    <p>Pehli Kamai sets <strong>no advertising cookies and no cross-site trackers</strong>. We don't sell or share your browsing behaviour, and we don't build a profile of you. There are only two things we store, and one of them is entirely your choice.</p>
+
+    <h2>1. Keeping you signed in — always on</h2>
+    <p>If you create an account or sign in, we keep a cached copy of your session in your browser's <strong>local storage</strong>. This is what stops you being logged out every time you move between pages. It stays on your own device, we can't read it remotely, and it isn't used to follow you anywhere.</p>
+    <p>This is strictly necessary for accounts to work at all, so it isn't something we ask permission for — under India's Digital Personal Data Protection Act, 2023, storage that's essential to deliver a service you asked for doesn't require separate consent. If you'd rather we didn't store it, don't sign in; you can browse candidate profiles without an account. Clearing your browser data removes it, and signing out removes it immediately.</p>
+
+    <h2>2. Anonymous visit counts — off unless you say yes</h2>
+    <p>We'd like to know which parts of the site are actually useful — how many people reach the candidate list, whether anyone finds the training pages. For that we use <strong>Vercel Web Analytics</strong>, and only if you switch it on.</p>
+    <p>What it does: counts page views and which links get clicked. What it does not do: set cookies, track you across other websites, record your name, email or IP address in a way that identifies you, or build an advertising profile. It's aggregate counting, not surveillance.</p>
+    <p><strong>It is off by default.</strong> If you chose "Reject", the analytics script is never downloaded at all — not loaded-then-disabled, simply never requested. Your choice is stored on your device so we don't ask again.</p>
+
+    <h2>Changing your mind</h2>
+    <p>You can switch analytics on or off whenever you like, and your earlier answer isn't binding.</p>
+    <p><a onclick="ckReopen()">Review my cookie choices →</a></p>
+    <p>You can also clear site data in your browser settings, which erases both your session and your stored preference — the next visit will ask again.</p>
+
+    <h2>Third parties that load on this site</h2>
+    <p>A few external services are needed for the site to function. None of them are advertising networks:</p>
+    <ul>
+      <li><strong>Google Firebase</strong> (Google LLC) — accounts, sign-in, the candidate database and file uploads. Stores your session on your device as described above.</li>
+      <li><strong>Vercel</strong> — hosting, and the optional analytics described above.</li>
+      <li><strong>EmailJS</strong> — delivers messages you send through our contact and interest forms.</li>
+      <li><strong>jsDelivr</strong> — serves two open-source display libraries used by the site's graphics.</li>
+    </ul>
+    <p>If you click "Connect via WhatsApp", that opens WhatsApp (operated by Meta) on your own device. Anything that happens there is covered by Meta's terms, not ours.</p>
+
+    <h2>Questions</h2>
+    <p>This page sits alongside our <a onclick="showPage('privacy')">Privacy Policy</a>, which covers everything else we collect and your rights over it. If something here is unclear or you think we've got it wrong, please raise it through <a onclick="showPage('grievance')">Grievance Redressal</a>.</p>
+  </div>
+</div>
+
 <div class="hidden" id="view-terms">
   <div class="about-wrap-new">
     <h1 class="page-h1">Terms &amp; <em>Conditions</em></h1>
@@ -526,6 +573,7 @@
   <div class="legal-wrap">
     <div class="legal-nav">
       <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('cookies')">Cookies</a>
       <a onclick="showPage('terms')">Terms &amp; Conditions</a>
       <a onclick="showPage('grievance')">Grievance Redressal</a>
     </div>
@@ -591,6 +639,7 @@
   <div class="legal-wrap">
     <div class="legal-nav">
       <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('cookies')">Cookies</a>
       <a onclick="showPage('terms')">Terms &amp; Conditions</a>
       <a onclick="showPage('grievance')">Grievance Redressal</a>
     </div>
@@ -1098,6 +1147,7 @@
   <div class="legal-wrap">
     <div class="legal-nav">
       <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('cookies')">Cookies</a>
       <a onclick="showPage('terms')">Terms &amp; Conditions</a>
       <a onclick="showPage('grievance')">Grievance Redressal</a>
     </div>
@@ -1670,6 +1720,7 @@
     <div class="ft-col">
       <div class="ft-col-label" data-i18n="footer_legal_label">Legal</div>
       <a onclick="showPage('privacy')" data-i18n="footer_privacy">Privacy Policy</a>
+      <a onclick="showPage('cookies')" data-i18n="footer_cookies">Cookies</a>
       <a onclick="showPage('terms')" data-i18n="footer_terms">Terms &amp; Conditions</a>
       <a onclick="showPage('grievance')" data-i18n="footer_grievance">Grievance Redressal</a>
       <a onclick="showPage('report')" class="ft-report-link" data-i18n="footer_report">Report a concern →</a>
@@ -1713,6 +1764,160 @@
   document.addEventListener('resumeclick', () => {
     goHomeThenScroll(scrollToCandidates);
   });
+</script>
+
+<!-- ━━ COOKIE CONSENT ━━
+     Hidden by default and only revealed by ckInit() when no prior choice is
+     stored, so returning visitors never see it twice. Analytics is opt-IN:
+     nothing is loaded until Accept, and Reject is a one-click peer of Accept
+     rather than being buried in preferences. -->
+<div class="ck-bar" id="ck-bar" role="region" aria-label="Cookie choices" hidden>
+  <div class="ck-in">
+    <svg class="ck-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3a9 9 0 1 0 9 9 3.2 3.2 0 0 1-4.2-4.2A3.2 3.2 0 0 1 12 3Z"/>
+      <circle cx="9.2" cy="10.4" r="1"/><circle cx="13" cy="14.6" r="1"/><circle cx="8.4" cy="15" r="1"/>
+    </svg>
+    <div class="ck-copy">
+      <!-- Deliberately short: on a 375px screen every extra sentence pushes the
+           bar past half the viewport. The signed-in session storage isn't
+           consented to anyway, so it's explained in the drawer and on the
+           cookies page rather than here. -->
+      <p id="ck-msg">
+        No tracking cookies here. We'd just like permission to count anonymous
+        page visits, so we know which parts of the site actually help.
+        <a onclick="showPage('cookies')">How we use cookies</a>
+      </p>
+    </div>
+    <div class="ck-acts">
+      <button class="ck-btn ck-ghost" id="ck-prefs-btn" onclick="ckTogglePrefs()"
+              aria-expanded="false" aria-controls="ck-prefs">Manage preferences</button>
+      <button class="ck-btn ck-ghost" onclick="ckDecline()">Reject</button>
+      <button class="ck-btn ck-solid" onclick="ckAcceptAll()">Accept</button>
+    </div>
+  </div>
+
+  <div class="ck-prefs" id="ck-prefs" hidden>
+    <div class="ck-prefs-in">
+      <div class="ck-row">
+        <div class="ck-row-txt">
+          <div class="ck-row-h">Keeping you signed in</div>
+          <div class="ck-row-d">Stores your session in your browser's local storage so you
+            stay logged in. Never leaves your device, and isn't used to track you. The site
+            can't offer accounts without it.</div>
+        </div>
+        <span class="ck-tag">Always on</span>
+      </div>
+      <div class="ck-row">
+        <div class="ck-row-txt">
+          <div class="ck-row-h">Anonymous visit counts</div>
+          <div class="ck-row-d">Vercel Web Analytics — counts page views and which links get
+            used. No cookies, no cross-site tracking, no profile of you, and nothing that
+            identifies you personally. Off unless you switch it on.</div>
+        </div>
+        <label class="ck-sw">
+          <input type="checkbox" id="ck-analytics" aria-label="Allow anonymous visit counts">
+          <span></span>
+        </label>
+      </div>
+      <div class="ck-acts" style="justify-content:flex-end;margin-top:14px;">
+        <button class="ck-btn ck-solid" onclick="ckSavePrefs()">Save my choices</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Cookie consent ──────────────────────────────────────────────────────
+   Consent is stored under a versioned key: bumping CK_VERSION re-asks
+   everyone, which is what you want if the categories ever change.
+
+   Analytics is genuinely gated — the Vercel script is injected here and
+   nowhere else, so declining means the request is never made. It is NOT
+   in the static markup, deliberately; a script tag in the HTML would run
+   before anyone could refuse it. */
+const CK_KEY = 'pk-cookie-consent';
+const CK_VERSION = 1;
+
+function ckRead(){
+  // Private mode / blocked storage throws on access, not just on write.
+  try{
+    const raw = localStorage.getItem(CK_KEY);
+    if(!raw) return null;
+    const v = JSON.parse(raw);
+    return (v && v.version === CK_VERSION) ? v : null;
+  }catch(e){ return null; }
+}
+
+function ckWrite(analytics){
+  try{
+    localStorage.setItem(CK_KEY, JSON.stringify({
+      version: CK_VERSION,
+      analytics: !!analytics,
+      decidedAt: new Date().toISOString()
+    }));
+  }catch(e){
+    /* Storage unavailable: honour the choice for this page view, but we
+       can't remember it, so the banner returns next visit. Better than
+       silently treating a refusal as consent. */
+  }
+}
+
+let ckAnalyticsLoaded = false;
+function ckEnableAnalytics(){
+  if(ckAnalyticsLoaded) return;
+  ckAnalyticsLoaded = true;
+  const s = document.createElement('script');
+  s.defer = true;
+  s.src = '/_vercel/insights/script.js';
+  document.head.appendChild(s);
+}
+
+function ckHide(){ const b=document.getElementById('ck-bar'); if(b) b.hidden = true; }
+
+function ckAcceptAll(){ ckWrite(true);  ckEnableAnalytics(); ckHide(); }
+function ckDecline(){   ckWrite(false); ckHide(); }
+
+function ckTogglePrefs(){
+  const p = document.getElementById('ck-prefs');
+  const btn = document.getElementById('ck-prefs-btn');
+  if(!p) return;
+  p.hidden = !p.hidden;
+  if(btn) btn.setAttribute('aria-expanded', String(!p.hidden));
+}
+
+function ckSavePrefs(){
+  const on = !!document.getElementById('ck-analytics').checked;
+  ckWrite(on);
+  if(on) ckEnableAnalytics();
+  ckHide();
+}
+
+/* Re-open from the cookies page so a choice is never final. */
+function ckReopen(){
+  const b = document.getElementById('ck-bar');
+  if(!b) return;
+  const saved = ckRead();
+  const box = document.getElementById('ck-analytics');
+  if(box) box.checked = !!(saved && saved.analytics);
+  b.hidden = false;
+  const p = document.getElementById('ck-prefs');
+  const btn = document.getElementById('ck-prefs-btn');
+  if(p){ p.hidden = false; }
+  if(btn) btn.setAttribute('aria-expanded','true');
+  b.scrollIntoView({block:'nearest'});
+}
+
+(function ckInit(){
+  const saved = ckRead();
+  if(saved){
+    // Already decided — respect it silently, show nothing.
+    if(saved.analytics) ckEnableAnalytics();
+    return;
+  }
+  const b = document.getElementById('ck-bar');
+  if(b) b.hidden = false;
+})();
 </script>
 </body>
 </html>

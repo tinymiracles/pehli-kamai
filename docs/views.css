@@ -629,7 +629,7 @@ pk-hiw3d.hot{cursor:pointer;}
         justification for hiding it. Guard 2 above ellipsizes it if a
         narrower device ever does run out of room. */
 @media(max-width:560px){
-  .brand-sub{display:none;}
+  /* .brand-sub was hidden here; it's now hidden at every width (rule 6 below). */
   .btn-add{padding:0 12px;font-size:12.5px;}
 }
 
@@ -641,6 +641,84 @@ pk-hiw3d.hot{cursor:pointer;}
 @media(min-width:1001px){.wm-logo{width:48px;height:48px;}}
 
 /* 6 — The badge already letters "Pehli Kamai", so the adjacent wordmark would
-       print the name twice — once legibly, once as a smudge. Drop it and keep
-       only the parent-org credit. */
-.brand-name{display:none;}
+       print the name twice — once legibly, once as a smudge. The badge carries
+       the brand alone: no wordmark, no strapline. */
+.brand-name,.brand-sub{display:none;}
+
+/* ══ cookie consent ═══════════════════════════════════════════════════════
+   Sits at 350: above the sticky header (300), below modals (400+) so it can
+   never cover a sign-in dialog. Nothing here tracks anyone — the analytics
+   script is only injected after an explicit Accept. */
+/* Explicit #fff, NOT var(--card) — that token is #0d2427, a leftover from the
+   legacy dark theme, and it puts near-black ink on a near-black bar. */
+.ck-bar{position:fixed;left:0;right:0;bottom:0;z-index:350;
+  background:#fff;border-top:1.5px solid var(--ed-ink);
+  box-shadow:0 -6px 28px rgba(13,36,38,.10);}
+.ck-in{max-width:1240px;margin:0 auto;padding:16px 44px;
+  display:flex;align-items:center;gap:20px;}
+.ck-mark{flex-shrink:0;width:30px;height:30px;color:var(--teal);}
+.ck-copy{flex:1;min-width:0;}
+.ck-copy p{margin:0;font-family:var(--sans);font-size:13.5px;line-height:1.6;
+  color:var(--ed-ink);max-width:78ch;}
+.ck-copy a{color:var(--teal);font-weight:700;text-decoration:underline;
+  text-underline-offset:2px;cursor:pointer;}
+.ck-copy a:hover{color:var(--ed-ink);}
+.ck-acts{flex-shrink:0;display:flex;align-items:center;gap:10px;}
+.ck-btn{height:40px;padding:0 20px;border-radius:22px;font-family:var(--sans);
+  font-size:12.5px;font-weight:700;letter-spacing:.3px;cursor:pointer;
+  white-space:nowrap;transition:background .14s,color .14s,transform .14s;}
+.ck-btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+.ck-ghost{background:transparent;border:1.5px solid var(--ed-ink);color:var(--ed-ink);}
+.ck-ghost:hover{background:var(--ed-ink);color:#fff;}
+.ck-solid{background:var(--teal);border:1.5px solid var(--teal);color:#fff;}
+.ck-solid:hover{background:var(--ed-ink);border-color:var(--ed-ink);transform:translateY(-1px);}
+
+/* preferences drawer — collapsed until "Manage preferences" */
+.ck-prefs{border-top:1px solid var(--ed-line);background:var(--paper);}
+.ck-prefs[hidden]{display:none;}
+.ck-prefs-in{max-width:1240px;margin:0 auto;padding:18px 44px 20px;}
+.ck-row{display:flex;align-items:flex-start;gap:14px;padding:12px 0;}
+.ck-row+.ck-row{border-top:1px solid var(--ed-line);}
+.ck-row-txt{flex:1;min-width:0;}
+.ck-row-h{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--ed-ink);}
+.ck-row-d{font-family:var(--sans);font-size:12.5px;line-height:1.55;
+  color:var(--ed-ink-2);margin-top:3px;max-width:72ch;}
+.ck-tag{font-family:var(--mono);font-size:10px;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ed-ink-2);flex-shrink:0;padding-top:2px;}
+/* switch */
+.ck-sw{flex-shrink:0;position:relative;width:44px;height:26px;}
+.ck-sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;}
+.ck-sw span{position:absolute;inset:0;border-radius:13px;background:#cfcabd;
+  border:1.5px solid var(--ed-ink);transition:background .16s;pointer-events:none;}
+.ck-sw span::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;
+  border-radius:50%;background:#fff;border:1.5px solid var(--ed-ink);
+  transition:transform .16s;}
+.ck-sw input:checked+span{background:var(--lime);}
+.ck-sw input:checked+span::after{transform:translateX(18px);}
+.ck-sw input:disabled+span{opacity:.55;}
+.ck-sw input:disabled{cursor:not-allowed;}
+.ck-sw input:focus-visible+span{outline:2px solid var(--teal);outline-offset:2px;}
+
+@media(max-width:860px){
+  .ck-in{padding:14px 20px;flex-wrap:wrap;gap:12px;}
+  .ck-mark{width:24px;height:24px;}
+  .ck-copy{flex-basis:100%;order:2;}
+  .ck-mark{order:1;}
+  .ck-acts{flex-basis:100%;order:3;}
+  /* 46px, not the desktop 40 — a mis-tap here sets the wrong consent, so these
+     clear the 44px touch minimum comfortably. */
+  .ck-btn{flex:1;padding:0 12px;height:46px;}
+  .ck-prefs-in{padding:16px 20px 18px;}
+}
+@media(max-width:560px){
+  /* Reject and Accept share a row; "Manage preferences" takes its own above
+     them. Three stacked full-width pills pushed the bar to ~half the screen. */
+  .ck-acts{flex-wrap:wrap;}
+  .ck-in .ck-btn{flex:1 1 calc(50% - 5px);}
+  .ck-in #ck-prefs-btn{flex-basis:100%;}
+  .ck-row{flex-wrap:wrap;}
+}
+@media(prefers-reduced-motion:reduce){
+  .ck-btn,.ck-sw span,.ck-sw span::after{transition:none;}
+  .ck-solid:hover{transform:none;}
+}
