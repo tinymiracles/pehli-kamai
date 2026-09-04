@@ -77,4 +77,55 @@
   --skin:#e8b48c;          /* character illustration skin tone */
   --skin-shade:#d99f75;    /* shaded/underside tone for the same */
   --hair:#241a15;          /* character illustration hair */
+
+  /* ── tokens that exist so the theme can flip ────────────────────────
+     --teal-ink is teal used as TEXT. It is a separate token from --teal
+     purely so dark mode can lighten the two independently: --teal is also
+     a fill behind white text 29 times, and lightening that would drop
+     white-on-teal below AA. In light mode the two are deliberately the
+     SAME value, so splitting them changed nothing visually.
+     --surface-1 is any raised panel that was previously a literal #fff. */
+  --teal-ink:#0e7a72;
+  --surface-1:#ffffff;
+  --surface-line:rgba(13,36,39,.08);
+}
+
+/* ══ dark mode ═══════════════════════════════════════════════════════
+   Follows the phone/OS setting via prefers-color-scheme. Only tokens are
+   redefined here -- no component rules -- so the two themes can't drift.
+
+   The values reuse Part 1's original dark teal palette above (--ink,
+   --surface, --card, --text), which was built for this brand, rather than
+   inventing a second dark palette that would fight it.
+
+   NOT flipped, on purpose:
+     --teal / --lime   brand fills; white-on-teal and ink-on-lime already
+                       pass AA and should look the same in both themes.
+     .fi-hero-*        white text over the hero video, already on a dark
+                       scrim in both themes.
+     .section-teal / .section-ink   full-bleed brand sections, dark in
+                       both themes by design. */
+@media (prefers-color-scheme: dark){
+  :root{
+    /* surfaces */
+    --paper:#0b1f22;
+    --bg-light:#08191c;
+    --bg-light-tint:#102b2e;
+    --surface-1:#12292c;
+    --surface-line:rgba(255,255,255,.10);
+
+    /* text — reusing Part 1's --text / --text-2 values */
+    --ed-ink:#eaf4f4;
+    --ed-ink-2:#a8c4c6;
+    --fi-ink:#eaf4f4;
+    --fi-ink-2:#a8c4c6;
+
+    /* hairlines have to invert or they vanish into the dark ground */
+    --ed-line:rgba(255,255,255,.14);
+
+    /* teal AS TEXT only. #0e7a72 on #08191c measures 3.57:1 -- under the
+       4.5:1 AA floor for body copy. #5ccfc0 clears it comfortably. */
+    --teal-ink:#5ccfc0;
+    --teal-light:#5ccfc0;
+  }
 }
