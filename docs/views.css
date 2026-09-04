@@ -61,8 +61,14 @@ body{background:var(--paper);color:var(--ed-ink);font-family:var(--sans);}
    two-tone italic wordmark, underline rule, lede, inline stat cards, CTAs. ── */
 body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 .fi-hero-banner{background:var(--bg-light);}
+/* dvh, not vh. On phones 100vh is the viewport with the URL bar RETRACTED, so
+   a 100vh-tall hero extends underneath the browser chrome and the CTAs end up
+   hidden behind it. 100dvh tracks the actually-visible height. The vh line
+   stays first as the fallback for browsers without dvh. */
 .fi-hero-stage{position:relative;overflow:hidden;width:100%;
-  height:calc(100vh - 64px);min-height:560px;background:var(--bg-light-tint);}
+  height:calc(100vh - 64px);
+  height:calc(100dvh - 64px);
+  min-height:560px;background:var(--bg-light-tint);}
 .fi-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   object-position:50% 50%;display:block;}
 /* corner treatment: copy sits in the bottom-left corner of the full-page
@@ -98,7 +104,12 @@ body:has(#view-home:not(.hidden)){background:var(--bg-light);}
 .fi-cta.ghost:hover{background:rgba(255,255,255,.14);}
 .fi-hero-foot{font-family:var(--sans);font-size:12.5px;color:rgba(255,255,255,.8);}
 @media(max-width:860px){
-  .fi-hero-stage{height:calc(100vh - 56px);min-height:520px;}
+  /* 64px, not 56px -- the header is 64px tall at EVERY width, so subtracting
+     56 made the hero 8px too tall and pushed header+hero 8px past the
+     viewport, giving the landing screen a permanent stray scroll. */
+  .fi-hero-stage{height:calc(100vh - 64px);
+                 height:calc(100dvh - 64px);
+                 min-height:520px;}
   .fi-hero-copy{left:22px;right:22px;bottom:28px;max-width:none;}
   .fi-h1{font-size:clamp(38px,11vw,56px);}
 }
