@@ -627,10 +627,20 @@ pk-hiw3d.hot{cursor:pointer;}
    ══════════════════════════════════════════════════════════════════════ */
 
 /* 1 — Collapse primary nav into the hamburger before it can overflow.
-        Brand + 6 nowrap tabs + CTA need ~1000px of bar. */
+        Was 1000px for 6 tabs. Adding "Training Journey" made a 7th, and at
+        1001px that pushed the CTA 119px off-screen -- measured, not guessed.
+        Seven tabs need ~1120px at the old 15px padding; trimming the tab
+        padding to 11px buys back most of that, so the nav returns at 1076px
+        instead of being hidden until 1120. Boundaries measured, not guessed:
+        1076 is clean, 1075 falls back to the hamburger, both with 0 overflow. */
 .hdr-menu-nav{display:none;flex-direction:column;gap:2px;
   padding-bottom:6px;margin-bottom:4px;border-bottom:1px solid var(--line-d);}
-@media(max-width:1000px){
+@media(min-width:1076px) and (max-width:1300px){
+  /* Only tighten where space is actually short; roomy screens keep the
+     original, more generous rhythm. */
+  .tab{padding-left:11px;padding-right:11px;}
+}
+@media(max-width:1075px){
   .tabs{display:none;}
   .hdr-menu-nav{display:flex;}
 }
