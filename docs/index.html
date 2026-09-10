@@ -393,7 +393,7 @@
             <div><span>Location</span><span id="pf-info-location"></span></div>
             <div><span>Sectors</span><span id="pf-info-sectors"></span></div>
             <div><span>Resume</span><span id="pf-info-resume"></span></div>
-            <div><span>Training</span><span style="color:var(--teal);font-weight:700">Completed</span></div>
+            <div><span>Training</span><span style="color:var(--teal-ink);font-weight:700">Completed</span></div>
           </div>
         </div>
       </div>
@@ -1123,7 +1123,7 @@
 <div class="ov" id="cf-ov" onclick="if(event.target===this)closeCF()">
   <div class="modal" style="max-width:480px;padding:32px 28px;">
     <button class="modal-x" onclick="closeCF()">✕</button>
-    <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--ink);margin-bottom:4px">Let's <em style="font-style:italic;color:var(--teal)">talk.</em></h2>
+    <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--ink);margin-bottom:4px">Let's <em style="font-style:italic;color:var(--teal-ink)">talk.</em></h2>
     <div class="ct-bar" style="margin-bottom:20px"></div>
     <div id="cf-form-body">
     <p style="font-size:13.5px;color:var(--ink-3);margin-bottom:28px;line-height:1.7">Whether you're an employer, NGO, or just curious — drop us a message.</p>
@@ -1142,7 +1142,7 @@
       <div class="ct-row"><label>Message *</label><textarea id="cf-msg" placeholder="Tell us how we can help…"></textarea></div>
       <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--ink-3);cursor:pointer;margin-bottom:14px">
         <input type="checkbox" id="cf-consent" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
-        By sending this, I agree to Pehli Kamai's <a onclick="event.preventDefault();closeCF();showPage('privacy')" href="#" style="color:var(--teal);font-weight:700">Privacy Policy</a>.&nbsp;*
+        By sending this, I agree to Pehli Kamai's <a onclick="event.preventDefault();closeCF();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700">Privacy Policy</a>.&nbsp;*
       </label>
       <button class="btn-ct-submit" onclick="submitContact()">Send message</button>
     </div>
@@ -1201,7 +1201,7 @@
       </div>
       <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--fi-ink-2);cursor:pointer;margin:14px 0">
         <input type="checkbox" id="gr-consent" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
-        By sending this, I agree to Pehli Kamai's <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal);font-weight:700">Privacy Policy</a>.&nbsp;*
+        By sending this, I agree to Pehli Kamai's <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700">Privacy Policy</a>.&nbsp;*
       </label>
       <button class="btn-ct-submit" onclick="submitGrievance()">Send report</button>
     </div>
@@ -1447,7 +1447,7 @@
           </label>
           <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--ink-2);cursor:pointer">
             <input type="checkbox" id="a-consent-terms" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
-            I've read and agree to the <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal);font-weight:700">Privacy Policy</a> and <a onclick="event.preventDefault();showPage('terms')" href="#" style="color:var(--teal);font-weight:700">Terms &amp; Conditions</a>. *
+            I've read and agree to the <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700">Privacy Policy</a> and <a onclick="event.preventDefault();showPage('terms')" href="#" style="color:var(--teal-ink);font-weight:700">Terms &amp; Conditions</a>. *
           </label>
           <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--ink-2);cursor:pointer">
             <input type="checkbox" id="a-consent-profile" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
@@ -1574,7 +1574,8 @@
               <div><label>Work email *</label><input type="email" id="hr-si-email" placeholder="hr@company.com"/></div>
               <div><label>Password *</label><input type="password" id="hr-si-pw" placeholder="Your password"/></div>
               <button class="btn-lf-submit" onclick="hrSignIn()">Sign in</button>
-              <div class="lf-note">No account? <span style="color:var(--teal);cursor:pointer;font-weight:600" onclick="switchLoginTab('up')">Create one →</span></div>
+              <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('hr-si-email')">Forgot password?</span></div>
+              <div class="lf-note">No account? <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="switchLoginTab('up')">Create one →</span></div>
             </div>
           </div>
           <div class="login-panel" id="lp-up">
@@ -1602,7 +1603,7 @@
               <div><label>Password *</label><input type="password" id="hr-up-pw" placeholder="Create a password"/></div>
               <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--ink-2);cursor:pointer;margin:6px 0 4px">
                 <input type="checkbox" id="hr-consent-terms" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
-                I agree to the <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal);font-weight:700">Privacy Policy</a> and <a onclick="event.preventDefault();showPage('terms')" href="#" style="color:var(--teal);font-weight:700">Terms &amp; Conditions</a>. *
+                I agree to the <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700">Privacy Policy</a> and <a onclick="event.preventDefault();showPage('terms')" href="#" style="color:var(--teal-ink);font-weight:700">Terms &amp; Conditions</a>. *
               </label>
               <button class="btn-lf-submit" onclick="hrSignUp()">Create account</button>
             </div>
@@ -1615,7 +1616,8 @@
             <div><label>Email</label><input type="email" id="yt-email" placeholder="your@email.com"/></div>
             <div><label>Password</label><input type="password" id="yt-pw" placeholder="Your password"/></div>
             <button class="btn-lf-submit" onclick="youthLogin()">Login</button>
-            <div class="lf-note">First time? <span style="color:var(--teal);cursor:pointer;font-weight:600" onclick="closeHRLogin();openAdd()">Add my profile →</span></div>
+            <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('yt-email')">Forgot password?</span></div>
+            <div class="lf-note">First time? <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="closeHRLogin();openAdd()">Add my profile →</span></div>
           </div>
         </div>
       </div>
@@ -1641,10 +1643,10 @@
       <div style="font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px">Before you add your profile</div>
       <div style="font-size:13px;color:var(--ink-3);line-height:1.7;margin-bottom:20px">We want every profile to be genuine and ready to work. This takes about 5 minutes and helps employers trust our candidates.</div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-3)"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal)">1</div>Background — a few questions about you (no right/wrong answers)</div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-3)"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal)">2</div>English check — simple reading and workplace questions</div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-3)"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal)">3</div>Work readiness — basic workplace scenarios</div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-3)"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal)">4</div>Choose your track — Corporate or NGO / Social Sector</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-3)"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal-ink)">1</div>Background — a few questions about you (no right/wrong answers)</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-3)"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal-ink)">2</div>English check — simple reading and workplace questions</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-3)"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal-ink)">3</div>Work readiness — basic workplace scenarios</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-3)"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal-ink)">4</div>Choose your track — Corporate or NGO / Social Sector</div>
       </div>
       <button class="btn-at-n" style="width:100%" onclick="atStep(1)">Start</button>
     </div>

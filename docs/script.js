@@ -1136,6 +1136,30 @@ function switchLoginRole(r){
 }
 
 // ── YOUTH AUTH ────────────────────────────────────
+/* Password reset, shared by the youth and HR sign-in forms.
+
+   Deliberately reports the SAME message whether or not the address has an
+   account. Firebase distinguishes auth/user-not-found, and surfacing that
+   would turn this box into a membership oracle: anyone could test an email
+   and learn whether that person is a Pehli Kamai jobseeker. Given the
+   candidates here are young people from underserved communities, that is
+   not a detail worth leaking to save a moment of confusion. */
+function sendPasswordReset(emailFieldId){
+  const el=document.getElementById(emailFieldId);
+  const email=(el&&el.value||'').trim().toLowerCase();
+  if(!email){toast('Enter your email address first, then tap Forgot password.');return;}
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('That does not look like an email address.');return;}
+  const done=()=>toast('If that email has an account, a reset link is on its way. Check spam too.');
+  auth.sendPasswordResetEmail(email)
+    .then(done)
+    .catch(e=>{
+      // Same reassurance for a missing account; only surface real faults.
+      if(e&&(e.code==='auth/user-not-found'||e.code==='auth/invalid-email')){done();return;}
+      if(e&&e.code==='auth/too-many-requests'){toast('Too many attempts. Please wait a few minutes and try again.');return;}
+      toast('Could not send the reset email just now. Please try again.');
+    });
+}
+
 function youthLogin(){
   const email=document.getElementById('yt-email').value.trim().toLowerCase();
   const pw=document.getElementById('yt-pw').value;
