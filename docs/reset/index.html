@@ -122,12 +122,38 @@ button:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
     <p class="foot"><a href="../">Go to Pehli Kamai →</a></p>
   </div>
 
-  <!-- 4. link no good -->
+  <!-- 4. link no good -- never a dead end: offer a fresh one right here -->
   <div id="s-err" class="hidden">
     <h1>This link didn't work</h1>
     <div class="msg err" id="err-msg"></div>
-    <p class="foot">Head back and choose <strong>Forgot password?</strong> to get a fresh link.<br>
-      <a href="../">Go to Pehli Kamai →</a></p>
+    <button type="button" id="to-request">Send me a new link</button>
+    <p class="foot"><a href="../">Go to Pehli Kamai →</a></p>
+  </div>
+
+  <!-- 5. ask for a link. This is what someone gets when they open /reset/
+          on its own -- with no code there is nothing to be wrong about, so
+          showing a red error was alarming and left them nowhere to go. -->
+  <div id="s-request" class="hidden">
+    <h1>Forgot your <em>password?</em></h1>
+    <p class="lede">Enter the email you signed up with and we'll send you a link to choose a new one.</p>
+    <form id="req-form">
+      <label for="req-email">Email</label>
+      <input type="email" id="req-email" autocomplete="email" placeholder="your@email.com">
+      <p class="hint" id="req-hint"></p>
+      <button type="submit" id="req-btn">Send reset link</button>
+    </form>
+    <p class="foot"><a href="../">Go to Pehli Kamai →</a></p>
+  </div>
+
+  <!-- 6. link sent -->
+  <div id="s-sent" class="hidden">
+    <div class="tick" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8 6 8-6M4 6v12h16V6"/></svg>
+    </div>
+    <h1>Check your <em>email</em></h1>
+    <p class="lede">If that address has a Pehli Kamai account, a reset link is on its way. It can take a minute — do check your spam folder too.</p>
+    <p class="foot"><a href="../">Go to Pehli Kamai →</a></p>
   </div>
 </div>
 
@@ -144,7 +170,8 @@ const auth = firebase.auth();
 
 const $ = id => document.getElementById(id);
 function show(which){
-  ['s-load','s-form','s-done','s-err'].forEach(s => $(s).classList.toggle('hidden', s !== which));
+  ['s-load','s-form','s-done','s-err','s-request','s-sent']
+    .forEach(s => $(s).classList.toggle('hidden', s !== which));
 }
 function fail(text){ $('err-msg').textContent = text; show('s-err'); }
 
@@ -175,7 +202,9 @@ function friendlyError(e){
 }
 
 if(!mode || !code){
-  fail('This page needs the link from your email. Open the reset email and tap the button in it, rather than typing this address in directly.');
+  // Opened directly, with nothing to verify. Nothing has gone wrong, so don't
+  // shout -- just let them ask for a link from here.
+  show('s-request');
 } else if(mode === 'resetPassword'){
   // verifyPasswordResetCode also tells us which account the link belongs to,
   // which is safe to show: whoever holds the link already has the inbox.
@@ -201,6 +230,34 @@ if(!mode || !code){
 } else {
   fail('This link is for something this page does not handle. Please request a new one.');
 }
+
+$('to-request').addEventListener('click', () => { show('s-request'); $('req-email').focus(); });
+
+/* Same enumeration-safe rule as the sign-in panel: a real account and an
+   unknown one get identical wording, so this cannot be used to test whether
+   somebody has a Pehli Kamai account. */
+$('req-form').addEventListener('submit', ev => {
+  ev.preventDefault();
+  const email = $('req-email').value.trim().toLowerCase();
+  const hint = $('req-hint');
+  hint.classList.remove('bad');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+    hint.textContent = 'Please enter a valid email address.';
+    hint.classList.add('bad'); $('req-email').focus(); return;
+  }
+  $('req-btn').disabled = true; $('req-btn').textContent = 'Sending…';
+  const sent = () => show('s-sent');
+  auth.sendPasswordResetEmail(email)
+    .then(sent)
+    .catch(e => {
+      if(e && (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-email')){ sent(); return; }
+      $('req-btn').disabled = false; $('req-btn').textContent = 'Send reset link';
+      hint.classList.add('bad');
+      hint.textContent = (e && e.code === 'auth/too-many-requests')
+        ? 'Too many attempts. Please wait a few minutes and try again.'
+        : 'Could not send just now. Please try again.';
+    });
+});
 
 $('pw-form').addEventListener('submit', ev => {
   ev.preventDefault();
