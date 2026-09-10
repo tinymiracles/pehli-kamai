@@ -666,6 +666,20 @@ pk-hiw3d.hot{cursor:pointer;}
 @media(max-width:560px){.wm-logo{width:42px;height:42px;}}
 @media(min-width:1001px){.wm-logo{width:48px;height:48px;}}
 
+/* 5b — The logo needs its light ground back in dark mode.
+       The badge body is rgb(6,111,105); against the dark header rgb(11,31,34)
+       that is 2.83:1, under the 3:1 WCAG floor for graphical objects, so the
+       mark visibly sinks into the bar. It was drawn as a badge to sit on a
+       light page, and the PNG's corners and the slash through "Pehli" are
+       transparent -- on a dark ground those knockouts fill with near-black
+       instead of the light the design assumes.
+       Sitting it on the same warm paper the light theme uses restores the
+       intended reading and takes it back to 5.34:1. box-shadow rather than
+       padding, so the plate grows outward and the logo does not shrink. */
+@media (prefers-color-scheme: dark){
+  .wm-logo{background:#f4f1ea;box-shadow:0 0 0 3px #f4f1ea;border-radius:7px;}
+}
+
 /* 6 — The badge already letters "Pehli Kamai", so the adjacent wordmark would
        print the name twice — once legibly, once as a smudge. The badge carries
        the brand alone: no wordmark, no strapline. */
