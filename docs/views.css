@@ -758,3 +758,22 @@ pk-hiw3d.hot{cursor:pointer;}
   .ck-btn,.ck-sw span,.ck-sw span::after{transition:none;}
   .ck-solid:hover{transform:none;}
 }
+
+/* ══ backed-by credit ══════════════════════════════════════════════════
+   Appears at the foot of the home page and inside Our story. Separated by
+   a hairline rather than a colour band, because the two pages sit on
+   different grounds -- home is --bg-light (white), Our story is --paper
+   (cream) -- and a filled band would be invisible on one of them. */
+.tm-backed{padding:60px 24px;text-align:center;border-top:1px solid var(--ed-line);}
+.tm-backed-in{max-width:600px;margin:0 auto;display:flex;flex-direction:column;
+  align-items:center;gap:22px;}
+.tm-backed img{width:172px;height:auto;display:block;}
+.tm-backed p{font-family:var(--sans);font-size:15px;line-height:1.7;
+  color:var(--ed-ink-2);margin:0;max-width:50ch;text-wrap:pretty;}
+.tm-backed strong{color:var(--ed-ink);font-weight:700;}
+@media(max-width:640px){
+  .tm-backed{padding:44px 20px;}
+  .tm-backed-in{gap:18px;}
+  .tm-backed img{width:142px;}
+  .tm-backed p{font-size:14.5px;}
+}

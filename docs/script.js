@@ -1942,13 +1942,19 @@ document.querySelectorAll('.ov').forEach(o=>{
   o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
 function updateAboutStats(){
-  const abTot=document.getElementById('ab-tot'); if(abTot) abTot.textContent=DATA.length;
-  const abRes=document.getElementById('ab-res'); if(abRes) abRes.textContent=DATA.filter(d=>d.resume).length;
-  const abSec=document.getElementById('ab-sec'); if(abSec) abSec.textContent=new Set(DATA.map(d=>d.sector)).size+'+';
-  const sTot=document.getElementById('s-tot'); if(sTot) sTot.textContent=DATA.length;
-  const dTot=document.getElementById('d-tot'); if(dTot) dTot.textContent=DATA.length;
-  const hiwTot=document.getElementById('hiw-tot'); if(hiwTot) hiwTot.textContent=DATA.length;
-  const heroTot=document.getElementById('hero-tot'); if(heroTot) countUpOnce(heroTot,DATA.length);
+  const set=(id,val,suffix)=>setStat(document.getElementById(id),val,suffix);
+  set('ab-tot',  DATA.length);
+  set('ab-res',  DATA.filter(d=>d.resume).length);
+  set('ab-sec',  new Set(DATA.map(d=>d.sector)).size, '+');
+  set('s-tot',   DATA.length);
+  set('d-tot',   DATA.length);
+  set('hiw-tot', DATA.length);
+  set('hero-tot',DATA.length);
+  // Pick up stats whose numbers are written in the markup rather than set
+  // from DATA (the hero's "10+"), so every figure counts, not just the
+  // data-driven ones. Runs after the above so it never re-reads a stat
+  // mid-animation and mistakes the current frame for the real total.
+  adoptStaticStats();
 }
 
 /* Count a stat up from zero, but ONLY the first time. updateAboutStats() runs
@@ -1956,35 +1962,82 @@ function updateAboutStats(){
    data refresh would make the hero number visibly flicker back to 0. After the
    first run this just assigns the value.
    Honours prefers-reduced-motion by skipping straight to the final number. */
-function countUpOnce(el,to){
-  const target=Number(to)||0;
-  const settle=()=>{ el.textContent=target; };
-  if(el.dataset.counted){ settle(); return; }
+/* ── counting stats ──────────────────────────────────────────────────────
+   Every figure on the home page and Our story counts up when it scrolls
+   into view, and counts again each time you scroll away and back.
 
-  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  /* Bail to the plain number -- and crucially do NOT mark this as counted --
-     in three cases:
-       target<=0     this pass ran before mergeFirestoreCandidates() resolved,
-                     so spending the animation here would strand the real
-                     number and never animate it;
-       reduce        the user asked for no motion;
-       document.hidden  requestAnimationFrame does not fire in a background
-                     tab, so the loop would freeze on its first frame -- which
-                     paints 0 -- and the stat would read zero until focus.
-     Leaving `counted` unset means the next call still gets to animate. */
-  if(target<=0||reduce||document.hidden){ settle(); return; }
+   The target lives on the element as data-count-to rather than being
+   captured in a closure, because updateAboutStats() runs again whenever
+   mergeFirestoreCandidates() resolves -- an in-flight animation re-reads
+   the value each frame and lands on the real total instead of a stale one. */
+const STAT_DUR = 900;
 
-  el.dataset.counted='1';
-  const DUR=900, t0=performance.now();
+function statPaint(el, n){
+  el.textContent = n + (el.dataset.countSuffix || '');
+}
+
+function statCanAnimate(){
+  // rAF does not fire in a background tab: the loop would freeze on frame one
+  // and paint the starting number forever. Reduced motion opts out too.
+  if(document.hidden) return false;
+  return !(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches);
+}
+
+function setStat(el, value, suffix){
+  if(!el) return;
+  const n = Number(value) || 0;
+  el.dataset.countTo = String(n);
+  el.dataset.countSuffix = suffix || '';
+  if(!el.dataset.countWired){
+    el.dataset.countWired = '1';
+    if(statObserver) statObserver.observe(el); else statPaint(el, n);
+  }
+  // Don't stamp over a running count -- it re-reads the target itself.
+  if(!el.dataset.countRunning) statPaint(el, n);
+}
+
+/* Numbers written straight into the markup, e.g. the hero's "10+".
+   Anything non-numeric ("Mumbai") is skipped rather than counted to 0. */
+function adoptStaticStats(){
+  document.querySelectorAll('.fi-hero-stat-n, .stat-n').forEach(el=>{
+    if(el.dataset.countWired) return;
+    const m = (el.textContent || '').trim().match(/^(\d[\d,]*)(\D*)$/);
+    if(!m) return;
+    setStat(el, Number(m[1].replace(/,/g,'')), m[2]);
+  });
+}
+
+function statAnimate(el){
+  const target = Number(el.dataset.countTo) || 0;
+  if(target <= 0 || !statCanAnimate()){ statPaint(el, target); return; }
+  el.dataset.countRunning = '1';
+  const t0 = performance.now();
   (function tick(now){
-    const p=Math.min(1,(now-t0)/DUR);
-    // ease-out cubic: fast start, gentle settle
-    const eased=1-Math.pow(1-p,3);
-    // round, and pin the last frame to the exact target so it never lands short
-    el.textContent = p<1 ? Math.round(eased*target) : target;
-    if(p<1) requestAnimationFrame(tick);
+    const live = Number(el.dataset.countTo) || 0;
+    const p = Math.min(1, (now - t0) / STAT_DUR);
+    const eased = 1 - Math.pow(1 - p, 3);   // ease-out cubic
+    // Start at 1 rather than 0, and pin the final frame to the exact target
+    // so a rounding step can never leave it one short.
+    statPaint(el, p < 1 ? Math.max(1, Math.round(eased * live)) : live);
+    if(p < 1) requestAnimationFrame(tick);
+    else delete el.dataset.countRunning;
   })(t0);
 }
+
+/* Two thresholds on purpose: fire the count at 50% visible so it is not
+   already finished by the time it reaches the eye, but only rewind at 0 --
+   fully off-screen -- so nobody ever sees a figure snap back to 1. */
+const statObserver = ('IntersectionObserver' in window)
+  ? new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.intersectionRatio >= 0.5){
+          if(!e.target.dataset.countRunning) statAnimate(e.target);
+        } else if(e.intersectionRatio === 0 && !e.target.dataset.countRunning){
+          statPaint(e.target, 1);   // armed to count again on the way back
+        }
+      });
+    }, {threshold:[0, 0.5]})
+  : null;
 function boot(){
   buildChips();render();updateEnqBadge();updateAboutStats();
   updateHRHeader();
