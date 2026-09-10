@@ -8,8 +8,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="../icon-48.png">
 <link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0b1f22" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f1ea">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -25,16 +24,7 @@
   --danger:#a4342a; --danger-bg:#fdf1ef;
   --serif:'Instrument Serif',Georgia,serif;
   --sans:'Manrope',system-ui,-apple-system,sans-serif;
-}
-/* Matches the palette the main site flips to, so arriving here from a dark
-   phone does not flash a white page mid-journey. */
-@media (prefers-color-scheme: dark){
-  :root{
-    --teal-ink:#5ccfc0;
-    --paper:#08191c; --surface:#12292c;
-    --ink:#eaf4f4; --ink-2:#a8c4c6; --line:rgba(255,255,255,.14);
-    --danger:#ffb4a8; --danger-bg:rgba(164,52,42,.18);
-  }
+  color-scheme: light;
 }
 *{box-sizing:border-box;}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
@@ -43,11 +33,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
   border-radius:16px;padding:34px 30px 30px;box-shadow:0 10px 40px rgba(13,36,39,.08);}
 .brand{display:flex;align-items:center;gap:11px;margin-bottom:26px;}
 .brand img{width:44px;height:44px;border-radius:6px;flex-shrink:0;}
-@media (prefers-color-scheme: dark){
-  /* Same reason as the main header: the badge is rgb(6,111,105) and sinks to
-     2.83:1 on a dark ground, so it gets its light plate back. */
-  .brand img{background:#f4f1ea;box-shadow:0 0 0 3px #f4f1ea;border-radius:7px;}
-}
 .brand span{font-family:var(--mono,ui-monospace,monospace);font-size:10px;letter-spacing:1.6px;
   text-transform:uppercase;color:var(--ink-2);}
 h1{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.15;margin:0 0 10px;}

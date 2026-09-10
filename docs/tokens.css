@@ -88,44 +88,16 @@
   --teal-ink:#0e7a72;
   --surface-1:#ffffff;
   --surface-line:rgba(13,36,39,.08);
-}
 
-/* ══ dark mode ═══════════════════════════════════════════════════════
-   Follows the phone/OS setting via prefers-color-scheme. Only tokens are
-   redefined here -- no component rules -- so the two themes can't drift.
+  /* ══ light only ═══════════════════════════════════════════════════
+     The site is deliberately light at every setting; there is no dark
+     theme. This declaration is what makes that hold: without it, a
+     phone set to dark still renders the UA's own widgets dark --
+     text inputs, selects, checkboxes, scrollbars -- so the sign-in
+     and add-profile forms would come out dark on a light page. Naming
+     the scheme tells the browser to draw all of them light to match.
 
-   The values reuse Part 1's original dark teal palette above (--ink,
-   --surface, --card, --text), which was built for this brand, rather than
-   inventing a second dark palette that would fight it.
-
-   NOT flipped, on purpose:
-     --teal / --lime   brand fills; white-on-teal and ink-on-lime already
-                       pass AA and should look the same in both themes.
-     .fi-hero-*        white text over the hero video, already on a dark
-                       scrim in both themes.
-     .section-teal / .section-ink   full-bleed brand sections, dark in
-                       both themes by design. */
-@media (prefers-color-scheme: dark){
-  :root{
-    /* surfaces */
-    --paper:#0b1f22;
-    --bg-light:#08191c;
-    --bg-light-tint:#102b2e;
-    --surface-1:#12292c;
-    --surface-line:rgba(255,255,255,.10);
-
-    /* text — reusing Part 1's --text / --text-2 values */
-    --ed-ink:#eaf4f4;
-    --ed-ink-2:#a8c4c6;
-    --fi-ink:#eaf4f4;
-    --fi-ink-2:#a8c4c6;
-
-    /* hairlines have to invert or they vanish into the dark ground */
-    --ed-line:rgba(255,255,255,.14);
-
-    /* teal AS TEXT only. #0e7a72 on #08191c measures 3.57:1 -- under the
-       4.5:1 AA floor for body copy. #5ccfc0 clears it comfortably. */
-    --teal-ink:#5ccfc0;
-    --teal-light:#5ccfc0;
-  }
+     --teal-ink stays a separate token from --teal even so. It costs
+     nothing here, and it is the seam a dark theme would need again. */
+  color-scheme: light;
 }
