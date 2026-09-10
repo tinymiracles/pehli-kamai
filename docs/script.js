@@ -1941,11 +1941,25 @@ document.querySelectorAll('.ov').forEach(o=>{
   if(o.id==='at-ov')return;
   o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
+/* The public "sectors" figure, used by BOTH the hero and Our story so the two
+   pages can never disagree again.
+
+   Deliberately NOT new Set(DATA.map(d=>d.sector)).size -- that returns 24, but
+   they are 24 spellings of roughly nine things: Retail / Retail & Fashion /
+   Retail & Sales / Sales / Sales & Marketing are one sector typed five ways,
+   Admin / Admin & Data Entry / Office Work another, Hospitality / Hotel Front
+   Desk another, and "Open to All" is not a sector at all. Publishing 24+ would
+   have put an inflated claim on two pages instead of one.
+   Change this single number, or swap in a real canonical grouping, once the
+   sector labels in the data are tidied up. */
+const SECTORS_CLAIM = 10;
+
 function updateAboutStats(){
   const set=(id,val,suffix)=>setStat(document.getElementById(id),val,suffix);
   set('ab-tot',  DATA.length);
   set('ab-res',  DATA.filter(d=>d.resume).length);
-  set('ab-sec',  new Set(DATA.map(d=>d.sector)).size, '+');
+  set('ab-sec',  SECTORS_CLAIM, '+');
+  set('hero-sec',SECTORS_CLAIM, '+');
   set('s-tot',   DATA.length);
   set('d-tot',   DATA.length);
   set('hiw-tot', DATA.length);

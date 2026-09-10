@@ -35,6 +35,7 @@ const TRANSLATIONS = {
     hero_stat_candidates: 'Candidates',
     hero_stat_sectors: 'Sectors',
     hero_stat_based: 'Based',
+    hero_backed: 'Backed by',
     hero_cta_browse: 'Browse profiles →',
     hero_cta_kaam: 'Naukri dhoond rahe ho? →',
     hiw_quote: '"How it works is simple. You browse profiles. You pick who you like. We make the introduction — and we stay in the loop until the candidate\'s first day, and after."',
@@ -88,6 +89,10 @@ const TRANSLATIONS = {
     hero_stat_candidates: 'उम्मीदवार',
     hero_stat_sectors: 'क्षेत्र',
     hero_stat_based: 'स्थित',
+    // NEEDS A NATIVE CHECK -- Hindi/Marathi put the postposition AFTER the
+    // name ("Tiny Miracles द्वारा"), so this label sitting BEFORE the logo
+    // may read oddly. Flagged rather than guessed at silently.
+    hero_backed: 'समर्थन',
     hero_cta_browse: 'प्रोफ़ाइल देखें →',
     hero_cta_kaam: 'नौकरी ढूंढ रहे हो? →',
     hiw_quote: '"यह कैसे काम करता है, बहुत आसान है। आप प्रोफ़ाइल देखते हैं। आप जिसे पसंद करें उसे चुनते हैं। हम मुलाकात कराते हैं — और उम्मीदवार के पहले दिन तक, और उसके बाद भी हम साथ रहते हैं।"',
@@ -141,6 +146,7 @@ const TRANSLATIONS = {
     hero_stat_candidates: 'उमेदवार',
     hero_stat_sectors: 'क्षेत्रं',
     hero_stat_based: 'स्थित',
+    hero_backed: 'पाठिंबा',
     hero_cta_browse: 'प्रोफाइल्स पाहा →',
     hero_cta_kaam: 'नोकरी शोधताय? →',
     hiw_quote: '"हे कसं चालतं, अगदी सोपं आहे. तुम्ही प्रोफाइल्स पाहता. तुम्हाला आवडेल त्याला निवडता. आम्ही ओळख करून देतो — आणि उमेदवाराच्या पहिल्या दिवसापर्यंत, आणि नंतरही आम्ही सोबत असतो."',

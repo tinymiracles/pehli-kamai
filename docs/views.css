@@ -777,3 +777,16 @@ pk-hiw3d.hot{cursor:pointer;}
   .tm-backed img{width:142px;}
   .tm-backed p{font-size:14.5px;}
 }
+
+/* Backed-by credit inside the hero, under the CTAs. Sits on the dark video
+   scrim, so it uses the white logo variant and the same muted white as
+   .fi-hero-foot rather than the page's ink colours. */
+.fi-hero-backed{display:flex;align-items:center;gap:10px;margin-top:4px;}
+.fi-hero-backed span{font-family:var(--sans);font-size:12px;font-weight:600;
+  letter-spacing:.4px;color:rgba(255,255,255,.72);white-space:nowrap;}
+.fi-hero-backed img{height:19px;width:auto;display:block;opacity:.92;}
+@media(max-width:640px){
+  .fi-hero-backed{gap:8px;}
+  .fi-hero-backed span{font-size:11px;}
+  .fi-hero-backed img{height:17px;}
+}
