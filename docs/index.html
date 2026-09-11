@@ -82,7 +82,6 @@
 <link rel="stylesheet" href="tokens.css?v=3">
 <link rel="stylesheet" href="styles.css?v=5">
 <link rel="stylesheet" href="views.css?v=3">
-<link rel="stylesheet" href="chatbot.css?v=1">
 </head>
 <body>
 
@@ -1794,10 +1793,6 @@
 <script src="resumes-data.js"></script>
 <script src="i18n.js?v=1"></script>
 <script src="script.js?v=5"></script>
-<!-- Help chatbot. Loads after script.js/i18n.js because it calls into
-     showPage/openCF/openAdd/getLang; self-injects its own DOM, so there
-     is no markup for it anywhere above. -->
-<script src="chatbot.js?v=1" defer></script>
 <!-- pk-hiw3d needs three.js's GLTFLoader, which only ships as an ES module —
      this is the one component on the site loaded this way. Everything else
      (shutter.js, script.js) stays a classic script using the UMD build above. -->
