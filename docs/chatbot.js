@@ -193,6 +193,17 @@
       see: ['j_signup', 'j_time']
     },
     {
+      id: 'j_salary', topic: 'job',
+      q: L('What salary can I expect?', 'मुझे कितनी सैलरी मिल सकती है?', 'मला किती पगार मिळू शकतो?'),
+      k: ['salary', 'pay', 'stipend', 'wage', 'income', 'kitni salary', 'tankha', 'pagar', 'per month', 'earning', 'सैलरी', 'तनख्वाह', 'पगार', 'कमाई', 'वेतन'],
+      a: L(
+        'It depends entirely on the role, the sector and the employer — so we will not quote you a figure we cannot stand behind. What we can promise is that <b>the employer tells you the salary before the interview</b>, so you are never negotiating blind, and <b>Pehli Kamai takes no cut of it, ever</b>.<br><br>If an offer feels unfair or does not match what you were told, tell us and we will take it up with the employer.',
+        'यह पूरी तरह पद, क्षेत्र और कंपनी पर निर्भर करता है — इसलिए हम कोई ऐसा आँकड़ा नहीं बताएँगे जिस पर टिक न सकें। हम इतना ज़रूर कहते हैं कि <b>इंटरव्यू से पहले कंपनी आपको सैलरी बता देती है</b>, ताकि आप अंधेरे में बात न करें, और <b>पहली कमाई उसमें से कभी कोई हिस्सा नहीं लेती</b>।<br><br>अगर कोई ऑफ़र ग़लत लगे या जो बताया गया था उससे मेल न खाए, तो हमें बताइए — हम कंपनी से बात करेंगे।',
+        'हे पूर्णपणे पद, क्षेत्र आणि कंपनीवर अवलंबून आहे — म्हणून आम्ही असा आकडा सांगणार नाही ज्यावर आम्ही ठाम राहू शकत नाही. एवढं मात्र नक्की की <b>मुलाखतीआधी कंपनी तुम्हाला पगार सांगते</b>, म्हणजे तुम्ही अंधारात बोलत नाही, आणि <b>पहली कमाई त्यातून कधीही वाटा घेत नाही</b>.<br><br>एखादी ऑफर चुकीची वाटली किंवा सांगितल्याप्रमाणे नसेल, तर आम्हाला सांगा — आम्ही कंपनीशी बोलू.'
+      ),
+      see: ['j_free', 'j_money', 'j_sectors']
+    },
+    {
       id: 'j_time', topic: 'job',
       q: L('How long until I get a job?', 'नौकरी मिलने में कितना समय लगेगा?', 'नोकरी मिळायला किती वेळ लागेल?'),
       k: ['how long', 'time', 'kitne din', 'kab tak', 'duration', 'wait', 'timeline', 'when', 'कितना समय', 'कब', 'किती वेळ', 'केव्हा', 'दिवस'],
@@ -384,7 +395,7 @@
     {
       id: 'ab_what', topic: 'about',
       q: L('What is Pehli Kamai?', 'पहली कमाई क्या है?', 'पहली कमाई म्हणजे काय?'),
-      k: ['what is', 'about', 'kya hai', 'explain', 'purpose', 'क्या है', 'बारे में', 'काय आहे', 'बद्दल'],
+      k: ['what is pehli kamai', 'about pehli kamai', 'kya hai', 'explain', 'purpose', 'क्या है', 'बारे में', 'काय आहे', 'बद्दल'],
       a: L(
         'A bridge between Mumbai young people looking for their first job and employers looking to hire. Free for job-seekers, always. We build your profile and resume, put you in front of employers, coach you before interviews, and stay with you after you are placed.<br><br>The belief behind it: talent was never the shortage in this city — introductions were.',
         'मुंबई के उन युवाओं और भर्ती करने वाली कंपनियों के बीच एक पुल, जो अपनी पहली नौकरी ढूँढ रहे हैं। नौकरी ढूँढने वालों के लिए हमेशा मुफ़्त। हम आपकी प्रोफ़ाइल और रेज़्यूमे बनाते हैं, कंपनियों के सामने रखते हैं, इंटरव्यू से पहले तैयार करते हैं, और नौकरी लगने के बाद भी साथ रहते हैं।<br><br>इसके पीछे की सोच: इस शहर में कमी कभी हुनर की नहीं थी — जान-पहचान की थी।',
@@ -477,17 +488,25 @@
     });
   }
 
+  // Returns a raw score AND coverage — the share of the asker's own
+  // content words the match actually accounts for. Score alone is not
+  // enough: "what is the weather in Dubai" once scored a confident hit
+  // on "What is Pehli Kamai?" purely on the words "what is". Coverage
+  // catches that, because none of weather/dubai were explained.
   function score(query, faq) {
     var qn = norm(query);
     var qt = tokens(query);
-    if (!qt.length) return 0;
-    var s = 0;
+    if (!qt.length) return { s: 0, cov: 0 };
+    var s = 0, hit = {};
 
     // Whole-phrase keyword hit — strongest signal ("forgot password").
     (faq.k || []).forEach(function (kw) {
       var k = norm(kw);
-      if (!k) return;
-      if (qn.indexOf(k) !== -1) s += k.indexOf(' ') !== -1 ? 6 : 4;
+      var kt = tokens(k);
+      if (!kt.length) return; // a keyword made only of filler words matches everything
+      if (qn.indexOf(k) === -1) return;
+      s += kt.length > 1 ? 6 : 4;
+      kt.forEach(function (w) { hit[w] = 1; });
     });
 
     // Individual words shared with the question text, in any language.
@@ -496,24 +515,26 @@
       qWords = qWords.concat(tokens(faq.q[lg]));
     });
     qt.forEach(function (w) {
-      if (qWords.indexOf(w) !== -1) s += 2;
-      else if (qWords.some(function (x) { return x.indexOf(w) === 0 || w.indexOf(x) === 0; })) s += 1;
+      if (qWords.indexOf(w) !== -1) { s += 2; hit[w] = 1; }
+      else if (qWords.some(function (x) { return x.length > 3 && (x.indexOf(w) === 0 || w.indexOf(x) === 0); })) { s += 1; hit[w] = 1; }
     });
 
-    return s;
+    var covered = qt.filter(function (w) { return hit[w]; }).length;
+    return { s: s, cov: covered / qt.length };
   }
 
   function search(query) {
-    var hits = FAQ.map(function (f) { return { f: f, s: score(query, f) }; })
+    return FAQ.map(function (f) {
+      var r = score(query, f);
+      return { f: f, s: r.s, cov: r.cov };
+    })
       .filter(function (h) { return h.s > 0; })
       .sort(function (a, b) { return b.s - a.s; });
-    return hits;
   }
 
   // ── DOM ──────────────────────────────────────────────────────
   var el = {};
   var open = false;
-  var misses = 0;
 
   function build() {
     var launch = document.createElement('button');
@@ -565,7 +586,6 @@
     panel.querySelector('#pkc-close').addEventListener('click', closePanel);
     panel.querySelector('#pkc-restart').addEventListener('click', function () {
       el.log.innerHTML = '';
-      misses = 0;
       greet();
     });
 
@@ -716,7 +736,6 @@
     var f = BY_ID[id];
     if (!f) return;
     if (echoQuestion) bubble(escapeHtml(say(f.q)), 'me');
-    misses = 0;
     track({ action: 'answer', id: id, lang: lang() });
 
     reply(function () {
@@ -738,7 +757,7 @@
         el.log.appendChild(btn);
       }
 
-      if (f.escalate) { escalation(true); return; }
+      if (f.escalate) { escalation(); return; }
 
       // Related questions, then the honest exit: "no, talk to a person".
       var items = (f.see || []).filter(function (x) { return BY_ID[x]; }).map(function (x) {
@@ -750,7 +769,7 @@
     });
   }
 
-  function escalation(quiet) {
+  function escalation() {
     var card = document.createElement('div');
     card.className = 'pkc-esc';
 
@@ -795,7 +814,6 @@
 
     chips([{ text: say(UI.backTopics), ghost: true, echo: false, go: function () { topicMenu(); } }]);
     scrollDown();
-    if (quiet) scrollDown();
   }
 
   function submit() {
@@ -808,16 +826,20 @@
 
     var hits = search(q);
     var top = hits[0];
+    var short = tokens(q).length <= 2; // "profile", "salary" — a nudge, not a question
 
-    // Confident: one clear winner, well clear of the runner-up.
-    if (top && top.s >= 6 && (!hits[1] || top.s - hits[1].s >= 2)) {
+    // Confident: a clear winner, clear of the runner-up, and actually
+    // about most of what they asked.
+    if (top && top.s >= 6 && top.cov >= 0.34 && (!hits[1] || top.s - hits[1].s >= 2)) {
       answer(top.f.id, false);
       return;
     }
 
     // Plausible but ambiguous: offer the shortlist instead of picking
-    // one for them. Guessing here is how a bot loses trust.
-    if (top && top.s >= 4) {
+    // one for them. Guessing here is how a bot loses trust. A one- or
+    // two-word query is always treated this way — there is not enough
+    // in it to be confident, but plenty to offer a menu.
+    if (top && (top.s >= 4 || (short && top.s >= 2))) {
       reply(function () {
         bubble(say(UI.guess));
         var items = hits.slice(0, 3).map(function (h) {
@@ -830,7 +852,6 @@
     }
 
     // Nothing. Say so plainly and hand over.
-    misses++;
     reply(function () {
       bubble(say(UI.noMatch));
       escalation();
@@ -876,7 +897,7 @@
         var r = orig.apply(this, arguments);
         try {
           applyUI();
-          if (open) { el.log.innerHTML = ''; misses = 0; greet(); }
+          if (open) { el.log.innerHTML = ''; greet(); }
         } catch (e) {}
         return r;
       };
