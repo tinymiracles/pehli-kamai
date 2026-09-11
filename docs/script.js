@@ -410,15 +410,20 @@ function updateShortlistUI(){
   if(countEl)countEl.textContent=shortlist.length;
   if(!btn||curId==null)return;
   const on=isShortlisted(curId);
-  btn.textContent=on?'Shortlisted':'Add to shortlist';
+  // Written from JS, so it can't carry a data-i18n attribute -- pull the
+  // string through t() instead, and fall back to English if i18n.js has
+  // not loaded yet.
+  btn.textContent = (typeof t==='function' ? (t(on?'pf_shortlisted':'pf_addshortlist') || null) : null)
+    || (on?'Shortlisted':'Add to shortlist');
   btn.classList.toggle('on',on);
 }
 
+// English fallbacks; the live strings come from i18n.js via pf_tr1..4.
 const TRAINING=[
-  'Reading a job description — kya maang rahe hain samajhna',
-  'Building an honest resume — jhooth ke bina',
-  'Interviewing — HR round mein kya poochte hain',
-  "Knowing what day one at a workplace actually looks like"
+  ['pf_tr1','Reading a job description — kya maang rahe hain samajhna'],
+  ['pf_tr2','Building an honest resume — jhooth ke bina'],
+  ['pf_tr3','Interviewing — HR round mein kya poochte hain'],
+  ['pf_tr4','Knowing what day one at a workplace actually looks like']
 ];
 
 function showProfile(id){
@@ -430,11 +435,14 @@ function showProfile(id){
   document.getElementById('pf-av').textContent=shownName.charAt(0).toUpperCase();
   document.getElementById('pf-name').textContent=shownName;
   document.getElementById('pf-location').textContent=shownLoc;
+  const tr = k => (typeof t==='function' ? t(k) : null);
   document.getElementById('pf-tags').innerHTML=
     `<span>${d.edu}</span><span>${d.sector}</span>`+
-    (d.resume?'<span>Resume ready</span>':'<span>Resume not uploaded yet</span>');
-  document.getElementById('pf-summary').textContent=d.about||'No summary provided yet.';
-  document.getElementById('pf-training-list').innerHTML=TRAINING.map(t=>`<li>${t}</li>`).join('');
+    `<span>${esc(d.resume ? (tr('pf_resumeready')||'Resume ready')
+                          : (tr('pf_resumenot')||'Resume not uploaded yet'))}</span>`;
+  document.getElementById('pf-summary').textContent=d.about||tr('pf_nosummary')||'No summary provided yet.';
+  document.getElementById('pf-training-list').innerHTML=
+    TRAINING.map(([k,fallback])=>`<li>${esc(tr(k)||fallback)}</li>`).join('');
 
   // "Others in [sector]" -- same sector (via track, matching the sector
   // filter chips), excluding this candidate, first 3.
@@ -452,18 +460,29 @@ function showProfile(id){
     simWrap.style.display='none';
   }
 
-  document.getElementById('pf-side-desc').textContent=full
-    ?`Shortlist ${shownName.split(' ')[0]} and we'll make the introduction — and stay in the loop until the first day.`
-    :'Sign in as an approved employer, or express interest below, to see their exact location and contact details.';
+  document.getElementById('pf-side-desc').textContent = full
+    ? (tr('pf_side_full') || 'Shortlist {{NAME}} and we\'ll make the introduction — and stay in the loop until the first day.')
+        .replace('{{NAME}}', shownName.split(' ')[0])
+    : (tr('pf_side_masked') || 'Sign in as an approved employer, or express interest below, to see their exact location and contact details.');
   document.getElementById('pf-resume-btn').style.display=full?'':'none';
   document.getElementById('pf-info-location').textContent=shownLoc;
   document.getElementById('pf-info-sectors').textContent='1';
-  document.getElementById('pf-info-resume').textContent=d.resume?'Ready':'Not uploaded yet';
+  document.getElementById('pf-info-resume').textContent =
+    (d.resume ? tr('pf_ready') : tr('pf_notuploaded')) || (d.resume?'Ready':'Not uploaded yet');
   updateShortlistUI();
 
   showPage('profile');
 }
 function toRes(){openR(curId);}
+
+/* The profile page is written entirely from JS, so applyTranslations() has
+   nothing to walk there. If the visitor switches language while a profile
+   is open, re-render it in place; showProfile() calls showPage('profile')
+   at the end, which is a no-op when that page is already showing. */
+(window.PK_LANG_HOOKS = window.PK_LANG_HOOKS || []).push(function(){
+  const v = document.getElementById('view-profile');
+  if(curId != null && v && !v.classList.contains('hidden')) showProfile(curId);
+});
 
 function downloadShortlist(){
   if(!shortlist.length){toast('Shortlist is empty — pick a few candidates first.');return;}
