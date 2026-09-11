@@ -561,89 +561,198 @@ function toggleVol(show){
 // fields; nothing here is invented (there's no separate "job title"
 // field, so the experience/volunteering entries use company/org + how
 // long + what they did there, same fields the form actually collects).
+/* ══ generated resume ═══════════════════════════════════════════════════
+   Layout reproduced from the approved Pehli Kamai CV template: A4 at 96dpi
+   (794px), 57px margins giving a 680px column, Fraunces for display type and
+   Inter for everything else, a 2px #1d6b4f rule under the masthead and
+   #dde1e7 hairlines between sections.
+
+   The template it came from belongs to a candidate with an MBA, eight roles,
+   projects and certifications. Almost nobody enrolling here has any of that
+   -- they are first-time jobseekers, and the form only asks for one optional
+   job and one optional volunteering stint. So every block below is
+   conditional: a section with nothing in it is omitted entirely rather than
+   printed as an empty heading, which is what would otherwise make a young
+   person's first CV look like a form they failed to finish. */
+
+const RESUME_CSS = `
+  .gr{--ink:#14181b;--muted:#656e7c;--teal:#1d6b4f;--rule:#dde1e7;
+      --serif:'Fraunces',Georgia,'Times New Roman',serif;
+      --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+      width:794px;max-width:100%;margin:0 auto;background:#fff;color:var(--ink);
+      font-family:var(--sans);padding:51px 57px 44px;box-sizing:border-box;}
+  .gr *{box-sizing:border-box;}
+  /* masthead */
+  .gr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;}
+  .gr-brand{font-family:var(--serif);font-weight:600;font-size:15px;color:var(--teal);line-height:1.1;}
+  .gr-by{font-family:var(--sans);font-size:9.5px;color:var(--muted);margin-top:3px;}
+  .gr-date{font-family:var(--sans);font-size:9.5px;color:var(--muted);white-space:nowrap;padding-top:2px;}
+  .gr-rule{height:2px;background:var(--teal);margin:9px 0 0;}
+  .gr-hr{height:1px;background:var(--rule);margin:0;}
+  /* identity */
+  .gr-id{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:22px 0 20px;}
+  .gr-name{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.05;margin:0;}
+  .gr-contact{text-align:right;font-size:11px;line-height:1.75;color:var(--ink);}
+  .gr-contact .p{font-weight:500;font-size:12.5px;}
+  .gr-contact span{display:block;color:var(--muted);}
+  /* stat strip */
+  .gr-stats{display:flex;gap:26px;padding:18px 0 16px;}
+  .gr-stat{min-width:0;}
+  .gr-stat-v{font-family:var(--serif);font-weight:600;font-size:17px;line-height:1.2;}
+  .gr-stat-l{font-size:10px;color:var(--muted);margin-top:3px;}
+  /* summary */
+  .gr-summary{padding:22px 0 0;}
+  .gr-summary p{font-family:var(--serif);font-weight:400;font-size:13.5px;line-height:1.62;margin:0;}
+  .gr-cap{font-size:10px;color:var(--muted);margin:14px 0 20px;}
+  /* sections */
+  .gr-sec{padding:22px 0 0;}
+  .gr-sec-h{font-family:var(--serif);font-weight:600;font-size:14.5px;margin:0 0 16px;}
+  .gr-sub{font-size:11px;font-weight:600;margin:0 0 9px;}
+  .gr-chips{display:flex;flex-wrap:wrap;gap:6px 8px;margin:0 0 18px 10px;padding:0;list-style:none;}
+  .gr-chips li{font-size:11.5px;line-height:1.5;color:var(--ink);}
+  .gr-chips li::after{content:'·';color:var(--rule);margin-left:8px;}
+  .gr-chips li:last-child::after{content:'';}
+  /* two-column rows: when it happened on the left, what it was on the right */
+  .gr-row{display:flex;gap:18px;margin-bottom:18px;}
+  .gr-row:last-child{margin-bottom:4px;}
+  .gr-when{width:107px;flex:none;font-size:11px;color:var(--muted);line-height:1.5;padding-top:2px;}
+  .gr-what{flex:1;min-width:0;}
+  .gr-what-t{font-size:12.5px;font-weight:600;line-height:1.35;}
+  .gr-what-s{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.5;}
+  .gr-what-d{font-size:11.5px;line-height:1.6;margin-top:7px;}
+  /* footer */
+  .gr-foot{margin-top:26px;padding-top:13px;border-top:1px dashed var(--rule);
+           font-size:9.5px;line-height:1.65;color:var(--muted);}
+  .gr-foot b{color:var(--ink);font-weight:600;}
+  @media(max-width:820px){
+    .gr{width:100%;padding:28px 22px 30px;}
+    .gr-id{flex-direction:column;align-items:flex-start;gap:12px;}
+    .gr-contact{text-align:left;}
+    .gr-stats{flex-wrap:wrap;gap:16px 26px;}
+    .gr-row{flex-direction:column;gap:4px;}
+    .gr-when{width:auto;}
+  }
+`;
+
+function esc(v){
+  return String(v==null?'':v).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
 function buildResumeHTML(d){
-  const skillItems=(d.skills||[]).map(s=>`<li>${s}</li>`).join('');
-  const expBlock=d.expCompany?`
-      <div class="gr-main-block">
-        <div class="gr-main-label">Work Experience</div>
-        <div class="gr-exp-title">${d.expCompany}</div>
-        ${d.expDuration?`<div class="gr-exp-meta">${d.expDuration}</div>`:''}
-        ${d.expRole?`<div class="gr-exp-desc">${d.expRole}</div>`:''}
-      </div>`:'';
-  const volBlock=d.volOrg?`
-      <div class="gr-main-block">
-        <div class="gr-main-label">Volunteering</div>
-        <div class="gr-exp-title">${d.volOrg}</div>
-        ${d.volDuration?`<div class="gr-exp-meta">${d.volDuration}</div>`:''}
-        ${d.volRole?`<div class="gr-exp-desc">${d.volRole}</div>`:''}
-      </div>`:'';
-  return`<div class="gen-resume">
-    <div class="gr-header">
-      <div class="gr-name">${d.name||''}</div>
-      <div class="gr-tagline">${d.sector||''}${d.location?' &nbsp;·&nbsp; '+d.location+', Mumbai':''}</div>
-    </div>
-    <div class="gr-body">
-      <div class="gr-sidebar">
-        ${(d.skills&&d.skills.length)?`<div class="gr-side-block"><div class="gr-side-label">Key Skills</div><ul class="gr-skill-list">${skillItems}</ul></div>`:''}
-        <div class="gr-side-block">
-          <div class="gr-side-label">Education</div>
-          <div class="gr-side-text">${d.edu||''}</div>
-          ${d.institution?`<div class="gr-side-sub">${d.institution}</div>`:''}
-          ${d.passYear?`<div class="gr-side-sub">${d.passYear}</div>`:''}
+  const firstName = (d.name||'').trim().split(/\s+/)[0] || 'this candidate';
+  const today = new Date().toLocaleDateString('en-IN',
+    {day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Kolkata'});
+
+  // Contact column: only rows we actually hold. Deliberately no phone --
+  // the form never asks for one, and Pehli Kamai makes the introduction
+  // itself rather than publishing a young person's number on a file that
+  // gets forwarded around.
+  const contact = [
+    d.email    ? `<div class="p">${esc(d.email)}</div>` : '',
+    d.location ? `<span>${esc(d.location)}, Mumbai</span>` : '',
+    d.sector   ? `<span>${esc(d.sector)}</span>` : ''
+  ].filter(Boolean).join('');
+
+  const stats = [
+    d.edu      ? {v:d.edu,      l:'Education'}  : null,
+    d.passYear ? {v:d.passYear, l:'Completed'}  : null,
+    (d.langs && d.langs.length) ? {v:d.langs.join(', '), l:'Languages'} : null,
+    d.location ? {v:d.location, l:'Based in'}   : null
+  ].filter(Boolean).map(s =>
+    `<div class="gr-stat"><div class="gr-stat-v">${esc(s.v)}</div>
+       <div class="gr-stat-l">${esc(s.l)}</div></div>`).join('');
+
+  const chips = list => `<ul class="gr-chips">${
+    list.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`;
+
+  // "What X can do" only earns its heading if there is something under it.
+  const skillBlocks = [
+    (d.skills && d.skills.length)
+      ? `<div class="gr-sub">Skills &amp; sectors</div>${chips(d.skills)}` : '',
+    (d.langs && d.langs.length)
+      ? `<div class="gr-sub">Languages</div>${chips(d.langs)}` : ''
+  ].filter(Boolean).join('');
+
+  const row = (when, title, sub, desc) => `
+      <div class="gr-row">
+        <div class="gr-when">${esc(when||'')}</div>
+        <div class="gr-what">
+          <div class="gr-what-t">${esc(title)}</div>
+          ${sub  ? `<div class="gr-what-s">${esc(sub)}</div>`  : ''}
+          ${desc ? `<div class="gr-what-d">${esc(desc)}</div>` : ''}
         </div>
-        ${(d.langs&&d.langs.length)?`<div class="gr-side-block"><div class="gr-side-label">Languages</div><div class="gr-side-text">${d.langs.join(', ')}</div></div>`:''}
+      </div>`;
+
+  const work = d.expCompany
+    ? `<div class="gr-hr"></div><div class="gr-sec"><h2 class="gr-sec-h">Work experience</h2>
+         ${row(d.expDuration, d.expCompany, '', d.expRole)}</div>` : '';
+
+  // Volunteering is not in the source template, but for someone with no paid
+  // job it is often the only evidence of showing up and being relied on --
+  // so it gets the same treatment rather than being dropped.
+  const vol = d.volOrg
+    ? `<div class="gr-hr"></div><div class="gr-sec"><h2 class="gr-sec-h">Volunteering</h2>
+         ${row(d.volDuration, d.volOrg, '', d.volRole)}</div>` : '';
+
+  const education = (d.edu || d.institution)
+    ? `<div class="gr-hr"></div><div class="gr-sec"><h2 class="gr-sec-h">Education</h2>
+         ${row(d.passYear, d.edu||'', d.institution||'', '')}</div>` : '';
+
+  return `<div class="gr">
+    <div class="gr-top">
+      <div>
+        <div class="gr-brand">Pehli Kamai</div>
+        <div class="gr-by">by tiny miracles</div>
       </div>
-      <div class="gr-main">
-        ${d.about?`<div class="gr-main-block"><div class="gr-main-label">Profile Summary</div><div class="gr-main-text">${d.about}</div></div>`:''}
-        ${expBlock}
-        ${volBlock}
-      </div>
+      <div class="gr-date">${esc(today)}</div>
+    </div>
+    <div class="gr-rule"></div>
+
+    <div class="gr-id">
+      <h1 class="gr-name">${esc(d.name||'')}</h1>
+      ${contact ? `<div class="gr-contact">${contact}</div>` : ''}
+    </div>
+    <div class="gr-hr"></div>
+
+    ${stats ? `<div class="gr-stats">${stats}</div><div class="gr-hr"></div>` : ''}
+
+    ${d.about ? `<div class="gr-summary"><p>${esc(d.about)}</p>
+       <div class="gr-cap">In ${esc(firstName)}'s own words.</div></div>` : ''}
+
+    ${skillBlocks ? `<div class="gr-hr"></div><div class="gr-sec">
+       <h2 class="gr-sec-h">What ${esc(firstName)} can do</h2>${skillBlocks}</div>` : ''}
+
+    ${work}${vol}${education}
+
+    <div class="gr-foot">
+      <b>Pehli Kamai is free for candidates.</b> No one from Pehli Kamai or an employer
+      may ask for a fee, a deposit, or original documents.<br>
+      Tiny Miracles, Mumbai · www.pehlikamai.com<br>
+      Raise a concern: pehlikamaitm@gmail.com · This document carries no Aadhaar,
+      PAN, or other ID number.
     </div>
   </div>`;
 }
 
-// buildResumeHTML() above returns a bare <div class="gen-resume">
-// fragment -- fine for the in-page modal, which already has styles.css
-// loaded and just renders it inline. But that same fragment is also what
-// gets saved as a standalone .html file in Drive (see saveResumeToDrive_
-// in sheet-logger/Code.gs) -- opened on its own, outside the site, with
-// no stylesheet available, it showed up as plain unstyled text (class
-// names with nothing defining them). This wraps the identical markup in
-// a real document with the handful of rules it actually uses copied in,
-// so the Drive copy looks like the resume it's meant to be instead of a
-// wall of plain text. Values below are the light-mode ones .gen-resume
-// already resolves to on the live site (styles.css), just written out
-// literally since a standalone file has no access to tokens.css/styles.css.
+/* The same markup saved as a standalone .html in Drive (see saveResumeToDrive_
+   in sheet-logger/Code.gs). Opened on its own it has no stylesheet, so the
+   rules travel with it. Fraunces and Inter are pulled from Google Fonts with
+   real fallbacks, because a CV is often opened offline or printed. */
 function buildStandaloneResumeHTML(d){
-  return`<!doctype html>
+  return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>${(d.name||'Resume')} — Pehli Kamai</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(d.name||'Resume')} — Pehli Kamai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  body{margin:0;background:#fff;}
-  .gen-resume{font-family:'Manrope',system-ui,-apple-system,sans-serif;max-width:640px;margin:0 auto;border:1px solid #e3e8e7;}
-  .gr-header{background:#0e7a72;color:#fff;padding:22px 24px;}
-  .gr-name{font-family:'Instrument Serif',Georgia,serif;font-size:21px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-  .gr-tagline{font-size:12px;color:rgba(255,255,255,.82);margin-top:4px;font-style:italic;}
-  .gr-body{display:flex;}
-  .gr-sidebar{width:150px;flex:none;background:#0c655e;color:#fff;padding:20px 16px;}
-  .gr-side-block{margin-bottom:20px;}
-  .gr-side-block:last-child{margin-bottom:0;}
-  .gr-side-label{font-size:8.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#c9dd6a;margin-bottom:8px;}
-  .gr-skill-list{list-style:none;padding:0;margin:0;}
-  .gr-skill-list li{font-size:11px;line-height:1.7;padding-left:10px;position:relative;color:rgba(255,255,255,.92);}
-  .gr-skill-list li::before{content:'';position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:#c9dd6a;}
-  .gr-side-text{font-size:11px;line-height:1.6;color:rgba(255,255,255,.92);}
-  .gr-side-sub{font-size:10px;color:rgba(255,255,255,.68);margin-top:2px;}
-  .gr-main{flex:1;padding:20px 22px;min-width:0;}
-  .gr-main-block{margin-bottom:18px;}
-  .gr-main-block:last-child{margin-bottom:0;}
-  .gr-main-label{font-size:9px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#0e7a72;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #c8d8da;}
-  .gr-main-text{font-size:12.5px;color:#4a6b6e;line-height:1.75;}
-  .gr-exp-title{font-size:12.5px;font-weight:700;color:#07181a;}
-  .gr-exp-meta{font-size:11px;color:#7a9c9f;margin-top:1px;margin-bottom:5px;}
-  .gr-exp-desc{font-size:12px;color:#4a6b6e;line-height:1.6;}
+  html,body{margin:0;background:#f4f1ea;}
+  @media print{ html,body{background:#fff;} .gr{padding:0;} @page{size:A4;margin:14mm;} }
+${RESUME_CSS}
 </style>
 </head>
 <body>
@@ -651,6 +760,22 @@ ${buildResumeHTML(d)}
 </body>
 </html>`;
 }
+
+/* The in-page preview drops buildResumeHTML() straight into the modal, so the
+   same rules have to exist in this document too. Injected once from the single
+   RESUME_CSS above rather than copied into styles.css, so what a candidate
+   sees on screen and what lands in their downloaded file cannot drift apart. */
+(function injectResumeCSS(){
+  const add = () => {
+    if(document.getElementById('pk-resume-css')) return;
+    const s = document.createElement('style');
+    s.id = 'pk-resume-css';
+    s.textContent = RESUME_CSS;
+    document.head.appendChild(s);
+  };
+  if(document.head) add();
+  else document.addEventListener('DOMContentLoaded', add);
+})();
 
 // Optional "already have a resume?" upload -- kept separate from the
 // auto-generated resume (candidates still get that either way). The file
