@@ -285,11 +285,11 @@
           <input class="s-in" id="q" placeholder="Search…" oninput="render()" data-i18n-placeholder="search_placeholder"/>
         </div>
         <select class="loc-sel" id="edu-sel" onchange="render()">
-          <option value="all">All education levels</option>
-          <option value="10th">10th Pass</option>
-          <option value="12th">12th Pass</option>
-          <option value="graduate">Graduate</option>
-          <option value="itk">ITI/Trade</option>
+          <option value="all" data-i18n="fl_edu_all">All education levels</option>
+          <option value="10th" data-i18n="af_10th">10th Pass</option>
+          <option value="12th" data-i18n="af_12th">12th Pass</option>
+          <option value="graduate" data-i18n="af_graduate">Graduate</option>
+          <option value="itk" data-i18n="fl_iti">ITI/Trade</option>
         </select>
         <select class="loc-sel" id="loc-sel" onchange="render()">
           <option value="all" data-i18n="search_all_locations">All locations</option>
@@ -818,125 +818,125 @@
 <!-- ━━ FREE TRAINING & RESOURCES ━━ -->
 <div class="hidden" id="view-training">
   <div class="about-wrap-new">
-    <h1 class="page-h1">Free <em>Training</em></h1>
-    <div class="legal-meta">Learn workplace skills at zero cost</div>
+    <h1 class="page-h1" data-i18n-html="tr_h1">Free <em>Training</em></h1>
+    <div class="legal-meta" data-i18n="tr_meta">Learn workplace skills at zero cost</div>
   </div>
   <div class="legal-wrap">
-    <p style="font-size: 14px; color: var(--ink-3); margin-bottom: 28px; line-height: 1.7; padding: 16px; background: var(--teal-soft); border-radius: 8px; border-left: 4px solid var(--teal);">
+    <p style="font-size: 14px; color: var(--ink-3); margin-bottom: 28px; line-height: 1.7; padding: 16px; background: var(--teal-soft); border-radius: 8px; border-left: 4px solid var(--teal);" data-i18n-html="tr_intro">
       <strong>These resources are free.</strong> No subscriptions, no paywalls. Start learning today. When you join Pehli Kamai and an HR company expresses interest, we'll also coach you directly on the specific skills needed for that role.
     </p>
 
-    <h2>Excel & Spreadsheets</h2>
-    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 14px;">Master the most-used workplace tool. These are the skills that show up in almost every office job.</p>
+    <h2 data-i18n="tr_h2_excel">Excel & Spreadsheets</h2>
+    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 14px;" data-i18n="tr_p_excel">Master the most-used workplace tool. These are the skills that show up in almost every office job.</p>
 
     <div style="margin-bottom: 24px;">
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
         <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
           Microsoft Excel Official Tutorials
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">Free official training from Microsoft. Covers basics to advanced formulas.</p>
-        <a href="https://support.microsoft.com/en-us/office/excel-for-windows-training-9bc05390-e94c-46af-a5b3-d7c22f6990bb" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Learn from Microsoft →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r1_d">Free official training from Microsoft. Covers basics to advanced formulas.</p>
+        <a href="https://support.microsoft.com/en-us/office/excel-for-windows-training-9bc05390-e94c-46af-a5b3-d7c22f6990bb" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r1_a">Learn from Microsoft →</a>
       </div>
 
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
+        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;" data-i18n="tr_r2_t">
           YouTube: Excel Basics in 30 Minutes
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">Quick video tutorials covering SUM, AVERAGE, VLOOKUP, pivot tables, and charts.</p>
-        <a href="https://www.youtube.com/results?search_query=excel+basics+tutorial+30+minutes" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Watch on YouTube →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r2_d">Quick video tutorials covering SUM, AVERAGE, VLOOKUP, pivot tables, and charts.</p>
+        <a href="https://www.youtube.com/results?search_query=excel+basics+tutorial+30+minutes" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r2_a">Watch on YouTube →</a>
       </div>
 
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
+        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;" data-i18n="tr_r3_t">
           Google Sheets (Free Alternative)
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">Cloud-based spreadsheet tool. Free, works in your browser, very similar to Excel.</p>
-        <a href="https://docs.google.com/spreadsheets" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Start using Google Sheets →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r3_d">Cloud-based spreadsheet tool. Free, works in your browser, very similar to Excel.</p>
+        <a href="https://docs.google.com/spreadsheets" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r3_a">Start using Google Sheets →</a>
       </div>
     </div>
 
-    <h2>Professional Communication & Interview Skills</h2>
-    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 14px;">How to talk, email, and present yourself professionally.</p>
+    <h2 data-i18n="tr_h2_comm">Professional Communication & Interview Skills</h2>
+    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 14px;" data-i18n="tr_p_comm">How to talk, email, and present yourself professionally.</p>
 
     <div style="margin-bottom: 24px;">
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
+        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;" data-i18n="tr_r4_t">
           Professional Communication Basics
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">Email etiquette, phone calls, meetings. Everything you need to know.</p>
-        <a href="https://www.youtube.com/results?search_query=professional+communication+workplace+basics" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Watch tutorials →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r4_d">Email etiquette, phone calls, meetings. Everything you need to know.</p>
+        <a href="https://www.youtube.com/results?search_query=professional+communication+workplace+basics" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r4_a">Watch tutorials →</a>
       </div>
 
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
+        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;" data-i18n="tr_r5_t">
           Interview Preparation Guide
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">Common interview questions, how to answer, body language, what to wear.</p>
-        <a href="https://www.youtube.com/results?search_query=job+interview+preparation+tips+for+freshers" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Learn interview skills →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r5_d">Common interview questions, how to answer, body language, what to wear.</p>
+        <a href="https://www.youtube.com/results?search_query=job+interview+preparation+tips+for+freshers" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r5_a">Learn interview skills →</a>
       </div>
     </div>
 
-    <h2>Computer & Typing Skills</h2>
-    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 14px;">Build speed and accuracy on the keyboard.</p>
+    <h2 data-i18n="tr_h2_comp">Computer & Typing Skills</h2>
+    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 14px;" data-i18n="tr_p_comp">Build speed and accuracy on the keyboard.</p>
 
     <div style="margin-bottom: 24px;">
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
+        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;" data-i18n="tr_r6_t">
           Free Typing Practice (TypeRacer, TypingMaster)
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">Games that teach you to type faster and more accurately. Free and fun.</p>
-        <a href="https://play.typeracer.com/" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Start typing →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r6_d">Games that teach you to type faster and more accurately. Free and fun.</p>
+        <a href="https://play.typeracer.com/" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r6_a">Start typing →</a>
       </div>
 
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
+        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;" data-i18n="tr_r7_t">
           MS Office Basics
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">Word, PowerPoint, and Outlook basics for office work.</p>
-        <a href="https://support.microsoft.com/en-us/office" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Microsoft training →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r7_d">Word, PowerPoint, and Outlook basics for office work.</p>
+        <a href="https://support.microsoft.com/en-us/office" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r7_a">Microsoft training →</a>
       </div>
     </div>
 
-    <h2>Soft Skills & Workplace Culture</h2>
-    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 14px;">How to be a great team member, take feedback, and grow in your role.</p>
+    <h2 data-i18n="tr_h2_soft">Soft Skills & Workplace Culture</h2>
+    <p style="color: var(--ink-4); font-size: 13px; margin-bottom: 14px;" data-i18n="tr_p_soft">How to be a great team member, take feedback, and grow in your role.</p>
 
     <div style="margin-bottom: 24px;">
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
+        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;" data-i18n="tr_r8_t">
           Workplace Soft Skills
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">Teamwork, time management, taking feedback, problem-solving.</p>
-        <a href="https://www.youtube.com/results?search_query=workplace+soft+skills+training" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Learn soft skills →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r8_d">Teamwork, time management, taking feedback, problem-solving.</p>
+        <a href="https://www.youtube.com/results?search_query=workplace+soft+skills+training" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r8_a">Learn soft skills →</a>
       </div>
 
       <div style="padding: 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--teal); margin-bottom: 12px;">
-        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;">
+        <div style="font-weight: 600; color: var(--ink-1); font-size: 13px; margin-bottom: 6px;" data-i18n="tr_r9_t">
           Customer Service Training
         </div>
-        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;">For roles in retail, BPO, hospitality, or customer support.</p>
-        <a href="https://www.youtube.com/results?search_query=customer+service+training+basics" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;">Customer service basics →</a>
+        <p style="font-size: 12px; color: var(--ink-3); margin: 0 0 10px;" data-i18n="tr_r9_d">For roles in retail, BPO, hospitality, or customer support.</p>
+        <a href="https://www.youtube.com/results?search_query=customer+service+training+basics" target="_blank" style="color: var(--teal); text-decoration: none; font-weight: 600; font-size: 12px;" data-i18n="tr_r9_a">Customer service basics →</a>
       </div>
     </div>
 
     <div style="padding: 20px; background: var(--teal-soft); border-radius: 10px; border: 1.5px solid var(--teal-mid); margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
       <div>
-        <h3 style="font-size: 15px; font-weight: 700; color: var(--teal-dark); margin: 0 0 4px;">There's more &mdash; your 5-day Training Journey</h3>
-        <p style="font-size: 13px; color: var(--teal-dark); margin: 0;">Two sessions before you're picked, three more once you are. See the full journey.</p>
+        <h3 style="font-size: 15px; font-weight: 700; color: var(--teal-dark); margin: 0 0 4px;" data-i18n="tr_more_h">There's more &mdash; your 5-day Training Journey</h3>
+        <p style="font-size: 13px; color: var(--teal-dark); margin: 0;" data-i18n="tr_more_p">Two sessions before you're picked, three more once you are. See the full journey.</p>
       </div>
-      <button class="btn-add" style="flex-shrink:0;" onclick="showPage('journey')">View the journey &rarr;</button>
+      <button class="btn-add" style="flex-shrink:0;" onclick="showPage('journey')" data-i18n="tr_more_btn">View the journey &rarr;</button>
     </div>
 
-    <h2>When You Join Pehli Kamai</h2>
+    <h2 data-i18n="tr_h2_join">When You Join Pehli Kamai</h2>
 
     <div style="padding: 18px; background: var(--teal-soft); border-radius: 10px; border: 1.5px solid var(--teal-mid); margin-top: 28px;">
-      <h3 style="font-size: 14px; font-weight: 700; color: var(--teal-dark); margin: 0 0 12px;">We train you directly.</h3>
+      <h3 style="font-size: 14px; font-weight: 700; color: var(--teal-dark); margin: 0 0 12px;" data-i18n="tr_join_h">We train you directly.</h3>
       <p style="font-size: 13px; color: var(--teal-dark); margin: 0; line-height: 1.6;">
-        Once an HR company is interested in you, we provide <strong>free one-on-one or group coaching</strong> tailored to that specific job. We teach you:
+        <span data-i18n-html="tr_join_p">Once an HR company is interested in you, we provide <strong>free one-on-one or group coaching</strong> tailored to that specific job. We teach you:</span>
         <ul style="margin: 8px 0 0; font-size: 13px; color: var(--teal-dark);">
-          <li>Exact skills the employer needs</li>
-          <li>How to talk about your experience</li>
-          <li>What to expect on interview day</li>
-          <li>How to succeed in your first week on the job</li>
+          <li data-i18n="tr_join_li1">Exact skills the employer needs</li>
+          <li data-i18n="tr_join_li2">How to talk about your experience</li>
+          <li data-i18n="tr_join_li3">What to expect on interview day</li>
+          <li data-i18n="tr_join_li4">How to succeed in your first week on the job</li>
         </ul>
       </p>
     </div>
@@ -1398,9 +1398,9 @@
         <div class="lf-row-2">
           <div><label data-i18n="af_education">Education *</label>
             <select id="a-ed">
-              <option value="">Select...</option>
-              <option>10th Pass</option><option>12th Pass</option>
-              <option>Graduate</option><option>Post Graduate</option><option>Diploma</option>
+              <option value="" data-i18n="af_select">Select...</option>
+              <option data-i18n="af_10th">10th Pass</option><option data-i18n="af_12th">12th Pass</option>
+              <option data-i18n="af_graduate">Graduate</option><option data-i18n="af_postgrad">Post Graduate</option><option data-i18n="af_diploma">Diploma</option>
             </select>
           </div>
           <div><label data-i18n="af_school">School / College</label><input id="a-inst" type="text" placeholder="e.g. Jai Hind College"/></div>
@@ -1408,12 +1408,12 @@
         <div class="lf-row-2">
           <div><label data-i18n="af_year">Year of passing</label>
             <select id="a-yr">
-              <option value="">Select...</option>
+              <option value="" data-i18n="af_select">Select...</option>
               <option>2026</option><option>2025</option><option>2024</option><option>2023</option>
               <option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option>
             </select>
           </div>
-          <div><label data-i18n="af_sector">Sector *</label><select id="a-sc"><option value="">Select...</option></select></div>
+          <div><label data-i18n="af_sector">Sector *</label><select id="a-sc"><option value="" data-i18n="af_select">Select...</option></select></div>
         </div>
         <div><label data-i18n="af_skills">Your skills *</label><input id="a-sk" type="text" placeholder="e.g. MS Excel, Tally, Customer Service, Photoshop"/></div>
         <div><label data-i18n="af_languages">Languages</label><input id="a-lg" type="text" placeholder="e.g. Hindi, English, Marathi"/></div>
@@ -1486,7 +1486,7 @@
           </label>
         </div>
 
-        <button class="btn-save" onclick="saveProfile()">Generate my resume &amp; save →</button>
+        <button class="btn-save" onclick="saveProfile()" data-i18n="af_submit">Generate my resume &amp; save →</button>
       </div>
     </div>
   </div>
@@ -1602,7 +1602,7 @@
               <div><label data-i18n="af_password">Password *</label><input type="password" id="hr-si-pw" placeholder="Your password"/></div>
               <button class="btn-lf-submit" onclick="hrSignIn()" data-i18n="si_signin">Sign in</button>
               <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('hr-si-email')" data-i18n="si_forgot">Forgot password?</span></div>
-              <div class="lf-note">No account? <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="switchLoginTab('up')">Create one →</span></div>
+              <div class="lf-note"><span data-i18n="si_noaccount">No account?</span> <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="switchLoginTab('up')" data-i18n="si_createone">Create one →</span></div>
             </div>
           </div>
           <div class="login-panel" id="lp-up">
@@ -1616,7 +1616,7 @@
               <div class="lf-row-2">
                 <div><label data-i18n="si_industry">Industry *</label>
                   <select id="hr-ind">
-                    <option value="">Select...</option>
+                    <option value="" data-i18n="af_select">Select...</option>
                     <option>Retail & FMCG</option><option>Banking & Finance</option>
                     <option>IT & Technology</option><option>Healthcare</option>
                     <option>Hospitality & Food</option><option>Manufacturing</option>
@@ -1632,7 +1632,7 @@
                 <input type="checkbox" id="hr-consent-terms" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
                 I agree to the <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700">Privacy Policy</a> and <a onclick="event.preventDefault();showPage('terms')" href="#" style="color:var(--teal-ink);font-weight:700">Terms &amp; Conditions</a>. *
               </label>
-              <button class="btn-lf-submit" onclick="hrSignUp()">Create account</button>
+              <button class="btn-lf-submit" onclick="hrSignUp()" data-i18n="si_create_account">Create account</button>
             </div>
           </div>
         </div>
@@ -1644,7 +1644,7 @@
             <div><label data-i18n="si_pw">Password</label><input type="password" id="yt-pw" placeholder="Your password"/></div>
             <button class="btn-lf-submit" onclick="youthLogin()" data-i18n="si_login">Login</button>
             <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('yt-email')" data-i18n="si_forgot">Forgot password?</span></div>
-            <div class="lf-note">First time? <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="closeHRLogin();openAdd()">Add my profile →</span></div>
+            <div class="lf-note"><span data-i18n="si_firsttime">First time?</span> <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="closeHRLogin();openAdd()" data-i18n="ab_btn_add">Add my profile →</span></div>
           </div>
         </div>
       </div>
