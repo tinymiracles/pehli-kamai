@@ -104,6 +104,7 @@ button:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
     </div>
     <h1 id="done-h">Password <em>changed</em></h1>
     <p class="lede" id="done-p">You can sign in with your new password now.</p>
+    <button type="button" id="to-signin" onclick="goSignIn()">Sign in</button>
     <p class="foot"><a href="../">Go to Pehli Kamai →</a></p>
   </div>
 
@@ -164,6 +165,17 @@ const q = new URLSearchParams(location.search);
 const mode = q.get('mode');
 const code = q.get('oobCode');
 
+/* Held so the sign-in form on the way out can be pre-filled. Passed through
+   sessionStorage rather than a query string: same origin either way, but an
+   address in the URL ends up in browser history and in referrer headers, and
+   these are jobseekers' personal emails. Cleared by the main page on read. */
+let verifiedEmail = null;
+
+function goSignIn(){
+  try{ if(verifiedEmail) sessionStorage.setItem('pk-reset-email', verifiedEmail); }catch(e){}
+  location.href = '../?signin=1';
+}
+
 /* Firebase routes EVERY account email through this one action URL, not just
    password resets -- HR signup and the "verify your email first" prompt both
    call sendEmailVerification(), which lands here with mode=verifyEmail. If
@@ -194,7 +206,11 @@ if(!mode || !code){
   // verifyPasswordResetCode also tells us which account the link belongs to,
   // which is safe to show: whoever holds the link already has the inbox.
   auth.verifyPasswordResetCode(code)
-    .then(email => { $('acct-email').textContent = email; show('s-form'); $('pw1').focus(); })
+    .then(email => {
+      verifiedEmail = email;
+      $('acct-email').textContent = email;
+      show('s-form'); $('pw1').focus();
+    })
     .catch(e => fail(friendlyError(e)));
 } else if(mode === 'verifyEmail'){
   auth.applyActionCode(code)

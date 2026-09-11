@@ -1247,6 +1247,45 @@ function toast(m){const t=document.getElementById('toast');document.getElementBy
 let hrUser=JSON.parse(localStorage.getItem('typc_hr_user')||'null');
 
 function openSignIn(){document.getElementById('hl-ov').classList.add('open');switchLoginRole('hr');}
+
+/* Arriving from /reset/ after choosing a new password. Without this the
+   journey ends by dumping someone on the home page to go and find the login
+   again, having just proved they own the address -- so the modal opens
+   straight away and both email fields are pre-filled.
+
+   The address travels in sessionStorage, not the URL: a query string would
+   put a jobseeker's email into browser history and referrer headers. It is
+   read once and removed. The role is not known here (the reset link does not
+   say whether they are youth or HR), so both panels are filled and they pick. */
+function handleReturnFromReset(){
+  const params = new URLSearchParams(location.search);
+  if(params.get('signin') !== '1') return;
+
+  let email = null;
+  try{
+    email = sessionStorage.getItem('pk-reset-email');
+    sessionStorage.removeItem('pk-reset-email');
+  }catch(e){ /* private mode -- just open the form empty */ }
+
+  const ov = document.getElementById('hl-ov');
+  if(ov) ov.classList.add('open');
+  // Default to the youth panel: they are the larger group and the ones most
+  // likely to have needed a reset. This MUST come before the prefill --
+  // switchLoginRole('yt') blanks yt-email and yt-pw, so filling first would
+  // have the values silently wiped.
+  switchLoginRole('yt');
+
+  if(email){
+    ['yt-email','hr-si-email'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.value = email;
+    });
+    const p = document.getElementById('yt-pw'); if(p) p.focus();
+  }
+
+  // Drop ?signin=1 so a refresh or a shared link does not reopen the modal.
+  try{ history.replaceState({}, '', location.pathname); }catch(e){}
+}
 function closeSI(){document.getElementById('si-ov').classList.remove('open');}
 function openHRLogin(){closeSI();document.getElementById('hl-ov').classList.add('open');switchLoginRole('hr');}
 function closeHRLogin(){document.getElementById('hl-ov').classList.remove('open');}
@@ -2180,6 +2219,7 @@ const statObserver = ('IntersectionObserver' in window)
 function boot(){
   buildChips();render();updateEnqBadge();updateAboutStats();
   updateHRHeader();
+  handleReturnFromReset();
   mergeFirestoreCandidates();
   const holder=document.getElementById('shutterHolder');
   if(holder && !holder.querySelector('pk-shutter')){
