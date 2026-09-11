@@ -371,7 +371,7 @@
      the grid already uses for non-approved HR visitors) -->
 <div class="hidden" id="view-profile">
   <div class="pf-wrap">
-    <button class="pf-back" onclick="goHomeThenScroll(scrollToCandidates)">&larr; Back to candidates</button>
+    <button class="pf-back" onclick="goHomeThenScroll(scrollToCandidates)" data-i18n="pf_back">&larr; Back to candidates</button>
     <div class="pf-grid">
       <div class="pf-main">
         <div class="pf-header">
@@ -384,34 +384,34 @@
         <div class="pf-tags" id="pf-tags"></div>
 
         <div class="pf-card reveal">
-          <div class="pf-card-label">In their own summary</div>
+          <div class="pf-card-label" data-i18n="pf_summary">In their own summary</div>
           <div class="pf-summary" id="pf-summary"></div>
         </div>
 
         <div class="pf-card pf-training reveal">
-          <div class="pf-training-head">Career-readiness trained</div>
+          <div class="pf-training-head" data-i18n="pf_trained">Career-readiness trained</div>
           <ul id="pf-training-list"></ul>
         </div>
 
         <div class="pf-similar reveal" id="pf-similar-wrap">
-          <div class="pf-similar-label">Others in <span id="pf-similar-sector"></span></div>
+          <div class="pf-similar-label"><span data-i18n="pf_othersin">Others in</span> <span id="pf-similar-sector"></span></div>
           <div class="pf-similar-grid" id="pf-similar-grid"></div>
         </div>
       </div>
 
       <div class="pf-sidebar">
         <div class="pf-side-card reveal" id="pf-side-card">
-          <h3>Interested?</h3>
+          <h3 data-i18n="pf_interested_h">Interested?</h3>
           <p id="pf-side-desc"></p>
-          <button class="btn-interested" style="width:100%;height:40px;border-radius:8px;font-size:13px;letter-spacing:.3px;margin-bottom:10px" onclick="openHI()">I'm Interested in this Candidate</button>
+          <button class="btn-interested" style="width:100%;height:40px;border-radius:8px;font-size:13px;letter-spacing:.3px;margin-bottom:10px" onclick="openHI()" data-i18n="pf_interested_btn">I'm Interested in this Candidate</button>
           <button class="pf-shortlist-btn" id="pf-shortlist-btn" onclick="toggleShortlistCurrent()"></button>
-          <button class="pf-outline-btn" id="pf-resume-btn" onclick="toRes()">View resume</button>
-          <button class="pf-ghost-btn" onclick="downloadShortlist()">Download shortlist (<span id="pf-shortlist-count">0</span>)</button>
+          <button class="pf-outline-btn" id="pf-resume-btn" onclick="toRes()" data-i18n="pf_viewresume">View resume</button>
+          <button class="pf-ghost-btn" onclick="downloadShortlist()"><span data-i18n="pf_dlshortlist">Download shortlist</span> (<span id="pf-shortlist-count">0</span>)</button>
           <div class="pf-info-list">
-            <div><span>Location</span><span id="pf-info-location"></span></div>
-            <div><span>Sectors</span><span id="pf-info-sectors"></span></div>
-            <div><span>Resume</span><span id="pf-info-resume"></span></div>
-            <div><span>Training</span><span style="color:var(--teal-ink);font-weight:700">Completed</span></div>
+            <div><span data-i18n="pf_location">Location</span><span id="pf-info-location"></span></div>
+            <div><span data-i18n="pf_sectors">Sectors</span><span id="pf-info-sectors"></span></div>
+            <div><span data-i18n="pf_resume">Resume</span><span id="pf-info-resume"></span></div>
+            <div><span data-i18n="pf_training">Training</span><span style="color:var(--teal-ink);font-weight:700" data-i18n="pf_completed">Completed</span></div>
           </div>
         </div>
       </div>
@@ -495,10 +495,10 @@
   </div>
   <div class="legal-wrap">
     <div class="legal-nav">
-      <a onclick="showPage('privacy')">Privacy Policy</a>
-      <a onclick="showPage('cookies')">Cookies</a>
-      <a onclick="showPage('terms')">Terms &amp; Conditions</a>
-      <a onclick="showPage('grievance')">Grievance Redressal</a>
+      <a onclick="showPage('privacy')" data-i18n="footer_privacy">Privacy Policy</a>
+      <a onclick="showPage('cookies')" data-i18n="footer_cookies">Cookies</a>
+      <a onclick="showPage('terms')" data-i18n="footer_terms">Terms &amp; Conditions</a>
+      <a onclick="showPage('grievance')" data-i18n="footer_grievance">Grievance Redressal</a>
     </div>
 
     <h2>Who this is for</h2>
@@ -570,10 +570,10 @@
   </div>
   <div class="legal-wrap">
     <div class="legal-nav">
-      <a onclick="showPage('privacy')">Privacy Policy</a>
-      <a onclick="showPage('cookies')">Cookies</a>
-      <a onclick="showPage('terms')">Terms &amp; Conditions</a>
-      <a onclick="showPage('grievance')">Grievance Redressal</a>
+      <a onclick="showPage('privacy')" data-i18n="footer_privacy">Privacy Policy</a>
+      <a onclick="showPage('cookies')" data-i18n="footer_cookies">Cookies</a>
+      <a onclick="showPage('terms')" data-i18n="footer_terms">Terms &amp; Conditions</a>
+      <a onclick="showPage('grievance')" data-i18n="footer_grievance">Grievance Redressal</a>
     </div>
 
     <h2>The short version</h2>
@@ -604,7 +604,7 @@
     <p>If you click "Connect via WhatsApp", that opens WhatsApp (operated by Meta) on your own device. Anything that happens there is covered by Meta's terms, not ours.</p>
 
     <h2>Questions</h2>
-    <p>This page sits alongside our <a onclick="showPage('privacy')">Privacy Policy</a>, which covers everything else we collect and your rights over it. If something here is unclear or you think we've got it wrong, please raise it through <a onclick="showPage('grievance')">Grievance Redressal</a>.</p>
+    <p>This page sits alongside our <a onclick="showPage('privacy')" data-i18n="footer_privacy">Privacy Policy</a>, which covers everything else we collect and your rights over it. If something here is unclear or you think we've got it wrong, please raise it through <a onclick="showPage('grievance')" data-i18n="footer_grievance">Grievance Redressal</a>.</p>
   </div>
 </div>
 
@@ -615,10 +615,10 @@
   </div>
   <div class="legal-wrap">
     <div class="legal-nav">
-      <a onclick="showPage('privacy')">Privacy Policy</a>
-      <a onclick="showPage('cookies')">Cookies</a>
-      <a onclick="showPage('terms')">Terms &amp; Conditions</a>
-      <a onclick="showPage('grievance')">Grievance Redressal</a>
+      <a onclick="showPage('privacy')" data-i18n="footer_privacy">Privacy Policy</a>
+      <a onclick="showPage('cookies')" data-i18n="footer_cookies">Cookies</a>
+      <a onclick="showPage('terms')" data-i18n="footer_terms">Terms &amp; Conditions</a>
+      <a onclick="showPage('grievance')" data-i18n="footer_grievance">Grievance Redressal</a>
     </div>
 
     <h2>What Pehli Kamai is</h2>
@@ -681,10 +681,10 @@
   </div>
   <div class="legal-wrap">
     <div class="legal-nav">
-      <a onclick="showPage('privacy')">Privacy Policy</a>
-      <a onclick="showPage('cookies')">Cookies</a>
-      <a onclick="showPage('terms')">Terms &amp; Conditions</a>
-      <a onclick="showPage('grievance')">Grievance Redressal</a>
+      <a onclick="showPage('privacy')" data-i18n="footer_privacy">Privacy Policy</a>
+      <a onclick="showPage('cookies')" data-i18n="footer_cookies">Cookies</a>
+      <a onclick="showPage('terms')" data-i18n="footer_terms">Terms &amp; Conditions</a>
+      <a onclick="showPage('grievance')" data-i18n="footer_grievance">Grievance Redressal</a>
     </div>
 
     <p>Under the Digital Personal Data Protection Act, 2023, and as a matter of good practice, Pehli Kamai provides a way to raise concerns about how your personal data is collected or used, or about something that felt wrong on the platform.</p>
@@ -1155,33 +1155,33 @@
 <div class="ov" id="cf-ov" onclick="if(event.target===this)closeCF()">
   <div class="modal" style="max-width:480px;padding:32px 28px;">
     <button class="modal-x" onclick="closeCF()">✕</button>
-    <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--ink);margin-bottom:4px">Let's <em style="font-style:italic;color:var(--teal-ink)">talk.</em></h2>
+    <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--ink);margin-bottom:4px" data-i18n-html="ct_h2">Let's <em style="font-style:italic;color:var(--teal-ink)">talk.</em></h2>
     <div class="ct-bar" style="margin-bottom:20px"></div>
     <div id="cf-form-body">
-    <p style="font-size:13.5px;color:var(--ink-3);margin-bottom:28px;line-height:1.7">Whether you're an employer, NGO, or just curious — drop us a message.</p>
+    <p style="font-size:13.5px;color:var(--ink-3);margin-bottom:28px;line-height:1.7" data-i18n="ct_lede">Whether you're an employer, NGO, or just curious — drop us a message.</p>
     <div class="ct-form">
-      <div class="ct-row"><label data-i18n="si_yourname">Your name *</label><input type="text" id="cf-name" placeholder="e.g. Priya Shah"/></div>
-      <div class="ct-row"><label>Organisation</label><input type="text" id="cf-org" placeholder="e.g. Zomato, SBI, Self"/></div>
-      <div class="ct-row"><label>Email *</label><input type="email" id="cf-email" placeholder="your@email.com"/></div>
-      <div class="ct-row"><label>I am a...</label>
+      <div class="ct-row"><label data-i18n="si_yourname">Your name *</label><input type="text" id="cf-name" placeholder="e.g. Priya Shah" data-i18n-placeholder="ct_ph_name"/></div>
+      <div class="ct-row"><label data-i18n="ct_l_org">Organisation</label><input type="text" id="cf-org" placeholder="e.g. Zomato, SBI, Self" data-i18n-placeholder="ct_ph_org"/></div>
+      <div class="ct-row"><label data-i18n="rp_l_email">Email *</label><input type="email" id="cf-email" placeholder="your@email.com" data-i18n-placeholder="ct_ph_email"/></div>
+      <div class="ct-row"><label data-i18n="ct_l_iam">I am a...</label>
         <select id="cf-type">
-          <option>Employer / HR</option>
-          <option>NGO / Partner</option>
-          <option>Youth looking for work</option>
-          <option>Other</option>
+          <option data-i18n="ct_t1">Employer / HR</option>
+          <option data-i18n="ct_t2">NGO / Partner</option>
+          <option data-i18n="ct_t3">Youth looking for work</option>
+          <option data-i18n="ct_t4">Other</option>
         </select>
       </div>
-      <div class="ct-row"><label>Message *</label><textarea id="cf-msg" placeholder="Tell us how we can help…"></textarea></div>
+      <div class="ct-row"><label data-i18n="ct_l_msg">Message *</label><textarea id="cf-msg" placeholder="Tell us how we can help…" data-i18n-placeholder="ct_ph_msg"></textarea></div>
       <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--ink-3);cursor:pointer;margin-bottom:14px">
         <input type="checkbox" id="cf-consent" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
-        By sending this, I agree to Pehli Kamai's <a onclick="event.preventDefault();closeCF();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700">Privacy Policy</a>.&nbsp;*
+        <span data-i18n="consent_pre">By sending this, I agree to Pehli Kamai's</span> <a onclick="event.preventDefault();closeCF();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700" data-i18n="footer_privacy">Privacy Policy</a>.&nbsp;*
       </label>
-      <button class="btn-ct-submit" onclick="submitContact()">Send message</button>
+      <button class="btn-ct-submit" onclick="submitContact()" data-i18n="ct_submit">Send message</button>
     </div>
     </div>
     <div id="cf-thanks" style="display:none;text-align:center;padding:32px 0">
-      <div style="font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink)">Message sent!</div>
-      <div style="font-size:13px;color:var(--ink-3);margin-top:8px">We'll get back to you soon.</div>
+      <div style="font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink)" data-i18n="ct_sent_h">Message sent!</div>
+      <div style="font-size:13px;color:var(--ink-3);margin-top:8px" data-i18n="ct_sent_p">We'll get back to you soon.</div>
     </div>
   </div>
 </div>
@@ -1189,60 +1189,60 @@
 <!-- ━━ REPORT A CONCERN ━━ (own page, not a modal) -->
 <div class="hidden" id="view-report">
   <div class="about-wrap-new">
-    <h1 class="page-h1">Report a <em>concern</em></h1>
+    <h1 class="page-h1" data-i18n-html="h1_report">Report a <em>concern</em></h1>
   </div>
   <div class="legal-wrap">
     <div class="legal-nav">
-      <a onclick="showPage('privacy')">Privacy Policy</a>
-      <a onclick="showPage('cookies')">Cookies</a>
-      <a onclick="showPage('terms')">Terms &amp; Conditions</a>
-      <a onclick="showPage('grievance')">Grievance Redressal</a>
+      <a onclick="showPage('privacy')" data-i18n="footer_privacy">Privacy Policy</a>
+      <a onclick="showPage('cookies')" data-i18n="footer_cookies">Cookies</a>
+      <a onclick="showPage('terms')" data-i18n="footer_terms">Terms &amp; Conditions</a>
+      <a onclick="showPage('grievance')" data-i18n="footer_grievance">Grievance Redressal</a>
     </div>
     <div id="gr-form-body">
-    <p style="font-size:14.5px;color:var(--fi-ink-2);margin:0 0 26px;line-height:1.75;max-width:64ch">A data/privacy question, or something that felt wrong with an employer, a candidate, or an introduction — tell us. This goes straight to our team, gets a reference number, and is logged so it doesn't get lost. You won't lose access to the platform for reporting something.</p>
+    <p style="font-size:14.5px;color:var(--fi-ink-2);margin:0 0 26px;line-height:1.75;max-width:64ch" data-i18n="rp_intro">A data/privacy question, or something that felt wrong with an employer, a candidate, or an introduction — tell us. This goes straight to our team, gets a reference number, and is logged so it doesn't get lost. You won't lose access to the platform for reporting something.</p>
     <div class="ct-form" style="max-width:520px">
-      <div class="ct-row"><label data-i18n="si_yourname">Your name *</label><input type="text" id="gr-name" placeholder="e.g. Priya Shah"/></div>
-      <div class="ct-row"><label>Email *</label><input type="email" id="gr-email" placeholder="your@email.com"/></div>
-      <div class="ct-row"><label>What kind of concern is this? *</label>
+      <div class="ct-row"><label data-i18n="si_yourname">Your name *</label><input type="text" id="gr-name" placeholder="e.g. Priya Shah" data-i18n-placeholder="ct_ph_name"/></div>
+      <div class="ct-row"><label data-i18n="rp_l_email">Email *</label><input type="email" id="gr-email" placeholder="your@email.com" data-i18n-placeholder="ct_ph_email"/></div>
+      <div class="ct-row"><label data-i18n="rp_l_kind">What kind of concern is this? *</label>
         <select id="gr-category">
-          <option value="Data or privacy">Data or privacy</option>
-          <option value="Something felt wrong with an employer">Something felt wrong with an employer</option>
-          <option value="Something felt wrong with a candidate">Something felt wrong with a candidate</option>
-          <option value="An employer asked for money or documents">An employer asked for money or documents</option>
-          <option value="Harassment or inappropriate behaviour">Harassment or inappropriate behaviour</option>
-          <option value="Suspected fake job or fake profile">Suspected fake job or fake profile</option>
-          <option value="Something on the website isn't working">Something on the website isn't working</option>
-          <option value="Other">Other</option>
+          <option value="Data or privacy" data-i18n="rp_k1">Data or privacy</option>
+          <option value="Something felt wrong with an employer" data-i18n="rp_k2">Something felt wrong with an employer</option>
+          <option value="Something felt wrong with a candidate" data-i18n="rp_k3">Something felt wrong with a candidate</option>
+          <option value="An employer asked for money or documents" data-i18n="rp_k4">An employer asked for money or documents</option>
+          <option value="Harassment or inappropriate behaviour" data-i18n="rp_k5">Harassment or inappropriate behaviour</option>
+          <option value="Suspected fake job or fake profile" data-i18n="rp_k6">Suspected fake job or fake profile</option>
+          <option value="Something on the website isn't working" data-i18n="rp_k7">Something on the website isn't working</option>
+          <option value="Other" data-i18n="rp_k8">Other</option>
         </select>
       </div>
-      <div class="ct-row"><label>Who is this about? <span class="req-note">(optional)</span></label><input type="text" id="gr-related" placeholder="e.g. a candidate's name, an employer/company name"/></div>
-      <div class="ct-row"><label>How urgent does this feel? *</label>
+      <div class="ct-row"><label><span data-i18n="rp_l_about">Who is this about?</span> <span class="req-note" data-i18n="rp_optional">(optional)</span></label><input type="text" id="gr-related" placeholder="e.g. a candidate's name, an employer/company name" data-i18n-placeholder="rp_ph_about"/></div>
+      <div class="ct-row"><label data-i18n="rp_l_urgency">How urgent does this feel? *</label>
         <select id="gr-urgency">
-          <option value="Not urgent">Not urgent — a general question or suggestion</option>
-          <option value="Somewhat urgent">Somewhat urgent — please look into this soon</option>
-          <option value="Very urgent">Very urgent — money, safety, or harassment involved</option>
+          <option value="Not urgent" data-i18n="rp_u1">Not urgent — a general question or suggestion</option>
+          <option value="Somewhat urgent" data-i18n="rp_u2">Somewhat urgent — please look into this soon</option>
+          <option value="Very urgent" data-i18n="rp_u3">Very urgent — money, safety, or harassment involved</option>
         </select>
       </div>
-      <div class="ct-row"><label>What happened? *</label><textarea id="gr-desc" placeholder="Tell us what happened, as much detail as you can share…"></textarea></div>
+      <div class="ct-row"><label data-i18n="rp_l_what">What happened? *</label><textarea id="gr-desc" placeholder="Tell us what happened, as much detail as you can share…" data-i18n-placeholder="rp_ph_what"></textarea></div>
       <div class="ct-row">
-        <label>Screenshot (optional)</label>
+        <label data-i18n="rp_l_shot">Screenshot (optional)</label>
         <input type="file" id="gr-file" accept=".jpg,.jpeg,.png" style="display:none" onchange="handleGrievanceFile(this)"/>
         <div class="resume-drop" id="gr-drop" ondragover="event.preventDefault()" ondrop="handleGrievanceDrop(event)" onclick="document.getElementById('gr-file').click()">
-          <div class="resume-drop-lbl" id="gr-drop-lbl">Drop a screenshot here, or click to browse (max 5MB)</div>
+          <div class="resume-drop-lbl" id="gr-drop-lbl" data-i18n="rp_drop">Drop a screenshot here, or click to browse (max 5MB)</div>
         </div>
       </div>
       <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--fi-ink-2);cursor:pointer;margin:14px 0">
         <input type="checkbox" id="gr-consent" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
-        By sending this, I agree to Pehli Kamai's <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700">Privacy Policy</a>.&nbsp;*
+        <span data-i18n="consent_pre">By sending this, I agree to Pehli Kamai's</span> <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700" data-i18n="footer_privacy">Privacy Policy</a>.&nbsp;*
       </label>
-      <button class="btn-ct-submit" onclick="submitGrievance()">Send report</button>
+      <button class="btn-ct-submit" onclick="submitGrievance()" data-i18n="rp_submit">Send report</button>
     </div>
     </div>
     <div id="gr-thanks" style="display:none;text-align:center;padding:40px 0;max-width:480px">
-      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--fi-ink)">Report received</div>
-      <div style="font-size:14px;color:var(--fi-ink-2);margin-top:10px">Reference: <strong id="gr-ref-no" style="color:var(--fi-ink)"></strong></div>
-      <div style="font-size:13px;color:var(--fi-ink-2);margin-top:12px;line-height:1.65">We'll acknowledge within 2 business days, and aim to resolve this within 30 days. Save your reference number for follow-up.</div>
-      <button onclick="showPage('home')" style="margin-top:20px;padding:11px 22px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer">Back to home</button>
+      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--fi-ink)" data-i18n="rp_done_h">Report received</div>
+      <div style="font-size:14px;color:var(--fi-ink-2);margin-top:10px"><span data-i18n="rp_ref">Reference:</span> <strong id="gr-ref-no" style="color:var(--fi-ink)"></strong></div>
+      <div style="font-size:13px;color:var(--fi-ink-2);margin-top:12px;line-height:1.65" data-i18n="rp_done_p">We'll acknowledge within 2 business days, and aim to resolve this within 30 days. Save your reference number for follow-up.</div>
+      <button onclick="showPage('home')" style="margin-top:20px;padding:11px 22px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer" data-i18n="rp_home">Back to home</button>
     </div>
   </div>
 </div>
@@ -1338,7 +1338,7 @@
       <div class="m-sec-lbl">Location</div>
       <div style="font-size:12px;color:var(--ink-3);line-height:1.8" id="pm-ct"></div>
 
-      <button class="btn-interested" style="width:100%;height:40px;margin-top:18px;border-radius:8px;font-size:13px;letter-spacing:.3px;" onclick="openHI()">I'm Interested in this Candidate</button>
+      <button class="btn-interested" style="width:100%;height:40px;margin-top:18px;border-radius:8px;font-size:13px;letter-spacing:.3px;" onclick="openHI()" data-i18n="pf_interested_btn">I'm Interested in this Candidate</button>
 
       <div class="m-act">
         <button class="btn-pm-cl" id="pm-res-btn" onclick="toRes()">View Resume</button>
@@ -1466,7 +1466,7 @@
         <div style="border-top:1px solid var(--line);padding-top:14px;margin-top:6px">
           <div class="af-section-lbl" data-i18n="af_create_account">Create your account</div>
         </div>
-        <div><label>Email * <span class="req-note">(for login)</span></label><input id="a-em-yt" type="email" placeholder="your@email.com"/></div>
+        <div><label>Email * <span class="req-note">(for login)</span></label><input id="a-em-yt" type="email" placeholder="your@email.com" data-i18n-placeholder="ct_ph_email"/></div>
         <div class="lf-row-2">
           <div><label data-i18n="af_password">Password *</label><input id="a-pw" type="password" placeholder="Create a password"/></div>
           <div><label data-i18n="af_confirm_pw">Confirm password *</label><input id="a-pw2" type="password" placeholder="Re-enter password"/></div>
@@ -1627,7 +1627,7 @@
                     <option>Hospitality & Food</option><option>Manufacturing</option>
                     <option>Education & NGO</option><option>Media & Marketing</option>
                     <option>Logistics & Supply Chain</option><option>Real Estate</option>
-                    <option>Other</option>
+                    <option data-i18n="ct_t4">Other</option>
                   </select>
                 </div>
                 <div><label data-i18n="si_city">City *</label><input type="text" id="hr-city" placeholder="Mumbai"/></div>
@@ -1645,7 +1645,7 @@
         <!-- Youth panel -->
         <div class="login-panel" id="lp-yt">
           <div class="lf">
-            <div><label data-i18n="si_email">Email</label><input type="email" id="yt-email" placeholder="your@email.com"/></div>
+            <div><label data-i18n="si_email">Email</label><input type="email" id="yt-email" placeholder="your@email.com" data-i18n-placeholder="ct_ph_email"/></div>
             <div><label data-i18n="si_pw">Password</label><input type="password" id="yt-pw" placeholder="Your password"/></div>
             <button class="btn-lf-submit" onclick="youthLogin()" data-i18n="si_login">Login</button>
             <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('yt-email')" data-i18n="si_forgot">Forgot password?</span></div>
