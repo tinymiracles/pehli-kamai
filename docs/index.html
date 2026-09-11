@@ -98,9 +98,9 @@
     <button class="tab" id="nl-home" onclick="showPage('home')" aria-current="true" data-i18n="nav_hire">Hire a fresher</button>
     <button class="tab" id="nl-how" onclick="goHomeThenScroll(scrollToHowItWorks,'nl-how')" data-i18n="nav_how">How it works</button>
     <button class="tab" id="nl-candidates" onclick="goHomeThenScroll(scrollToCandidates,'nl-candidates')" data-i18n="nav_candidates">Candidates</button>
-    <button class="tab" id="nl-stories" onclick="showPage('stories')">Success Stories</button>
+    <button class="tab" id="nl-stories" onclick="showPage('stories')" data-i18n="nav_stories">Success Stories</button>
     <button class="tab" id="nl-addprofile" onclick="openAdd()" data-i18n="nav_kaam">Kaam chahiye</button>
-    <button class="tab" id="nl-journey" onclick="showPage('journey')">Training Journey</button>
+    <button class="tab" id="nl-journey" onclick="showPage('journey')" data-i18n="nav_journey">Training Journey</button>
     <button class="tab" id="nl-about" onclick="showPage('about')" data-i18n="nav_story">Our story</button>
   </nav>
   <div class="hdr-right">
@@ -123,10 +123,10 @@
         <button class="hdr-menu-item" onclick="showPage('about');toggleHdrMenu()" data-i18n="nav_story">Our story</button>
       </div>
       <button class="hdr-menu-item" id="hdr-hr-link" onclick="openSignIn();toggleHdrMenu()" data-i18n="menu_hrlogin">Sign in</button>
-      <button class="hdr-menu-item" onclick="showPage('stories');toggleHdrMenu()">Success Stories</button>
-      <button class="hdr-menu-item" onclick="showPage('journey');toggleHdrMenu()">Training Journey</button>
-      <button class="hdr-menu-item" onclick="showPage('training');toggleHdrMenu()">Free Training</button>
-      <button class="hdr-menu-item" onclick="showPage('help');toggleHdrMenu()">Help & FAQ</button>
+      <button class="hdr-menu-item" onclick="showPage('stories');toggleHdrMenu()" data-i18n="nav_stories">Success Stories</button>
+      <button class="hdr-menu-item" onclick="showPage('journey');toggleHdrMenu()" data-i18n="nav_journey">Training Journey</button>
+      <button class="hdr-menu-item" onclick="showPage('training');toggleHdrMenu()" data-i18n="menu_freetraining">Free Training</button>
+      <button class="hdr-menu-item" onclick="showPage('help');toggleHdrMenu()" data-i18n="menu_helpfaq">Help & FAQ</button>
       <button class="hdr-menu-item" onclick="openCF();toggleHdrMenu()" data-i18n="menu_contact">Contact Us</button>
       <button class="hdr-menu-item" onclick="showPage('report');toggleHdrMenu()" data-i18n="menu_report">Report a concern</button>
     </div>
@@ -1155,7 +1155,7 @@
     <div id="cf-form-body">
     <p style="font-size:13.5px;color:var(--ink-3);margin-bottom:28px;line-height:1.7">Whether you're an employer, NGO, or just curious — drop us a message.</p>
     <div class="ct-form">
-      <div class="ct-row"><label>Your name *</label><input type="text" id="cf-name" placeholder="e.g. Priya Shah"/></div>
+      <div class="ct-row"><label data-i18n="si_yourname">Your name *</label><input type="text" id="cf-name" placeholder="e.g. Priya Shah"/></div>
       <div class="ct-row"><label>Organisation</label><input type="text" id="cf-org" placeholder="e.g. Zomato, SBI, Self"/></div>
       <div class="ct-row"><label>Email *</label><input type="email" id="cf-email" placeholder="your@email.com"/></div>
       <div class="ct-row"><label>I am a...</label>
@@ -1196,7 +1196,7 @@
     <div id="gr-form-body">
     <p style="font-size:14.5px;color:var(--fi-ink-2);margin:0 0 26px;line-height:1.75;max-width:64ch">A data/privacy question, or something that felt wrong with an employer, a candidate, or an introduction — tell us. This goes straight to our team, gets a reference number, and is logged so it doesn't get lost. You won't lose access to the platform for reporting something.</p>
     <div class="ct-form" style="max-width:520px">
-      <div class="ct-row"><label>Your name *</label><input type="text" id="gr-name" placeholder="e.g. Priya Shah"/></div>
+      <div class="ct-row"><label data-i18n="si_yourname">Your name *</label><input type="text" id="gr-name" placeholder="e.g. Priya Shah"/></div>
       <div class="ct-row"><label>Email *</label><input type="email" id="gr-email" placeholder="your@email.com"/></div>
       <div class="ct-row"><label>What kind of concern is this? *</label>
         <select id="gr-category">
@@ -1357,7 +1357,7 @@
     <div class="m-bdy">
       <div id="hi-form-body">
         <div class="hcf-fields">
-          <div class="hcf-row"><label>Your name *</label><input type="text" id="hcf-name" placeholder="e.g. Rahul Mehta"/></div>
+          <div class="hcf-row"><label data-i18n="si_yourname">Your name *</label><input type="text" id="hcf-name" placeholder="e.g. Rahul Mehta"/></div>
           <div class="hcf-row"><label>Phone number *</label><input type="tel" id="hcf-phone" placeholder="+91 98765 43210"/></div>
           <div class="hcf-row"><label>Email *</label><input type="email" id="hcf-email" placeholder="hr@company.com"/></div>
           <div class="hcf-row"><label>Company (optional)</label><input type="text" id="hcf-company" placeholder="e.g. Reliance Retail"/></div>
@@ -1389,35 +1389,35 @@
   <div class="legal-wrap" style="max-width:680px">
     <div class="af-card">
       <div class="af">
-        <div class="af-section-lbl">About you</div>
+        <div class="af-section-lbl" data-i18n="af_about_you">About you</div>
         <div class="lf-row-2">
-          <div><label>Full name *</label><input id="a-nm" type="text" placeholder="e.g. Priya Sharma"/></div>
+          <div><label data-i18n="af_fullname">Full name *</label><input id="a-nm" type="text" placeholder="e.g. Priya Sharma"/></div>
           <div><label>Phone * <span class="req-note">(private)</span></label><input id="a-ph" type="tel" placeholder="+91 98765 43210"/></div>
         </div>
-        <div><label>Area / Neighbourhood *</label><input id="a-loc" type="text" placeholder="e.g. Andheri, Grant Road, Aarey Colony"/></div>
+        <div><label data-i18n="af_area">Area / Neighbourhood *</label><input id="a-loc" type="text" placeholder="e.g. Andheri, Grant Road, Aarey Colony"/></div>
         <div class="lf-row-2">
-          <div><label>Education *</label>
+          <div><label data-i18n="af_education">Education *</label>
             <select id="a-ed">
               <option value="">Select...</option>
               <option>10th Pass</option><option>12th Pass</option>
               <option>Graduate</option><option>Post Graduate</option><option>Diploma</option>
             </select>
           </div>
-          <div><label>School / College</label><input id="a-inst" type="text" placeholder="e.g. Jai Hind College"/></div>
+          <div><label data-i18n="af_school">School / College</label><input id="a-inst" type="text" placeholder="e.g. Jai Hind College"/></div>
         </div>
         <div class="lf-row-2">
-          <div><label>Year of passing</label>
+          <div><label data-i18n="af_year">Year of passing</label>
             <select id="a-yr">
               <option value="">Select...</option>
               <option>2026</option><option>2025</option><option>2024</option><option>2023</option>
               <option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option>
             </select>
           </div>
-          <div><label>Sector *</label><select id="a-sc"><option value="">Select...</option></select></div>
+          <div><label data-i18n="af_sector">Sector *</label><select id="a-sc"><option value="">Select...</option></select></div>
         </div>
-        <div><label>Your skills *</label><input id="a-sk" type="text" placeholder="e.g. MS Excel, Tally, Customer Service, Photoshop"/></div>
-        <div><label>Languages</label><input id="a-lg" type="text" placeholder="e.g. Hindi, English, Marathi"/></div>
-        <div><label>What kind of work are you looking for? *</label><textarea id="a-ab" rows="3" placeholder="Tell employers what you're looking for and what makes you a good hire. 2–3 sentences is enough."></textarea></div>
+        <div><label data-i18n="af_skills">Your skills *</label><input id="a-sk" type="text" placeholder="e.g. MS Excel, Tally, Customer Service, Photoshop"/></div>
+        <div><label data-i18n="af_languages">Languages</label><input id="a-lg" type="text" placeholder="e.g. Hindi, English, Marathi"/></div>
+        <div><label data-i18n="af_lookingfor">What kind of work are you looking for? *</label><textarea id="a-ab" rows="3" placeholder="Tell employers what you're looking for and what makes you a good hire. 2–3 sentences is enough."></textarea></div>
 
         <div style="margin:4px 0 2px">
           <div style="font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:6px">Already have a resume? <span style="font-weight:400;color:var(--ink-4)">(optional)</span></div>
@@ -1431,40 +1431,40 @@
         <div style="margin:14px 0 2px">
           <div style="font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:10px">Have you worked somewhere before?</div>
           <div style="display:flex;gap:8px">
-            <button type="button" class="af-yn act" id="af-exp-no" onclick="toggleExp(false)">No</button>
-            <button type="button" class="af-yn" id="af-exp-yes" onclick="toggleExp(true)">Yes</button>
+            <button type="button" class="af-yn act" id="af-exp-no" onclick="toggleExp(false)" data-i18n="af_no">No</button>
+            <button type="button" class="af-yn" id="af-exp-yes" onclick="toggleExp(true)" data-i18n="af_yes">Yes</button>
           </div>
         </div>
         <div id="af-exp-fields" style="display:none;flex-direction:column;gap:11px">
           <div class="lf-row-2">
-            <div><label>Company / Place</label><input id="a-exco" type="text" placeholder="e.g. D-Mart, Taj Hotel"/></div>
-            <div><label>How long?</label><input id="a-exdu" type="text" placeholder="e.g. 6 months, 1 year"/></div>
+            <div><label data-i18n="af_company_place">Company / Place</label><input id="a-exco" type="text" placeholder="e.g. D-Mart, Taj Hotel"/></div>
+            <div><label data-i18n="af_howlong">How long?</label><input id="a-exdu" type="text" placeholder="e.g. 6 months, 1 year"/></div>
           </div>
-          <div><label>What did you do there?</label><input id="a-exro" type="text" placeholder="e.g. Handled billing and customer queries at checkout"/></div>
+          <div><label data-i18n="af_whatdid">What did you do there?</label><input id="a-exro" type="text" placeholder="e.g. Handled billing and customer queries at checkout"/></div>
         </div>
 
         <div style="margin:14px 0 2px">
           <div style="font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:10px">Have you done any volunteering?</div>
           <div style="display:flex;gap:8px">
-            <button type="button" class="af-yn act" id="af-vol-no" onclick="toggleVol(false)">No</button>
-            <button type="button" class="af-yn" id="af-vol-yes" onclick="toggleVol(true)">Yes</button>
+            <button type="button" class="af-yn act" id="af-vol-no" onclick="toggleVol(false)" data-i18n="af_no">No</button>
+            <button type="button" class="af-yn" id="af-vol-yes" onclick="toggleVol(true)" data-i18n="af_yes">Yes</button>
           </div>
         </div>
         <div id="af-vol-fields" style="display:none;flex-direction:column;gap:11px">
           <div class="lf-row-2">
-            <div><label>Organisation / Cause</label><input id="a-volorg" type="text" placeholder="e.g. Tiny Miracles, local NGO, temple/community drive"/></div>
-            <div><label>How long?</label><input id="a-voldur" type="text" placeholder="e.g. 3 months, 2 years"/></div>
+            <div><label data-i18n="af_org_cause">Organisation / Cause</label><input id="a-volorg" type="text" placeholder="e.g. Tiny Miracles, local NGO, temple/community drive"/></div>
+            <div><label data-i18n="af_howlong">How long?</label><input id="a-voldur" type="text" placeholder="e.g. 3 months, 2 years"/></div>
           </div>
-          <div><label>What did you do there?</label><input id="a-volrole" type="text" placeholder="e.g. Taught kids on weekends, helped organise a relief drive"/></div>
+          <div><label data-i18n="af_whatdid">What did you do there?</label><input id="a-volrole" type="text" placeholder="e.g. Taught kids on weekends, helped organise a relief drive"/></div>
         </div>
 
         <div style="border-top:1px solid var(--line);padding-top:14px;margin-top:6px">
-          <div class="af-section-lbl">Create your account</div>
+          <div class="af-section-lbl" data-i18n="af_create_account">Create your account</div>
         </div>
         <div><label>Email * <span class="req-note">(for login)</span></label><input id="a-em-yt" type="email" placeholder="your@email.com"/></div>
         <div class="lf-row-2">
-          <div><label>Password *</label><input id="a-pw" type="password" placeholder="Create a password"/></div>
-          <div><label>Confirm password *</label><input id="a-pw2" type="password" placeholder="Re-enter password"/></div>
+          <div><label data-i18n="af_password">Password *</label><input id="a-pw" type="password" placeholder="Create a password"/></div>
+          <div><label data-i18n="af_confirm_pw">Confirm password *</label><input id="a-pw2" type="password" placeholder="Re-enter password"/></div>
         </div>
 
         <div class="consent-block" style="display:flex;flex-direction:column;gap:10px;margin:16px 0 4px;padding:14px 14px;background:var(--bg);border-radius:10px;border:1px solid var(--line);">
@@ -1586,8 +1586,8 @@
 
         <!-- Role pills -->
         <div style="display:flex;gap:10px;margin-bottom:28px">
-          <button class="role-pill act" id="rp-hr" onclick="switchLoginRole('hr')">HR / Employer</button>
-          <button class="role-pill" id="rp-yt" onclick="switchLoginRole('yt')">Youth</button>
+          <button class="role-pill act" id="rp-hr" onclick="switchLoginRole('hr')" data-i18n="si_hr">HR / Employer</button>
+          <button class="role-pill" id="rp-yt" onclick="switchLoginRole('yt')" data-i18n="si_youth">Youth</button>
         </div>
 
         <!-- HR panel -->
@@ -1598,23 +1598,23 @@
           </div>
           <div class="login-panel act" id="lp-in">
             <div class="lf">
-              <div><label>Work email *</label><input type="email" id="hr-si-email" placeholder="hr@company.com"/></div>
-              <div><label>Password *</label><input type="password" id="hr-si-pw" placeholder="Your password"/></div>
-              <button class="btn-lf-submit" onclick="hrSignIn()">Sign in</button>
-              <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('hr-si-email')">Forgot password?</span></div>
+              <div><label data-i18n="si_workemail">Work email *</label><input type="email" id="hr-si-email" placeholder="hr@company.com"/></div>
+              <div><label data-i18n="af_password">Password *</label><input type="password" id="hr-si-pw" placeholder="Your password"/></div>
+              <button class="btn-lf-submit" onclick="hrSignIn()" data-i18n="si_signin">Sign in</button>
+              <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('hr-si-email')" data-i18n="si_forgot">Forgot password?</span></div>
               <div class="lf-note">No account? <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="switchLoginTab('up')">Create one →</span></div>
             </div>
           </div>
           <div class="login-panel" id="lp-up">
             <div class="lf">
               <div class="lf-row-2">
-                <div><label>Your name *</label><input type="text" id="hr-nm" placeholder="Priya Shah"/></div>
-                <div><label>Phone *</label><input type="tel" id="hr-ph" placeholder="+91 98765 43210"/></div>
+                <div><label data-i18n="si_yourname">Your name *</label><input type="text" id="hr-nm" placeholder="Priya Shah"/></div>
+                <div><label data-i18n="si_phone">Phone *</label><input type="tel" id="hr-ph" placeholder="+91 98765 43210"/></div>
               </div>
-              <div><label>Work email *</label><input type="email" id="hr-em" placeholder="hr@company.com"/></div>
-              <div><label>Company *</label><input type="text" id="hr-co" placeholder="e.g. Reliance Retail"/></div>
+              <div><label data-i18n="si_workemail">Work email *</label><input type="email" id="hr-em" placeholder="hr@company.com"/></div>
+              <div><label data-i18n="si_company">Company *</label><input type="text" id="hr-co" placeholder="e.g. Reliance Retail"/></div>
               <div class="lf-row-2">
-                <div><label>Industry *</label>
+                <div><label data-i18n="si_industry">Industry *</label>
                   <select id="hr-ind">
                     <option value="">Select...</option>
                     <option>Retail & FMCG</option><option>Banking & Finance</option>
@@ -1625,9 +1625,9 @@
                     <option>Other</option>
                   </select>
                 </div>
-                <div><label>City *</label><input type="text" id="hr-city" placeholder="Mumbai"/></div>
+                <div><label data-i18n="si_city">City *</label><input type="text" id="hr-city" placeholder="Mumbai"/></div>
               </div>
-              <div><label>Password *</label><input type="password" id="hr-up-pw" placeholder="Create a password"/></div>
+              <div><label data-i18n="af_password">Password *</label><input type="password" id="hr-up-pw" placeholder="Create a password"/></div>
               <label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:var(--ink-2);cursor:pointer;margin:6px 0 4px">
                 <input type="checkbox" id="hr-consent-terms" style="width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--teal);">
                 I agree to the <a onclick="event.preventDefault();showPage('privacy')" href="#" style="color:var(--teal-ink);font-weight:700">Privacy Policy</a> and <a onclick="event.preventDefault();showPage('terms')" href="#" style="color:var(--teal-ink);font-weight:700">Terms &amp; Conditions</a>. *
@@ -1640,10 +1640,10 @@
         <!-- Youth panel -->
         <div class="login-panel" id="lp-yt">
           <div class="lf">
-            <div><label>Email</label><input type="email" id="yt-email" placeholder="your@email.com"/></div>
-            <div><label>Password</label><input type="password" id="yt-pw" placeholder="Your password"/></div>
-            <button class="btn-lf-submit" onclick="youthLogin()">Login</button>
-            <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('yt-email')">Forgot password?</span></div>
+            <div><label data-i18n="si_email">Email</label><input type="email" id="yt-email" placeholder="your@email.com"/></div>
+            <div><label data-i18n="si_pw">Password</label><input type="password" id="yt-pw" placeholder="Your password"/></div>
+            <button class="btn-lf-submit" onclick="youthLogin()" data-i18n="si_login">Login</button>
+            <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('yt-email')" data-i18n="si_forgot">Forgot password?</span></div>
             <div class="lf-note">First time? <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="closeHRLogin();openAdd()">Add my profile →</span></div>
           </div>
         </div>
