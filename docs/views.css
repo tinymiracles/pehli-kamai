@@ -790,3 +790,13 @@ pk-hiw3d.hot{cursor:pointer;}
   .fi-hero-backed span{font-size:11px;}
   .fi-hero-backed img{height:17px;}
 }
+
+/* Footer links are 19px tall -- fine with a mouse, under the 44px touch
+   minimum on a phone, and these are the links that matter most to a
+   jobseeker: Report a concern, Grievance Redressal, the contact email.
+   Padding rather than a taller font, so nothing reflows on desktop. */
+@media(max-width:700px){
+  .ft-col{gap:2px;}
+  .ft-col a{padding:11px 0;min-height:44px;display:flex;align-items:center;}
+  .ft-contact-email{word-break:break-all;}
+}

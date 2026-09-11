@@ -68,6 +68,7 @@ const TRANSLATIONS = {
     footer_send_message: 'Send us a message →',
     footer_legal_label: 'Legal',
     footer_privacy: 'Privacy Policy',
+    footer_cookies: 'Cookies',
     footer_terms: 'Terms & Conditions',
     footer_grievance: 'Grievance Redressal',
     footer_report: 'Report a concern →',
@@ -126,6 +127,7 @@ const TRANSLATIONS = {
     footer_legal_label: 'कानूनी',
     footer_privacy: 'प्राइवेसी पॉलिसी',
     footer_terms: 'नियम और शर्तें',
+    footer_cookies: 'कुकीज़',
     footer_grievance: 'शिकायत निवारण',
     footer_report: 'शिकायत दर्ज करें →',
     footer_browse_label: 'प्रोफ़ाइल देखें',
@@ -181,6 +183,7 @@ const TRANSLATIONS = {
     footer_privacy: 'प्रायव्हसी पॉलिसी',
     footer_terms: 'अटी व शर्ती',
     footer_grievance: 'तक्रार निवारण',
+    footer_cookies: 'कुकीज',
     footer_report: 'तक्रार नोंदवा →',
     footer_browse_label: 'प्रोफाइल्स पाहा',
   },
@@ -190,9 +193,15 @@ const LANG_NAMES = { en: 'EN', hi: 'हिं', mr: 'मर' };
 
 function getLang(){ return localStorage.getItem('pk_lang') || 'en'; }
 
+/* Returns null when a key exists in no language, rather than the key itself.
+   Callers keep whatever text is already in the markup instead of printing a
+   raw key at a visitor: a missing footer_cookies entry put the literal string
+   "footer_cookies" in the site footer on every page. English copy in the HTML
+   is a far better fallback than an identifier. */
 function t(key){
   const lang = getLang();
-  return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || TRANSLATIONS.en[key] || key;
+  const v = (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || TRANSLATIONS.en[key];
+  return (typeof v === 'string') ? v : null;
 }
 
 function setLang(lang){
@@ -210,13 +219,17 @@ function applyTranslations(){
       // set. #hiw-tot itself is kept updated elsewhere (updateAboutStats);
       // this just needs to exist so that continues to work.
       const totVal = document.getElementById('hiw-tot') ? document.getElementById('hiw-tot').textContent : (typeof DATA!=='undefined'?DATA.length:'');
-      el.innerHTML = t(key).replace('{{TOT}}', '<span id="hiw-tot">'+totVal+'</span>');
+      const tpl = t(key);
+      if(tpl) el.innerHTML = tpl.replace('{{TOT}}', '<span id="hiw-tot">'+totVal+'</span>');
       return;
     }
-    el.textContent = t(key);
+    const v = t(key);
+    // Leave the markup's own text alone when a key is missing.
+    if(v !== null) el.textContent = v;
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
-    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+    const v = t(el.getAttribute('data-i18n-placeholder'));
+    if(v !== null) el.placeholder = v;
   });
   document.documentElement.lang = getLang();
   document.querySelectorAll('.lang-switch [data-lang]').forEach(btn=>{
