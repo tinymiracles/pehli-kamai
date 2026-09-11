@@ -1338,11 +1338,25 @@ function youthLogin(){
         closeHRLogin();
         openYtDash(snap.data());
       } else {
-        // Profile in Firestore missing — try localStorage
+        /* Firestore doc missing. The cache below is keyed by email and this
+           email is the one Firebase just authenticated, so it can only ever
+           return this person's own profile -- unlike the HR panel's old
+           fallback, which was keyed to nobody. */
         const accts=JSON.parse(localStorage.getItem('pk_yt_accts')||'{}');
         const acct=accts[email];
-        if(acct){closeHRLogin();openYtDash(acct);}
-        else{toast('Profile not found. Please sign up again.');}
+        if(acct){closeHRLogin();openYtDash(acct);return;}
+        // Not a candidate at all. Say which panel they want rather than
+        // telling someone with a perfectly good account to sign up again.
+        const uid = (auth.currentUser && auth.currentUser.uid) || snap.id;
+        const check = uid
+          ? db.collection('hr_accounts').doc(uid).get().catch(()=>({exists:false}))
+          : Promise.resolve({exists:false});
+        return check.then(h=>{
+          auth.signOut().catch(()=>{});
+          toast(h && h.exists
+            ? 'That is an employer account — switch to HR / Employer to sign in.'
+            : 'Profile not found. Please sign up again.');
+        });
       }
     })
     .catch(e=>{
@@ -1602,13 +1616,33 @@ function hrSignIn(){
         return;
       }
       return db.collection('hr_accounts').doc(cred.user.uid).get().then(snap=>{
-        const data=snap.exists?snap.data():JSON.parse(localStorage.getItem('typc_hr_user')||'null');
-        if(data){
+        /* No cached fallback here. This used to read typc_hr_user from
+           localStorage when the Firestore doc was missing -- but that key
+           holds the LAST HR user to sign in on this device, keyed to nobody.
+           On a shared or community machine a candidate signing in through
+           this panel with their own correct password would find no
+           hr_accounts doc, fall through to that cache, and be handed the
+           previous employer's name, company and approved flag. Your role is
+           your account: if there is no HR record for this uid, this is not an
+           employer login, and no amount of local cache should say otherwise. */
+        const data = snap.exists ? snap.data() : null;
+        if(!data){
+          return db.collection('youth_accounts').doc(cred.user.uid).get()
+            .then(y=>{
+              auth.signOut().catch(()=>{});
+              toast(y.exists
+                ? 'That is a candidate account — switch to Youth to sign in.'
+                : 'No employer account found for that email. Please create one.');
+              if(!y.exists) switchLoginTab('up');
+            })
+            .catch(()=>{ auth.signOut().catch(()=>{}); toast('No employer account found for that email.'); });
+        }
+        {
           hrUser={name:data.name,phone:data.phone,email:data.email,company:data.company,industry:data.industry,city:data.city,approved:data.approved===true};
           localStorage.setItem('typc_hr_user',JSON.stringify(hrUser));
           closeHRLogin();updateHRHeader();render();
           toast('Welcome back, '+hrUser.name+'!');
-        } else {toast('Account not found. Please create one.');switchLoginTab('up');}
+        }
       });
     })
     .catch(()=>{
