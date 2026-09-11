@@ -20,6 +20,23 @@
  */
 const TRANSLATIONS = {
   en: {
+    st_role_de: 'Data Entry',
+    st_role_se: 'Sales Executive',
+    st_role_mse: 'Marketing & Sales Executive',
+    h1_ourstory: 'Our <em>story</em>',
+    h1_stories: 'Success <em>Stories</em>',
+    h1_journey: 'Your Training <em>Journey</em>',
+    ab_lead: '<strong>Pehli Kamai</strong> is an initiative by <strong>Tiny Miracles</strong>, a B-Corp certified social enterprise based in Mumbai and Amsterdam. For over a decade, Tiny Miracles has worked alongside communities across the city — on health, on education, on savings, on livelihoods — with one belief holding it all together: people don\'t lack ability, they lack access.',
+    ab_closer: 'That\'s what Pehli Kamai is: the introduction. Meet the candidates, and then finish the sentence <em>"freshers these days—"</em> however you like. We think you\'ll be surprised.',
+    st_next_h: 'You could be next.',
+    st_next_p: 'These are just the first stories. Pehli Kamai is actively working with 40+ HR companies to place more candidates. Whether you\'re a fresher, have some experience, or want to transition to a new sector — your story could be featured here.',
+    st_c1: 'Growth trajectory with structured salary increment. Located in Andheri.',
+    st_c2: 'Structured career path with 6-month increment plan. Stable growth opportunity.',
+    st_c3: '3-month increment timeline. Salary progression built in from day one.',
+    st_c4: '3-month internship to permanent role. Sales in growing tech company.',
+    st_c5: 'Animation course graduate in creative industry sales. Room for growth.',
+    st_c6: 'Customer-facing retail role. Stable income with growth potential.',
+    tm_backed: 'Backed by <strong>Tiny Miracles</strong> — the award-winning Mumbai and Amsterdam-based social enterprise.',
     nav_hire: 'Hire a fresher',
     nav_how: 'How it works',
     nav_candidates: 'Candidates',
@@ -83,7 +100,8 @@ const TRANSLATIONS = {
     ab_p_youth: 'Upload your profile. Bindaas bano — khud bano.',
     ab_h4_employers: 'For employers',
     ab_p_employers: 'Scroll through the profiles and give the candidates a call.',
-    ab_btn_browse: 'Browse candidates',
+    ab_btn_browse: 'Browse candidates →',
+    ab_btn_add: 'Add my profile →',
     ab_btn_meet: 'Meet the candidates',
     jt_eyebrow: '5 sessions · run by our own team · free, always',
     jt_lede: "Getting hired isn't just about having a resume — it's knowing how to walk into a room, answer a tough question, and show up ready on day one. Every youth on Pehli Kamai goes through five sessions with us: two before an employer even sees your profile, three more once you're picked.",
@@ -154,6 +172,23 @@ const TRANSLATIONS = {
     footer_browse_label: 'Browse profiles',
   },
   hi: {
+    st_role_de: 'डेटा एंट्री',
+    st_role_se: 'सेल्स एग्ज़ीक्यूटिव',
+    st_role_mse: 'मार्केटिंग व सेल्स एग्ज़ीक्यूटिव',
+    h1_ourstory: 'हमारी <em>कहानी</em>',
+    h1_stories: 'सफलता की <em>कहानियाँ</em>',
+    h1_journey: 'आपकी ट्रेनिंग <em>जर्नी</em>',
+    ab_lead: '<strong>पेहली कमाई</strong> <strong>टाइनी मिरेकल्स</strong> की एक पहल है — मुंबई और एम्स्टर्डम में स्थित एक बी-कॉर्प प्रमाणित सोशल एंटरप्राइज़। एक दशक से भी ज़्यादा समय से टाइनी मिरेकल्स इस शहर के समुदायों के साथ काम कर रही है — सेहत पर, शिक्षा पर, बचत पर, रोज़गार पर — और इन सबको जोड़े रखने वाला एक ही विश्वास है: लोगों में काबिलियत की कमी नहीं, मौकों की कमी है।',
+    ab_closer: 'पेहली कमाई यही है: पहचान कराना। उम्मीदवारों से मिलिए, और फिर <em>"आजकल के फ्रेशर—"</em> वाला वाक्य जैसे चाहें वैसे पूरा कीजिए। हमें लगता है आप हैरान रह जाएंगे।',
+    st_next_h: 'अगली बारी आपकी हो सकती है।',
+    st_next_p: 'ये तो बस पहली कहानियाँ हैं। पेहली कमाई 40+ एचआर कंपनियों के साथ मिलकर और उम्मीदवारों को नौकरी दिला रही है। आप फ्रेशर हों, थोड़ा अनुभव रखते हों, या नए सेक्टर में जाना चाहते हों — अगली कहानी आपकी हो सकती है।',
+    st_c1: 'तय बढ़ोतरी के साथ आगे बढ़ने का रास्ता। अंधेरी में स्थित।',
+    st_c2: '6 महीने की इंक्रीमेंट योजना के साथ तय करियर रास्ता। स्थिर ग्रोथ का मौका।',
+    st_c3: '3 महीने की इंक्रीमेंट अवधि। पहले दिन से ही सैलरी बढ़ने की व्यवस्था।',
+    st_c4: '3 महीने की इंटर्नशिप से पक्की नौकरी तक। बढ़ती टेक कंपनी में सेल्स।',
+    st_c5: 'क्रिएटिव इंडस्ट्री सेल्स में एनिमेशन कोर्स ग्रेजुएट। आगे बढ़ने की गुंजाइश।',
+    st_c6: 'ग्राहकों से जुड़ी रिटेल भूमिका। ग्रोथ की संभावना के साथ स्थिर आमदनी।',
+    tm_backed: '<strong>टाइनी मिरेकल्स</strong> का साथ — मुंबई और एम्स्टर्डम में स्थित पुरस्कार विजेता सोशल एंटरप्राइज़।',
     nav_hire: 'फ्रेशर को नौकरी दें',
     nav_how: 'यह कैसे काम करता है',
     nav_candidates: 'उम्मीदवार',
@@ -175,7 +210,8 @@ const TRANSLATIONS = {
     ab_p_youth: 'अपनी प्रोफ़ाइल अपलोड करें। बिंदास बनो — खुद बनो।',
     ab_h4_employers: 'नियोक्ताओं के लिए',
     ab_p_employers: 'प्रोफ़ाइल देखिए और उम्मीदवारों को कॉल कीजिए।',
-    ab_btn_browse: 'उम्मीदवार देखें',
+    ab_btn_browse: 'उम्मीदवार देखें →',
+    ab_btn_add: 'मेरी प्रोफ़ाइल जोड़ें →',
     ab_btn_meet: 'उम्मीदवारों से मिलें',
     jt_eyebrow: '5 सेशन · हमारी अपनी टीम द्वारा · हमेशा मुफ़्त',
     jt_lede: 'नौकरी मिलना सिर्फ़ रिज़्यूमे होने से नहीं होता — यह जानना ज़रूरी है कि कमरे में कैसे जाना है, मुश्किल सवाल का जवाब कैसे देना है, और पहले दिन तैयार होकर कैसे पहुँचना है। पेहली कमाई पर हर युवा हमारे साथ पाँच सेशन करता है: दो तब, जब कोई नियोक्ता आपकी प्रोफ़ाइल देखे भी नहीं, और तीन आपके चुने जाने के बाद।',
@@ -291,6 +327,23 @@ const TRANSLATIONS = {
     footer_browse_label: 'प्रोफ़ाइल देखें',
   },
   mr: {
+    st_role_de: 'डेटा एंट्री',
+    st_role_se: 'सेल्स एक्झिक्युटिव्ह',
+    st_role_mse: 'मार्केटिंग व सेल्स एक्झिक्युटिव्ह',
+    h1_ourstory: 'आमची <em>गोष्ट</em>',
+    h1_stories: '<em>यशोगाथा</em>',
+    h1_journey: 'तुमचा प्रशिक्षण <em>प्रवास</em>',
+    ab_lead: '<strong>पेहली कमाई</strong> हा <strong>टायनी मिरॅकल्स</strong>चा एक उपक्रम आहे — मुंबई आणि अ‍ॅमस्टरडॅम येथील बी-कॉर्प प्रमाणित सोशल एंटरप्राइझ. एक दशकाहून अधिक काळ टायनी मिरॅकल्स या शहरातील समुदायांसोबत काम करत आहे — आरोग्यावर, शिक्षणावर, बचतीवर, उपजीविकेवर — आणि हे सगळं जोडणारा एकच विश्वास आहे: लोकांकडे क्षमतेची कमतरता नाही, संधीची आहे.',
+    ab_closer: 'पेहली कमाई हेच आहे: ओळख करून देणं. उमेदवारांना भेटा, आणि मग <em>"हल्लीचे फ्रेशर—"</em> हे वाक्य तुम्हाला हवं तसं पूर्ण करा. आम्हाला वाटतं तुम्ही थक्क व्हाल.',
+    st_next_h: 'पुढचा नंबर तुमचा असू शकतो.',
+    st_next_p: 'या तर फक्त पहिल्या कथा आहेत. पेहली कमाई ४०+ एचआर कंपन्यांसोबत काम करून अधिक उमेदवारांना नोकरी मिळवून देत आहे. तुम्ही फ्रेशर असाल, थोडा अनुभव असेल, किंवा नव्या क्षेत्रात जायचं असेल — पुढची गोष्ट तुमची असू शकते.',
+    st_c1: 'ठरलेल्या पगारवाढीसह पुढे जाण्याचा मार्ग. अंधेरी येथे.',
+    st_c2: '६ महिन्यांच्या वाढीच्या योजनेसह ठरलेला करिअर मार्ग. स्थिर वाढीची संधी.',
+    st_c3: '३ महिन्यांची वाढीची मुदत. पहिल्या दिवसापासून पगारवाढीची रचना.',
+    st_c4: '३ महिन्यांच्या इंटर्नशिपपासून कायम नोकरीपर्यंत. वाढत्या टेक कंपनीत सेल्स.',
+    st_c5: 'क्रिएटिव्ह इंडस्ट्री सेल्समध्ये अ‍ॅनिमेशन कोर्स पदवीधर. वाढीला वाव.',
+    st_c6: 'ग्राहकांशी संबंधित रिटेल भूमिका. वाढीच्या शक्यतेसह स्थिर उत्पन्न.',
+    tm_backed: '<strong>टायनी मिरॅकल्स</strong>चा पाठिंबा — मुंबई आणि अ‍ॅमस्टरडॅम येथील पुरस्कारप्राप्त सोशल एंटरप्राइझ.',
     ab_para1: 'कुठेतरी एक गोष्ट दुर्लक्ष करणं अशक्य झालं. ज्या मुलांना आम्ही वाचायला शिकताना पाहिलं होतं, ती आता तरुण झाली होती. त्यांनी १०वी, १२वी, काहींनी पदवी पूर्ण केली — अनेकदा आपल्या घरातील पहिल्या पिढीचे विद्यार्थी म्हणून, अभ्यासात कोणतीही मदत नसताना, अनेकदा पार्ट-टाइम काम करत, अनेकदा घरात रेझ्युमे म्हणजे काय किंवा "एचआर राउंड" म्हणजे काय हे सांगू शकणारं कोणीच नसताना — पण नेहमी आशा, स्वप्नं आणि जिद्द घेऊन. त्यांनी उसन्या फोनवर स्वतः संगणक शिकला. स्वतःच्या साठवलेल्या पैशांतून टॅली, अ‍ॅनिमेशन आणि स्पोकन इंग्लिशचे वर्ग लावले.',
     ab_pull: 'आणि मग ते अशा भिंतीवर आदळले जी कोणताही कोर्स दुरुस्त करू शकत नव्हता: कोणीही त्यांना नोकरी द्यायला तयार नव्हतं.',
     ab_stat_candidates: 'पोर्टलवरील उमेदवार',
@@ -305,7 +358,8 @@ const TRANSLATIONS = {
     ab_p_youth: 'तुमची प्रोफाइल अपलोड करा. बिनधास्त व्हा — स्वतः व्हा.',
     ab_h4_employers: 'नियोक्त्यांसाठी',
     ab_p_employers: 'प्रोफाइल पाहा आणि उमेदवारांना फोन करा.',
-    ab_btn_browse: 'उमेदवार पाहा',
+    ab_btn_browse: 'उमेदवार पाहा →',
+    ab_btn_add: 'माझी प्रोफाइल जोडा →',
     ab_btn_meet: 'उमेदवारांना भेटा',
     jt_eyebrow: '५ सत्रे · आमच्याच टीमकडून · नेहमीच मोफत',
     jt_lede: 'नोकरी मिळणं म्हणजे फक्त रेझ्युमे असणं नव्हे — खोलीत कसं जायचं, कठीण प्रश्नाचं उत्तर कसं द्यायचं, आणि पहिल्या दिवशी तयार होऊन कसं पोहोचायचं हे माहीत असणं. पेहली कमाईवरील प्रत्येक तरुण आमच्यासोबत पाच सत्रे करतो: दोन नियोक्त्याने तुमची प्रोफाइल पाहण्याआधी, आणि तीन तुमची निवड झाल्यावर.',
@@ -463,6 +517,15 @@ function applyTranslations(){
     const v = t(key);
     // Leave the markup's own text alone when a key is missing.
     if(v !== null) el.textContent = v;
+  });
+  /* data-i18n-html, for the handful of strings that carry inline markup --
+     a heading with an <em> in it, a lead paragraph with <strong> around the
+     brand names. textContent would flatten those to plain text and lose the
+     styling, so these are set as HTML. Only ever used with translation
+     strings we author ourselves, never with anything a user typed. */
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const v = t(el.getAttribute('data-i18n-html'));
+    if(v !== null) el.innerHTML = v;
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
     const v = t(el.getAttribute('data-i18n-placeholder'));
