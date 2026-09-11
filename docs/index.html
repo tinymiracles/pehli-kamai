@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="tokens.css?v=3">
 <link rel="stylesheet" href="styles.css?v=5">
 <link rel="stylesheet" href="views.css?v=3">
+<link rel="stylesheet" href="chatbot.css?v=1">
 </head>
 <body>
 
@@ -254,8 +255,8 @@
             </g>
             <g transform="translate(410,60) rotate(5)">
               <rect width="170" height="110" rx="6" fill="#fff"/>
-              <text x="85" y="50" text-anchor="middle" font-family="Inter" font-weight="800" font-size="22" fill="var(--teal)">Day 1</text>
-              <text x="85" y="78" text-anchor="middle" font-family="Inter" font-size="13" fill="var(--fi-ink-2)">and after</text>
+              <text x="85" y="50" text-anchor="middle" font-family="Inter" font-weight="800" font-size="22" fill="var(--teal)" data-i18n="fi_day1">Day 1</text>
+              <text x="85" y="78" text-anchor="middle" font-family="Inter" font-size="13" fill="var(--fi-ink-2)" data-i18n="fi_andafter">and after</text>
               <circle cx="85" cy="0" r="9" fill="var(--teal)" stroke="#045a5f" stroke-width="1.5"/>
             </g>
             <g transform="translate(220,250) rotate(3)">
@@ -1022,125 +1023,129 @@
 <!-- ━━ HELP & FAQ ━━ -->
 <div class="hidden" id="view-help">
   <div class="about-wrap-new">
-    <h1 class="page-h1">Help & <em>Resources</em></h1>
-    <div class="legal-meta">Support for your journey from profile to first job</div>
+    <h1 class="page-h1" data-i18n-html="h1_help">Help &amp; <em>Resources</em></h1>
+    <div class="legal-meta" data-i18n="hf_meta">Support for your journey from profile to first job</div>
   </div>
   <div class="legal-wrap">
-    <p style="font-size: 14px; color: var(--ink-3); margin-bottom: 24px; line-height: 1.7; padding: 16px; background: var(--teal-soft); border-radius: 8px; border-left: 4px solid var(--teal);">
+    <p style="font-size: 14px; color: var(--ink-3); margin-bottom: 24px; line-height: 1.7; padding: 16px; background: var(--teal-soft); border-radius: 8px; border-left: 4px solid var(--teal);" data-i18n-html="hf_intro">
       <strong>Pehli Kamai is built for you.</strong> We're a bridge connecting youth — especially those without formal networks or privileged backgrounds — directly with employers. Your background doesn't define your potential. We help you present your real skills and prepare you to succeed.
     </p>
 
-    <h2>For Candidates</h2>
+    <h2 data-i18n="hf_h2_cand">For Candidates</h2>
 
-    <h3>Getting Started</h3>
+    <h3 data-i18n="hf_h3_start">Getting Started</h3>
     <div style="margin-bottom: 20px">
       <div style="margin-bottom: 12px">
-        <strong>How do I create my profile?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">It's simple. Sign up with your phone number and email. Answer questions about what work you're looking for, your education level, and skills. We automatically create a professional resume so HR companies see you in the best light.</p>
+        <strong data-i18n="hf_q1">How do I create my profile?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a1">It's simple. Sign up with your phone number and email. Answer questions about what work you're looking for, your education level, and skills. We automatically create a professional resume so HR companies see you in the best light.</p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>Is Pehli Kamai really free? Will there be hidden costs?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Yes, completely free. No charges ever. HR companies are our paying customers — we make money from them, not you. Your job is to build your profile and prepare. That's it.</p>
+        <strong data-i18n="hf_q2">Is Pehli Kamai really free? Will there be hidden costs?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a2">Yes, completely free. No charges ever. HR companies are our paying customers — we make money from them, not you. Your job is to build your profile and prepare. That's it.</p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>What information will HR companies see?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Your resume, experience, skills, education level, and general location. Your phone number and email are private until an HR company specifically says they're interested in you. Then we connect you directly, and you decide if you want to talk to them.</p>
+        <strong data-i18n="hf_q3">What information will HR companies see?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a3">Your resume, experience, skills, education level, and general location. Your phone number and email are private until an HR company specifically says they're interested in you. Then we connect you directly, and you decide if you want to talk to them.</p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>Is my information safe and private?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Yes. Read our <a onclick="showPage('privacy')" style="color: var(--teal); text-decoration: none; cursor: pointer">detailed Privacy Policy</a> for how we protect your data. Your trust is essential to us.</p>
+        <strong data-i18n="hf_q4">Is my information safe and private?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)"><span data-i18n="hf_a4_pre">Yes. Read our</span> <a onclick="showPage('privacy')" style="color: var(--teal); text-decoration: none; cursor: pointer" data-i18n="hf_a4_link">detailed Privacy Policy</a> <span data-i18n="hf_a4_post">for how we protect your data. Your trust is essential to us.</span></p>
       </div>
     </div>
 
-    <h3>Interview Preparation</h3>
+    <h3 data-i18n="hf_h3_interview">Interview Preparation</h3>
     <div style="margin-bottom: 20px">
       <div style="margin-bottom: 12px">
-        <strong>Does Pehli Kamai offer interview coaching?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Yes, and it's free. This is where we really help bridge the gap. Many candidates fail interviews not because they lack skills, but because they don't know interview etiquette or how to talk about themselves professionally. We fix that. When an HR company expresses interest, you get coaching on:
-          Professional communication and interview etiquette
-          How to answer tough questions with confidence
-          Understanding workplace expectations and culture
-          Building your personal narrative</p>
+        <strong data-i18n="hf_q5">Does Pehli Kamai offer interview coaching?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a5">Yes, and it's free. This is where we really help bridge the gap. Many candidates fail interviews not because they lack skills, but because they don't know interview etiquette or how to talk about themselves professionally. We fix that. When an HR company expresses interest, you get coaching on:</p>
+        <ul style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3); line-height: 1.7">
+          <li data-i18n="hf_a5_l1">Professional communication and interview etiquette</li>
+          <li data-i18n="hf_a5_l2">How to answer tough questions with confidence</li>
+          <li data-i18n="hf_a5_l3">Understanding workplace expectations and culture</li>
+          <li data-i18n="hf_a5_l4">Building your personal narrative</li>
+        </ul>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>What is included in the pre-session training?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">We cover basic workplace skills including essential Excel functions commonly used in entry-level jobs, intro to AI tools, and professional communication tips.</p>
+        <strong data-i18n="hf_q6">What is included in the pre-session training?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a6">We cover basic workplace skills including essential Excel functions commonly used in entry-level jobs, intro to AI tools, and professional communication tips.</p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>Can I request additional training after getting a job?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Absolutely. We offer post-placement sessions to help you succeed in your new role, including advanced Excel skills and workplace software.</p>
+        <strong data-i18n="hf_q7">Can I request additional training after getting a job?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a7">Absolutely. We offer post-placement sessions to help you succeed in your new role, including advanced Excel skills and workplace software.</p>
       </div>
     </div>
 
-    <h3>Skill Development</h3>
+    <h3 data-i18n="hf_h3_skill">Skill Development</h3>
     <div style="margin-bottom: 20px">
       <div style="margin-bottom: 12px">
-        <strong>What Excel skills should I learn?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">We focus on the most commonly used skills across jobs:
-          Basic formulas (SUM, AVERAGE, COUNT)
-          Filtering and sorting data
-          Creating pivot tables
-          Basic charts and data visualization
-          Working with multiple sheets</p>
+        <strong data-i18n="hf_q8">What Excel skills should I learn?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a8">We focus on the most commonly used skills across jobs:</p>
+        <ul style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3); line-height: 1.7">
+          <li data-i18n="hf_a8_l1">Basic formulas (SUM, AVERAGE, COUNT)</li>
+          <li data-i18n="hf_a8_l2">Filtering and sorting data</li>
+          <li data-i18n="hf_a8_l3">Creating pivot tables</li>
+          <li data-i18n="hf_a8_l4">Basic charts and data visualization</li>
+          <li data-i18n="hf_a8_l5">Working with multiple sheets</li>
+        </ul>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>Where can I practice Excel online?</strong>
+        <strong data-i18n="hf_q9">Where can I practice Excel online?</strong>
         <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">
-          <a href="https://www.youtube.com/results?search_query=excel+tutorial+basics" target="_blank" style="color: var(--teal); text-decoration: none">YouTube Excel Tutorials</a> (Free)
-          <a href="https://support.microsoft.com/en-us/office" target="_blank" style="color: var(--teal); text-decoration: none; margin-left: 16px">Microsoft Office Support</a> (Free)
-          <a href="https://www.coursera.org/courses?query=excel" target="_blank" style="color: var(--teal); text-decoration: none; margin-left: 16px">Coursera Excel Courses</a> (Some free)
+          <a href="https://www.youtube.com/results?search_query=excel+tutorial+basics" target="_blank" style="color: var(--teal); text-decoration: none">YouTube Excel Tutorials</a> <span data-i18n="hf_free">(Free)</span>
+          <a href="https://support.microsoft.com/en-us/office" target="_blank" style="color: var(--teal); text-decoration: none; margin-left: 16px">Microsoft Office Support</a> <span data-i18n="hf_free">(Free)</span>
+          <a href="https://www.coursera.org/courses?query=excel" target="_blank" style="color: var(--teal); text-decoration: none; margin-left: 16px">Coursera Excel Courses</a> <span data-i18n="hf_somefree">(Some free)</span>
         </p>
       </div>
     </div>
 
-    <h2>For HR Companies</h2>
+    <h2 data-i18n="hf_h2_hr">For HR Companies</h2>
 
     <div style="margin-bottom: 20px">
       <div style="margin-bottom: 12px">
-        <strong>How do I find candidates on Pehli Kamai?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">After signing up, browse our candidate directory. Use filters by education level (10th, 12th, graduate), sector, location, and skills to find candidates matching your requirements.</p>
+        <strong data-i18n="hf_q10">How do I find candidates on Pehli Kamai?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a10">After signing up, browse our candidate directory. Use filters by education level (10th, 12th, graduate), sector, location, and skills to find candidates matching your requirements.</p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>How do I express interest in a candidate?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Click on a candidate's profile and select "Express Interest" or "I Want to Hire." We'll immediately notify both you and the candidate, then provide interview coordination support.</p>
+        <strong data-i18n="hf_q11">How do I express interest in a candidate?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a11">Click on a candidate's profile and select "Express Interest" or "I Want to Hire." We'll immediately notify both you and the candidate, then provide interview coordination support.</p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>What support does Pehli Kamai provide for interviews?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">We prepare candidates before their interview with you, ensuring they're ready. We also help coordinate scheduling and follow up with candidates on outcomes to track placements.</p>
+        <strong data-i18n="hf_q12">What support does Pehli Kamai provide for interviews?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a12">We prepare candidates before their interview with you, ensuring they're ready. We also help coordinate scheduling and follow up with candidates on outcomes to track placements.</p>
       </div>
     </div>
 
-    <h2>General Support</h2>
+    <h2 data-i18n="hf_h2_general">General Support</h2>
 
     <div style="margin-bottom: 20px">
       <div style="margin-bottom: 12px">
-        <strong>Who do I contact if I have questions?</strong>
+        <strong data-i18n="hf_q13">Who do I contact if I have questions?</strong>
         <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">
-          <strong>Call:</strong> +91 93266 91744 or +91 99204 45917<br>
-          <strong>Email:</strong> pehlikamaitm@gmail.com<br>
-          <strong>WhatsApp:</strong> Message us on +91 93266 91744
+          <strong data-i18n="hf_call">Call:</strong> +91 93266 91744 / +91 99204 45917<br>
+          <strong data-i18n="hf_email">Email:</strong> pehlikamaitm@gmail.com<br>
+          <strong data-i18n="hf_whatsapp">WhatsApp:</strong> <span data-i18n="hf_wa_msg">Message us on</span> +91 93266 91744
         </p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>How long does it usually take to get placed?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">There's no set timeline. It depends on your profile, the market demand for your skills, and your location. We actively help by connecting you with interested HR companies.</p>
+        <strong data-i18n="hf_q14">How long does it usually take to get placed?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a14">There's no set timeline. It depends on your profile, the market demand for your skills, and your location. We actively help by connecting you with interested HR companies.</p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>I have a complaint or grievance. What do I do?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)"><a onclick="showPage('grievance')" style="color: var(--teal); text-decoration: none; cursor: pointer">Read our Grievance Redressal Policy</a> for detailed instructions on how to file a complaint.</p>
+        <strong data-i18n="hf_q15">I have a complaint or grievance. What do I do?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)"><a onclick="showPage('grievance')" style="color: var(--teal); text-decoration: none; cursor: pointer" data-i18n="hf_a15_link">Read our Grievance Redressal Policy</a> <span data-i18n="hf_a15_post">for detailed instructions on how to file a complaint.</span></p>
       </div>
     </div>
 
-    <h2>Privacy & Safety</h2>
+    <h2 data-i18n="hf_h2_privacy">Privacy &amp; Safety</h2>
 
     <div style="margin-bottom: 20px">
       <div style="margin-bottom: 12px">
-        <strong>Is my personal information safe?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">Yes. We follow strict data protection practices. Read our <a onclick="showPage('privacy')" style="color: var(--teal); text-decoration: none; cursor: pointer">Privacy Policy</a> for details about how we collect, use, and protect your information.</p>
+        <strong data-i18n="hf_q16">Is my personal information safe?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)"><span data-i18n="hf_a16_pre">Yes. We follow strict data protection practices. Read our</span> <a onclick="showPage('privacy')" style="color: var(--teal); text-decoration: none; cursor: pointer" data-i18n="footer_privacy">Privacy Policy</a> <span data-i18n="hf_a16_post">for details about how we collect, use, and protect your information.</span></p>
       </div>
       <div style="margin-bottom: 12px">
-        <strong>Who has access to my profile?</strong>
-        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)">All signed-in HR companies can see masked versions of your profile (first name, last initial, general location). Full details are only shared when an HR company specifically expresses interest in you.</p>
+        <strong data-i18n="hf_q17">Who has access to my profile?</strong>
+        <p style="margin: 6px 0 0; font-size: 13px; color: var(--ink-3)" data-i18n="hf_a17">All signed-in HR companies can see masked versions of your profile (first name, last initial, general location). Full details are only shared when an HR company specifically expresses interest in you.</p>
       </div>
     </div>
   </div>
@@ -1715,19 +1720,19 @@
       <div style="font-size:12px;color:var(--ink-3);margin-bottom:4px">This helps us match you with the right employers.</div>
       <div class="at-trk-grid">
         <div class="at-trk" id="attrk-corporate" onclick="selTrack('corporate')">
-          <div class="at-trk-name">Corporate</div>
+          <div class="at-trk-name" data-i18n="fl_corporate">Corporate</div>
           <div class="at-trk-desc">Sales, Admin, Finance, Retail, BPO, IT, Customer Service, Logistics</div>
         </div>
         <div class="at-trk" id="attrk-social" onclick="selTrack('social')">
-          <div class="at-trk-name">Social Sector</div>
+          <div class="at-trk-name" data-i18n="fl_social">Social Sector</div>
           <div class="at-trk-desc">Community Outreach, Teaching, Field Work, Social Work, Health, Environment</div>
         </div>
         <div class="at-trk" id="attrk-freelance" onclick="selTrack('freelance')">
-          <div class="at-trk-name">Freelance</div>
+          <div class="at-trk-name" data-i18n="fl_freelance">Freelance</div>
           <div class="at-trk-desc">Design, Photography, Content, Events, Skills-based, Independent work</div>
         </div>
         <div class="at-trk" id="attrk-services" onclick="selTrack('services')">
-          <div class="at-trk-name">Services</div>
+          <div class="at-trk-name" data-i18n="fl_services">Services</div>
           <div class="at-trk-desc">Beauty, Food, Repairs, Maintenance, Cleaning, Transport, Trades</div>
         </div>
       </div>
@@ -1789,6 +1794,10 @@
 <script src="resumes-data.js"></script>
 <script src="i18n.js?v=1"></script>
 <script src="script.js?v=5"></script>
+<!-- Help chatbot. Loads after script.js/i18n.js because it calls into
+     showPage/openCF/openAdd/getLang; self-injects its own DOM, so there
+     is no markup for it anywhere above. -->
+<script src="chatbot.js?v=1" defer></script>
 <!-- pk-hiw3d needs three.js's GLTFLoader, which only ships as an ES module —
      this is the one component on the site loaded this way. Everything else
      (shutter.js, script.js) stays a classic script using the UMD build above. -->

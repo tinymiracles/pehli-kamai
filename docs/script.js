@@ -275,24 +275,31 @@ function stopShutterLoop(){
 }
 
 // Build track filter chips + location dropdown
+// `key` is the i18n key for the label; these are rebuilt from JS, so each
+// one carries its data-i18n attribute and we re-run applyTranslations at the
+// end -- otherwise the markup we just wrote would sit in English until the
+// visitor switched language again.
 const TRACKS=[
-  {val:'all',label:'All'},
-  {val:'corporate',label:'Corporate'},
-  {val:'social',label:'Social Sector'},
-  {val:'freelance',label:'Freelance'},
-  {val:'services',label:'Services'},
+  {val:'all',label:'All',key:'fl_all'},
+  {val:'corporate',label:'Corporate',key:'fl_corporate'},
+  {val:'social',label:'Social Sector',key:'fl_social'},
+  {val:'freelance',label:'Freelance',key:'fl_freelance'},
+  {val:'services',label:'Services',key:'fl_services'},
 ];
 function buildChips(){
   const w=document.getElementById('chips');
-  w.innerHTML=TRACKS.map(t=>`<button class="chip${t.val==='all'?' on':''}" onclick="setSec(this,'${t.val}')">${t.label}</button>`).join('');
+  w.innerHTML=TRACKS.map(t=>`<button class="chip${t.val==='all'?' on':''}" onclick="setSec(this,'${t.val}')" data-i18n="${t.key}">${t.label}</button>`).join('');
   // Build location dropdown
   const locs=new Set();
   DATA.forEach(d=>locs.add(d.location));
   const ls=document.getElementById('loc-sel');
-  ls.innerHTML='<option value="all">All locations</option>';
+  // Locality names stay as typed -- they're what the candidate wrote and what
+  // the filter matches on, so they are data, not UI copy.
+  ls.innerHTML='<option value="all" data-i18n="search_all_locations">All locations</option>';
   Array.from(locs).sort().forEach(l=>{
     const o=document.createElement('option');o.value=l;o.textContent=l;ls.appendChild(o);
   });
+  if(typeof applyTranslations==='function') applyTranslations();
 }
 
 function setSec(el,s){
