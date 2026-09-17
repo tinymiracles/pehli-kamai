@@ -20,6 +20,8 @@
  */
 const TRANSLATIONS = {
   en: {
+    af_sector_other: 'Tell us what kind of work *',
+    af_sector_other_ph: 'e.g. Tailoring, Security guard, Driver, Salon work',
     pf_resumeready: 'Resume ready',
     pf_resumenot: 'Resume not uploaded yet',
     pf_nosummary: 'No summary provided yet.',
@@ -362,6 +364,8 @@ const TRANSLATIONS = {
     footer_browse_label: 'Browse profiles',
   },
   hi: {
+    af_sector_other: 'बताइए किस तरह का काम *',
+    af_sector_other_ph: 'जैसे सिलाई, सिक्योरिटी गार्ड, ड्राइवर, सैलून का काम',
     pf_resumeready: 'रिज़्यूमे तैयार',
     pf_resumenot: 'रिज़्यूमे अभी अपलोड नहीं हुआ',
     pf_nosummary: 'अभी कोई परिचय नहीं दिया गया।',
@@ -707,6 +711,8 @@ const TRANSLATIONS = {
     footer_browse_label: 'प्रोफ़ाइल देखें',
   },
   mr: {
+    af_sector_other: 'कोणत्या प्रकारचं काम ते सांगा *',
+    af_sector_other_ph: 'उदा. शिवणकाम, सिक्युरिटी गार्ड, ड्रायव्हर, सलूनचं काम',
     pf_resumeready: 'रेझ्युमे तयार',
     pf_resumenot: 'रेझ्युमे अजून अपलोड झालेला नाही',
     pf_nosummary: 'अजून कोणतीही ओळख दिलेली नाही.',

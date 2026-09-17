@@ -1417,8 +1417,12 @@
               <option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option>
             </select>
           </div>
-          <div><label data-i18n="af_sector">Sector *</label><select id="a-sc"><option value="" data-i18n="af_select">Select...</option></select></div>
+          <div><label data-i18n="af_sector">Sector *</label><select id="a-sc" onchange="syncSectorOther()"><option value="" data-i18n="af_select">Select...</option></select></div>
         </div>
+        <!-- Shown only when the sector dropdown is on "Other". Without this,
+             picking Other saved the literal word "Other" as the candidate's
+             sector, so their card and resume both just read "Other". -->
+        <div id="a-sc-other-row" class="hidden"><label data-i18n="af_sector_other">Tell us what kind of work *</label><input id="a-sc-other" type="text" placeholder="e.g. Tailoring, Security guard, Driver, Salon work" data-i18n-placeholder="af_sector_other_ph"/></div>
         <div><label data-i18n="af_skills">Your skills *</label><input id="a-sk" type="text" placeholder="e.g. MS Excel, Tally, Customer Service, Photoshop"/></div>
         <div><label data-i18n="af_languages">Languages</label><input id="a-lg" type="text" placeholder="e.g. Hindi, English, Marathi"/></div>
         <div><label data-i18n="af_lookingfor">What kind of work are you looking for? *</label><textarea id="a-ab" rows="3" placeholder="Tell employers what you're looking for and what makes you a good hire. 2–3 sentences is enough."></textarea></div>

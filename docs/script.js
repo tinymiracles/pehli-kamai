@@ -872,16 +872,54 @@ function openAdd(){
   const sc=document.getElementById('a-sc');
   while(sc.options.length)sc.remove(0);
   sc.add(new Option('Select sector...',''));
-  [...new Set(Object.values(TRACK_SECTORS).flat())].sort().forEach(o=>sc.add(new Option(o,o)));
+  sectorOptions(Object.values(TRACK_SECTORS).flat()).forEach(o=>sc.add(new Option(o,o)));
+  syncSectorOther();
   showPage('addprofile');
+}
+
+// Dedupe + sort the sector names, but keep "Other" pinned to the bottom --
+// alphabetically it lands in the middle of the list, where it reads as a
+// real sector rather than the escape hatch.
+function sectorOptions(list){
+  const all=[...new Set(list)].filter(s=>s!=='Other').sort();
+  return list.includes('Other')?[...all,'Other']:all;
+}
+
+/* "Other" is in every track's sector list, but on its own it tells an
+   employer nothing -- a profile saved that way reads "Other" on the card and
+   "Other — Looking for work" on the resume. So picking it reveals a free-text
+   box, and whatever the candidate types there becomes their real sector. */
+function syncSectorOther(){
+  const isOther=document.getElementById('a-sc').value==='Other';
+  const row=document.getElementById('a-sc-other-row');
+  if(row)row.classList.toggle('hidden',!isOther);
+  if(!isOther){const f=document.getElementById('a-sc-other');if(f)f.value='';}
+}
+
+// The sector actually saved: the typed answer when they chose Other,
+// otherwise the dropdown value.
+function effectiveSector(){
+  const picked=document.getElementById('a-sc').value;
+  if(picked!=='Other')return picked;
+  const typed=document.getElementById('a-sc-other');
+  return typed?typed.value.trim():'';
 }
 
 function saveProfile(){
   const nm=document.getElementById('a-nm').value.trim();
   const ed=document.getElementById('a-ed').value;
-  const sc=document.getElementById('a-sc').value;
+  const sc=effectiveSector();
   const loc=document.getElementById('a-loc').value.trim()||'Mumbai';
-  if(!nm||!ed||!sc){toast('Please fill your name, education and sector.');return;}
+  if(!nm||!ed||!sc){
+    // Distinguish the two ways sector can be empty, so someone who picked
+    // Other and left the box blank isn't told to fill a field they did fill.
+    if(nm&&ed&&document.getElementById('a-sc').value==='Other'){
+      toast('Please tell us what kind of work you are looking for.');
+      const f=document.getElementById('a-sc-other');if(f)f.focus();
+      return;
+    }
+    toast('Please fill your name, education and sector.');return;
+  }
 
   const inst=document.getElementById('a-inst').value.trim();
   const yr=document.getElementById('a-yr').value;
@@ -1600,8 +1638,19 @@ function youthEditProfile(){
   setTimeout(()=>{
     document.getElementById('a-nm').value=acct.name||'';
     document.getElementById('a-ed').value=acct.edu||'';
+    // A sector that isn't one of the listed options is a custom one the
+    // candidate typed under "Other" -- reselect Other and put their own
+    // words back in the box, rather than silently resetting them to blank.
     const sc=document.getElementById('a-sc');
-    for(let i=0;i<sc.options.length;i++){if(sc.options[i].value===acct.sector){sc.selectedIndex=i;break;}}
+    let matched=false;
+    for(let i=0;i<sc.options.length;i++){if(sc.options[i].value===acct.sector){sc.selectedIndex=i;matched=true;break;}}
+    if(!matched&&acct.sector){
+      for(let i=0;i<sc.options.length;i++){if(sc.options[i].value==='Other'){sc.selectedIndex=i;break;}}
+      syncSectorOther();
+      const f=document.getElementById('a-sc-other');if(f)f.value=acct.sector;
+    }else{
+      syncSectorOther();
+    }
     document.getElementById('a-loc').value=acct.location||'';
     document.getElementById('a-inst').value=acct.institution||'';
     document.getElementById('a-yr').value=acct.passYear||'';
@@ -2157,7 +2206,8 @@ function atProceed(){
   const sc=document.getElementById('a-sc');
   while(sc.options.length)sc.remove(0);
   sc.add(new Option('Select...',''));
-  (TRACK_SECTORS[atTrack]||TRACK_SECTORS.corporate).forEach(o=>sc.add(new Option(o,o)));
+  sectorOptions(TRACK_SECTORS[atTrack]||TRACK_SECTORS.corporate).forEach(o=>sc.add(new Option(o,o)));
+  syncSectorOther();
   openAdd();
 }
 
