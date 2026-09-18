@@ -75,6 +75,14 @@ body{font-family:var(--sans);background:var(--ink);color:var(--text);min-height:
 .btn-lf-submit{width:100%;height:40px;background:var(--teal);border:none;border-radius:7px;color:white;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;margin-top:6px;transition:opacity .14s;}
 .btn-lf-submit:hover{opacity:.88;}
 .lf-note{font-size:11px;color:var(--ink-4);text-align:center;margin-top:8px;line-height:1.5;}
+/* Failed sign-in. Stays on screen rather than toasting away, because it
+   carries the way out -- often the person has no account at all and needs
+   the button, not a warning. */
+.lf-err{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--teal-soft);border:1px solid var(--teal-mid);font-size:12.5px;line-height:1.55;color:var(--ink-2);text-align:left;}
+.lf-err b{color:var(--ink-1);font-weight:700;}
+.lf-err .lf-err-act{display:inline-block;margin-top:9px;padding:9px 14px;min-height:38px;border-radius:8px;background:var(--teal);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer;border:none;font-family:inherit;}
+.lf-err .lf-err-act:hover{filter:brightness(1.08);}
+.lf-err .lf-err-alt{display:block;margin-top:8px;color:var(--teal-ink);font-weight:700;cursor:pointer;font-size:12px;}
 .login-who{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0;}
 .login-who-card{border:2px solid var(--line-d);border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;transition:all .2s;}
 .login-who-card:hover{border-color:var(--teal-mid);}

@@ -1609,6 +1609,10 @@
               <div><label data-i18n="si_workemail">Work email *</label><input type="email" id="hr-si-email" placeholder="hr@company.com"/></div>
               <div><label data-i18n="af_password">Password *</label><input type="password" id="hr-si-pw" placeholder="Your password"/></div>
               <button class="btn-lf-submit" onclick="hrSignIn()" data-i18n="si_signin">Sign in</button>
+              <!-- Filled by showLoginError(). A toast disappears before someone
+                   on a phone has finished reading it, and this one has to carry
+                   a tappable way out. -->
+              <div class="lf-err hidden" id="hr-login-err"></div>
               <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('hr-si-email')" data-i18n="si_forgot">Forgot password?</span></div>
               <div class="lf-note"><span data-i18n="si_noaccount">No account?</span> <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="switchLoginTab('up')" data-i18n="si_createone">Create one →</span></div>
             </div>
@@ -1651,6 +1655,7 @@
             <div><label data-i18n="si_email">Email</label><input type="email" id="yt-email" placeholder="your@email.com" data-i18n-placeholder="ct_ph_email"/></div>
             <div><label data-i18n="si_pw">Password</label><input type="password" id="yt-pw" placeholder="Your password"/></div>
             <button class="btn-lf-submit" onclick="youthLogin()" data-i18n="si_login">Login</button>
+            <div class="lf-err hidden" id="yt-login-err"></div>
             <div class="lf-note"><span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="sendPasswordReset('yt-email')" data-i18n="si_forgot">Forgot password?</span></div>
             <div class="lf-note"><span data-i18n="si_firsttime">First time?</span> <span style="color:var(--teal-ink);cursor:pointer;font-weight:600" onclick="closeHRLogin();openAdd()" data-i18n="ab_btn_add">Add my profile →</span></div>
           </div>

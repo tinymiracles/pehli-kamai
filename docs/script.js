@@ -1388,6 +1388,7 @@ function openHRLogin(){closeSI();document.getElementById('hl-ov').classList.add(
 function closeHRLogin(){document.getElementById('hl-ov').classList.remove('open');}
 
 function switchLoginRole(r){
+  clearLoginErrors();
   ['hr','yt'].forEach(x=>{
     const pill=document.getElementById('rp-'+x);if(pill)pill.classList.toggle('act',x===r);
     const panel=document.getElementById('lp-'+x);if(panel)panel.classList.toggle('act',x===r);
@@ -1479,8 +1480,71 @@ function youthLogin(){
       // in localStorage. Removed: that password never should have been
       // stored client-side in the first place, and a client-side compare
       // isn't real authentication anyway (trivially bypassed via devtools).
-      toast('Email or password incorrect.');
+      showLoginError('yt', e);
     });
+}
+
+/* Why this is not simply "sorry, this account doesn't exist".
+   With Firebase's email-enumeration protection ON (it is, for this project),
+   a wrong password and a nonexistent account BOTH come back as
+   auth/invalid-credential -- deliberately, so nobody can use the login form
+   to discover which addresses are registered. So we genuinely cannot tell
+   the two apart, and claiming "no account" when the password was simply
+   mistyped sends that person off to sign up again, where they hit
+   "email already in use" and are stuck in a loop.
+   So: when Firebase DOES tell us (auth/user-not-found, i.e. protection
+   turned off in the console) we say it plainly. When it doesn't, we name
+   both possibilities and offer both ways out. Flipping that console setting
+   changes the wording here with no code change. */
+function showLoginError(which, e){
+  const box=document.getElementById(which==='hr'?'hr-login-err':'yt-login-err');
+  if(!box){toast(t('si_err_generic')||'Email or password incorrect.');return;}
+  const code=e&&e.code;
+  const tr=k=>t(k);
+  const esc2=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  if(code==='auth/too-many-requests'){
+    box.innerHTML='<b>'+esc2(tr('si_err_toomany_h')||'Too many attempts.')+'</b><br>'+
+      esc2(tr('si_err_toomany_p')||'Please wait a few minutes and try again.');
+    box.classList.remove('hidden');return;
+  }
+  if(code==='auth/network-request-failed'){
+    box.innerHTML='<b>'+esc2(tr('si_err_net_h')||'No internet just now.')+'</b><br>'+
+      esc2(tr('si_err_net_p')||'Check your connection and try again.');
+    box.classList.remove('hidden');return;
+  }
+
+  // Signup route differs per panel.
+  const act = which==='hr'
+    ? {label:tr('si_err_act_hr')||'Create an employer account →', fn:"switchLoginTab('up')"}
+    : {label:tr('si_err_act_yt')||'Create my profile →',           fn:"closeHRLogin();openAdd()"};
+
+  const noAccount = code==='auth/user-not-found';
+  const head = noAccount
+    ? (tr('si_err_noacc_h')||'Sorry, there is no account with this email.')
+    : (tr('si_err_maybe_h')||'We could not sign you in.');
+  const body = noAccount
+    ? (tr('si_err_noacc_p')||'You have not signed up yet. It only takes a few minutes.')
+    : (tr('si_err_maybe_p')||'Either the password is wrong, or there is no account with this email yet.');
+
+  let html='<b>'+esc2(head)+'</b><br>'+esc2(body)+
+    '<button type="button" class="lf-err-act" onclick="'+act.fn+'">'+esc2(act.label)+'</button>';
+  // Only offer a reset where an account might actually exist to reset.
+  if(!noAccount){
+    html+='<span class="lf-err-alt" onclick="sendPasswordReset(\''+(which==='hr'?'hr-si-email':'yt-email')+'\')">'+
+      esc2(tr('si_forgot')||'Forgot password?')+'</span>';
+  }
+  box.innerHTML=html;
+  box.classList.remove('hidden');
+}
+
+// Clear the panel's error whenever the sheet is reopened or the role flips,
+// so a stale failure doesn't greet the next person on a shared phone.
+function clearLoginErrors(){
+  ['yt-login-err','hr-login-err'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.classList.add('hidden');el.innerHTML='';}
+  });
 }
 
 let ytIsNewSignup=false;
@@ -1723,6 +1787,7 @@ function youthEditProfile(){
 }
 
 function switchLoginTab(t){
+  clearLoginErrors();
   ['in','up'].forEach(x=>{
     document.getElementById('lt-'+x).classList.toggle('act',x===t);
     document.getElementById('lp-'+x).classList.toggle('act',x===t);
@@ -1770,13 +1835,13 @@ function hrSignIn(){
         }
       });
     })
-    .catch(()=>{
+    .catch(e=>{
       // There used to be a fallback here that matched on email alone, with
       // no password check at all -- on a shared device where this HR user
       // had previously signed in once, ANY password would get you in as
       // them, as long as you knew their email. Removed: Firebase Auth's
       // rejection is the real answer here, not something to work around.
-      toast('Email or password incorrect.');
+      showLoginError('hr', e);
     });
 }
 
