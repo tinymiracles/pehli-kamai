@@ -994,12 +994,31 @@ function saveProfile(){
   const id=DATA.length+1;
   const ph=document.getElementById('a-ph').value.trim();
   const np={id,key,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,exp:ex,skills:sk,langs:lg,about:ab,exps:[],resume:true,resumeKey:key,track:trk};
-  DATA.push(np);
-  buildChips();render();updateEnqBadge();updateAboutStats();closeA();
+
+  /* Everything below used to run BEFORE the account was created: the profile
+     was pushed into the grid and closeA() sent the candidate to the home page,
+     and only then was createUserWithEmailAndPassword() attempted. If that call
+     failed -- a dropped mobile connection, a password Firebase rejects -- they
+     had already been congratulated and navigated away, and the error toast
+     landed on a different screen. They believed they had signed up, and then
+     could never log in, because no Firebase Auth account had ever existed.
+     So: create the account first, and only celebrate once it is real. */
+  const saveBtn=document.querySelector('#view-addprofile .btn-save');
+  const saveLabel=saveBtn?saveBtn.textContent:'';
+  if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='Creating your account…';}
+  const restoreBtn=()=>{if(saveBtn){saveBtn.disabled=false;saveBtn.textContent=saveLabel;}};
 
   auth.createUserWithEmailAndPassword(email,pw)
     .then(cred=>{
       const uid=cred.user.uid;
+      // The account exists. Now it is safe to show the profile and move on.
+      restoreBtn();
+      DATA.push(np);
+      buildChips();render();updateEnqBadge();updateAboutStats();closeA();
+      const noteMsg='New profile. Email: '+email+(ph?' | Phone: '+ph:'')+' | Resume auto-generated from form.';
+      [N_EMAIL,N_EMAIL2,N_EMAIL3].forEach(to=>{
+        emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc+' ('+trk+')',candidate_location:loc,candidate_note:noteMsg,viewed_at:t,message_type:'New Profile — '+nm,to_email:to}).catch(()=>{});
+      });
       const acct={uid,id,email,name:nm,age:21,edu:ed,sector:sc,location:loc,role:rl,skills:sk,langs:lg,about:ab,resumeKey:key,resume:true,track:trk,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,ageConfirmed18:true,donorConsent,createdAt:new Date().toISOString()};
       db.collection('youth_accounts').doc(uid).set(acct).catch(()=>{});
       db.collection('candidates').add({...np,email,phone:ph,institution:inst,passYear:yr,expCompany:exco,expDuration:exdu,expRole:exro,volOrg:volorg,volDuration:voldur,volRole:volrole,resumeHTML:html,donorConsent,createdAt:new Date().toISOString()}).catch(()=>{});
@@ -1015,21 +1034,35 @@ function saveProfile(){
       openYtDash(acct,true);
     })
     .catch(e=>{
-      if(e.code==='auth/email-already-in-use'){toast('Account already exists. Try logging in.');}
-      else{
-        // Account creation itself failed (network issue, etc.) -- there
-        // used to be a local-only fallback here that created an unauthenticated
-        // "account" cached in localStorage with a plaintext password. Removed:
-        // it wasn't a real account (no other device could ever sign into it),
-        // and it stored the password in the clear. Ask them to retry instead.
-        toast('Could not create your account -- check your connection and try again.');
+      // Stay on the form. The candidate has not been added anywhere, so the
+      // only correct thing is to leave their answers on screen and let them
+      // retry -- never to navigate away as if it had worked.
+      restoreBtn();
+      const code=e&&e.code;
+      if(code==='auth/email-already-in-use'){
+        toast('An account already exists with this email. Use Sign in, or Forgot password.');
+      }else if(code==='auth/weak-password'){
+        toast('That password is too weak. Please use at least 6 characters.');
+      }else if(code==='auth/invalid-email'){
+        toast('That email address does not look right. Please check it.');
+      }else if(code==='auth/network-request-failed'){
+        toast('No internet just now. Your details are still here -- tap the button again when you are back online.');
+      }else if(!code||String(code).indexOf('auth/')!==0){
+        /* No auth/* code means this did not come from createUserWithEmail-
+           AndPassword -- the account was created and something in the success
+           block threw afterwards (a Firestore write, the resume builder).
+           Telling them the signup failed would be wrong: it didn't, and
+           retrying would only get them "email already in use". */
+        console.error('post-signup step failed',e);
+        toast('Your account was created. Something else went wrong -- please sign in.');
+      }else{
+        // There used to be a local-only fallback here that created an
+        // unauthenticated "account" in localStorage with a plaintext password.
+        // Removed: no other device could ever sign into it, and it stored the
+        // password in the clear.
+        toast('Could not create your account. Please try again.');
       }
     });
-
-  const noteMsg='New profile. Email: '+email+(ph?' | Phone: '+ph:'')+' | Resume auto-generated from form.';
-  emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc+' ('+trk+')',candidate_location:loc,candidate_note:noteMsg,viewed_at:t,message_type:'New Profile — '+nm,to_email:N_EMAIL}).catch(()=>{});
-  emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc+' ('+trk+')',candidate_location:loc,candidate_note:noteMsg,viewed_at:t,message_type:'New Profile — '+nm,to_email:N_EMAIL2}).catch(()=>{});
-  emailjs.send(EJ_SID,EJ_TID,{candidate_name:nm,candidate_sectors:sc+' ('+trk+')',candidate_location:loc,candidate_note:noteMsg,viewed_at:t,message_type:'New Profile — '+nm,to_email:N_EMAIL3}).catch(()=>{});
 }
 
 function closeA(){showPage('home');}
