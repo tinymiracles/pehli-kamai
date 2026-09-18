@@ -1378,8 +1378,25 @@ function sendPasswordReset(emailFieldId){
   if(!email){toast('Enter your email address first, then tap Forgot password.');return;}
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('That does not look like an email address.');return;}
   const done=()=>toast('If that email has an account, a reset link is on its way. Check spam too.');
-  auth.sendPasswordResetEmail(email)
+  /* continueUrl. Where the RESET FORM itself lives is set by the action URL
+     in the Firebase console, not here -- until that is pointed at
+     /reset/, the form is Google's own page. What this does control is the
+     "Continue" button on whichever page handles it: without it someone who
+     has just chosen a new password dead-ends on Google's screen with no way
+     back. ?signin=1 is what handleReturnFromReset() looks for, so they land
+     back here with the sign-in sheet already open.
+     Sent as a best-effort: if Firebase ever rejects the continue URL (it
+     validates the domain against the authorized-domains list), fall back to
+     a plain reset rather than leaving the person with no email at all. */
+  const withContinue={url:location.origin+'/?signin=1',handleCodeInApp:false};
+  auth.sendPasswordResetEmail(email,withContinue)
     .then(done)
+    .catch(e=>{
+      if(e&&e.code==='auth/unauthorized-continue-uri'){
+        return auth.sendPasswordResetEmail(email).then(done);
+      }
+      throw e;
+    })
     .catch(e=>{
       // Same reassurance for a missing account; only surface real faults.
       if(e&&(e.code==='auth/user-not-found'||e.code==='auth/invalid-email')){done();return;}
